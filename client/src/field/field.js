@@ -1,5 +1,6 @@
 import React from 'react';
 import * as d3 from "d3";
+import axios from 'axios'
 
 var props = {stroke: "white", "stroke-width": 5}
 var outerField = {
@@ -39,7 +40,7 @@ var yard = gridSize * 3
 var line = 510;
 var routeColor = "navy";
 
-var players = [
+// var players = [
   // { placement: { relativeX: 80, relativeY: 0 }, pos: "center" },
   // { placement: { relativeX: 72, relativeY: 0 }, pos: "lt" },
   // { placement: { relativeX: 64, relativeY: 0 }, pos: "lt" },
@@ -65,26 +66,42 @@ var players = [
   // { placement: { relativeX: 95, relativeY: 7}, pos: "wr", tag: "89" },
   // { placement: { relativeX: 150, relativeY: 1}, pos: "wr", tag: "11" },
   // { placement: { relativeX: 109, relativeY: 3}, pos: "wr", tag: "19" }
-  { placement: { relativeX: 70, relativeY: 0}, pos: "center", tag: "" },
-{ placement: { relativeX: 54, relativeY: 0}, pos: "wr", tag: "" },
-{ placement: { relativeX: 78, relativeY: 0}, pos: "wr", tag: "" },
-{ placement: { relativeX: 62, relativeY: 0}, pos: "wr", tag: "" },
-{ placement: { relativeX: 86, relativeY: 0}, pos: "wr", tag: "" },
-{ placement: { relativeX: 11, relativeY: 0}, pos: "wr", tag: "84" },
-{ placement: { relativeX: 70, relativeY: 15}, pos: "wr", tag: "7" },
-{ placement: { relativeX: 58, relativeY: 15}, pos: "wr", tag: "30" },
-{ placement: { relativeX: 95, relativeY: 7}, pos: "wr", tag: "89" },
-{ placement: { relativeX: 150, relativeY: 1}, pos: "wr", tag: "11" },
-{ placement: { relativeX: 109, relativeY: 3}, pos: "wr", tag: "19" }
-]
+//   { placement: { relativeX: 70, relativeY: 0}, pos: "center", tag: "" },
+// { placement: { relativeX: 54, relativeY: 0}, pos: "wr", tag: "" },
+// { placement: { relativeX: 78, relativeY: 0}, pos: "wr", tag: "" },
+// { placement: { relativeX: 62, relativeY: 0}, pos: "wr", tag: "" },
+// { placement: { relativeX: 86, relativeY: 0}, pos: "wr", tag: "" },
+// { placement: { relativeX: 11, relativeY: 0}, pos: "wr", tag: "84" },
+// { placement: { relativeX: 70, relativeY: 15}, pos: "wr", tag: "7" },
+// { placement: { relativeX: 58, relativeY: 15}, pos: "wr", tag: "30" },
+// { placement: { relativeX: 95, relativeY: 7}, pos: "wr", tag: "89" },
+// { placement: { relativeX: 150, relativeY: 1}, pos: "wr", tag: "11" },
+// { placement: { relativeX: 109, relativeY: 3}, pos: "wr", tag: "19" }
+// ]
 class Field extends React.Component {
 
-    componentDidMount(){
-      players.forEach( (x)=> {
-          this.addPlayer(d3.select("#svg"), x)
-      })
-    }
+  state = {
+    placements: []
+  }
+    // componentDidMount(){
+    //   players.forEach( (x)=> {
+    //       this.addPlayer(d3.select("#svg"), x)
+    //   })
+    //
+    //
+    // }
 
+    componentDidMount() {
+        axios.get(`http://tf-lb-20181225234519875600000003-1500620053.us-east-1.elb.amazonaws.com/playcards`)
+          .then(res => {
+            const placements = res.data;
+            console.log(JSON.stringify(placements));
+            this.setState({ placements });
+            placements.forEach( (x)=> {
+                   this.addPlayer(d3.select("#svg"), x)
+            })
+          })
+      }
 
 
     drawFieldGrid(x1,y1,x2,y2){
@@ -96,7 +113,7 @@ class Field extends React.Component {
     }
 
     addPlayer( svg, player ){
-      if( player.pos == "center" ){
+      if( player.center ){
         this.addCenter(svg, player)
       }else if(!player.tag){
         this.addNonSkillPlayer(svg, player)

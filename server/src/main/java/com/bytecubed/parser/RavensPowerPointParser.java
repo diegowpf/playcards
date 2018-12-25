@@ -26,33 +26,33 @@ public class RavensPowerPointParser {
         this.ppt = ppt;
     }
 
-    private List<Placement> extractPlayersOnSlide(XSLFSlide slide) {
-        List<Placement> placements = new ArrayList<>();
+    private List<Player> extractPlayersOnSlide(XSLFSlide slide) {
+        List<Player> players = new ArrayList<>();
 
         slide.getShapes().forEach(x-> logger.debug( "Shape:  " + x.getShapeName()));
 
         slide.getShapes().stream()
                 .filter(this::isOnCanvas)
                 .forEach(s -> {
-                    Placement placement = playerExtractor(s);
+                    Player placement = playerExtractor(s);
                     if (placement != null)
-                        placements.add(placement);
+                        players.add(placement);
 
-                    placements.addAll(nestedPlayerExtractor(s));
+                    players.addAll(nestedPlayerExtractor(s));
                 });
 
-        placements.forEach(f -> {
+        players.forEach(f -> {
             String pos = f.isCenter() ? "center" : "wr";
-            logger.debug("{ placement: { relativeX: " + f.getRelativeX() + ", relativeY: "
-                    + f.getRelativeY() + "}, pos: \"" + pos + "\", tag: \"" +f.getTag() + "\" },");
+            logger.debug("{ placement: { relativeX: " + f.getPlacement().getRelativeX() + ", relativeY: "
+                    + f.getPlacement().getRelativeY() + "}, pos: \"" + pos + "\", tag: \"" +f.getTag() + "\" },");
         });
 
-        return placements;
+        return players;
     }
 
-    private List<Placement> nestedPlayerExtractor(XSLFShape s) {
+    private List<Player> nestedPlayerExtractor(XSLFShape s) {
 
-        List<Placement> placements = new ArrayList<>();
+        List<Player> placements = new ArrayList<>();
 
         if (s.getShapeName().contains("Group")) {
             XSLFGroupShape shape = (XSLFGroupShape) s;
@@ -66,10 +66,10 @@ public class RavensPowerPointParser {
                     .filter(f -> f.getShapeName().contains("Oval") || f.getShapeName().contains("Rectangle"))
                     .forEach(f -> {
 
-                        Placement placement = playerExtractor(f);
+                        Player player = playerExtractor(f);
                         logger.debug( "X: " + f.getAnchor().getX());
                         logger.debug( "Y: " + f.getAnchor().getY());
-                        placements.add(placement);
+                        placements.add(player);
                     });
 
 
@@ -78,7 +78,7 @@ public class RavensPowerPointParser {
         return placements;
     }
 
-    private Placement playerExtractor(XSLFShape shape) {
+    private Player playerExtractor(XSLFShape shape) {
 
         if (shape.getShapeName().contains("Oval") || shape.getShapeName().contains("Rect")) {
             boolean isCenter = shape.getShapeName().contains("Rect" );
@@ -91,14 +91,17 @@ public class RavensPowerPointParser {
 
 //            getNearestRoute(shape.getAnchor().getX(), shape.getAnchor().getY(), shape.getSheet());
             translatedY = (int) Math.round(((adjustedY / 200) * 30));
-            return new Placement(translatedX, translatedY, "wr", ((TextShape) shape).getText(), isCenter);
+            return new Player( new Placement(translatedX, translatedY), "wr", ((TextShape) shape).getText(), isCenter);
         }
 
         return null;
     }
 
-    public List<Placement> extractPlayerPlacements() {
+    public List<Player> extractPlayerPlacements() {
+
+
         return extractPlayersOnSlide(ppt.getSlides().get(0));
+//        return null;
     }
 
     private boolean isOnCanvas(XSLFShape s) {

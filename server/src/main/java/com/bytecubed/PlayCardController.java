@@ -1,6 +1,7 @@
 package com.bytecubed;
 
 import com.bytecubed.models.Placement;
+import com.bytecubed.parser.Player;
 import com.bytecubed.parser.RavensPowerPointParser;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.slf4j.Logger;
@@ -23,27 +24,27 @@ public class PlayCardController {
     public HttpEntity getPlayCard(){
         return ok("Test");
     }
-    private List<Placement> placements;
+    private List<Player> players;
     private Logger logger = LoggerFactory.getLogger(PlayCardController.class);
 
     public PlayCardController(){
-        placements = new ArrayList<>();
+        players = new ArrayList<>();
     }
 
     @PostMapping()
-    public HttpEntity<List<Placement>> importCard(@RequestParam("file") MultipartFile file,
-                                                  RedirectAttributes redirectAttributes) throws IOException {
+    public HttpEntity<List<Player>> importCard(@RequestParam("file") MultipartFile file,
+                                               RedirectAttributes redirectAttributes) throws IOException {
         XMLSlideShow ppt = new XMLSlideShow(file.getInputStream());
         logger.debug( "PowerPoint with slidecount:  "+ ppt.getSlides().size());
 
-        this.placements = new RavensPowerPointParser(ppt).extractPlayerPlacements();
+        this.players = new RavensPowerPointParser(ppt).extractPlayerPlacements();
 
-        return ok(placements);
+        return ok(players);
     }
 
     @GetMapping()
-    public HttpEntity<List<Placement>> getPlayCards(){
-        return ok(placements);
+    public HttpEntity<List<Player>> getPlayCards(){
+        return ok(players);
     }
 
 }
