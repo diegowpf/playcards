@@ -1,4 +1,4 @@
-package com.bytecubed;
+package com.bytecubed.models;
 
 public class Placement {
 
