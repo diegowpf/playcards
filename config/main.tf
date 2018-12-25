@@ -38,8 +38,8 @@ module "server" {
   public_subnets     = "${module.network.public_subnets}"
   docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-server"
   container_family   = "server"
-  memory             = 4096
-  cpu                = 2048
+  # memory             = 4096
+  # cpu                = 2048
   instance_count     = 2
   timeout            = 180
   container_port     = 8080
