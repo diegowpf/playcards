@@ -1,0 +1,3 @@
+#cloud-config
+bootcmd:
+ - cloud-init-per instance $(echo "ECS_CLUSTER=vulcan-development" >> /etc/ecs/ecs.config)
