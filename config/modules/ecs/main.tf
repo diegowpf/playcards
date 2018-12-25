@@ -25,23 +25,23 @@ resource "aws_iam_role_policy_attachment" "ecs-service-role-attachment" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
 }
 
-resource "aws_instance" "compute" {
-  # ECS-optimized AMI for us-east-1
-  ami           = "ami-cb2305a1"
-  instance_type = "m4.xlarge"
-  count         = 1
-
-  user_data = <<EOF
-#!/bin/bash
-echo ECS_CLUSTER=${var.ecs_cluster_name} >> /etc/ecs/ecs.config
-EOF
-
-  iam_instance_profile   = "${aws_iam_instance_profile.compute.name}"
-  vpc_security_group_ids = ["${aws_security_group.compute.id}"]
-  subnet_id              = "${var.public_subnets[0]}"
-
-  associate_public_ip_address = true
-}
+# resource "aws_instance" "compute" {
+#   # ECS-optimized AMI for us-east-1
+#   ami           = "ami-cb2305a1"
+#   instance_type = "m4.xlarge"
+#   count         = 1
+#
+#   user_data = <<EOF
+# #!/bin/bash
+# echo ECS_CLUSTER=${var.ecs_cluster_name} >> /etc/ecs/ecs.config
+# EOF
+#
+#   iam_instance_profile   = "${aws_iam_instance_profile.compute.name}"
+#   vpc_security_group_ids = ["${aws_security_group.compute.id}"]
+#   subnet_id              = "${var.public_subnets[0]}"
+#
+#   associate_public_ip_address = true
+# }
 
 //MongoDB Security Group
 resource "aws_security_group" "compute" {
@@ -163,10 +163,10 @@ resource "aws_iam_instance_profile" "compute" {
   role = "${aws_iam_role.compute.name}"
 }
 
-resource "aws_route53_record" "www" {
-  zone_id = "${var.zone_id}"
-  name    = "infra.${var.base_domain}"
-  type    = "A"
-  ttl     = "300"
-  records = ["${aws_instance.compute.public_ip}"]
-}
+# resource "aws_route53_record" "www" {
+#   zone_id = "${var.zone_id}"
+#   name    = "infra.${var.base_domain}"
+#   type    = "A"
+#   ttl     = "300"
+#   records = ["${aws_instance.compute.public_ip}"]
+# }
