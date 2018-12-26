@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -33,7 +32,6 @@ public class PlayCardController {
     public HttpEntity getPlayCard(){
         return ok("Test");
     }
-    private List<Player> players;
     private Logger logger = LoggerFactory.getLogger(PlayCardController.class);
 
 
