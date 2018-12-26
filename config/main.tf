@@ -42,7 +42,7 @@ module "server" {
   # memory             = 4096
   # cpu                = 2048
   REACT_APP_SERVER_URL = "http://www.google.com"
-  instance_count     = 2
+  instance_count     = 1
   timeout            = 180
   container_port     = 8080
   zone_id = "${aws_route53_zone.primary.zone_id}"

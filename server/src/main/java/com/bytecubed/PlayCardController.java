@@ -3,9 +3,11 @@ package com.bytecubed;
 import com.bytecubed.models.Placement;
 import com.bytecubed.parser.Player;
 import com.bytecubed.parser.RavensPowerPointParser;
+import com.bytecubed.persistence.PlayCardRepository;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +22,13 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/playcards")
 public class PlayCardController {
+    private PlayCardRepository repository;
+
+    @Autowired
+    public PlayCardController(PlayCardRepository repository) {
+        this.repository = repository;
+    }
+
     @GetMapping("/card")
     public HttpEntity getPlayCard(){
         return ok("Test");

@@ -1,5 +1,6 @@
 package com.bytecubed.configuration;
 
+import com.bytecubed.persistence.PlayCardRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -17,5 +18,10 @@ public class WebConfig {
                 registry.addMapping("/**");
             }
         };
+    }
+
+    @Bean
+    public PlayCardRepository repository(){
+        return new PlayCardRepository();
     }
 }
