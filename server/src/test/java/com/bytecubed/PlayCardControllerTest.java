@@ -2,6 +2,7 @@ package com.bytecubed;
 
 import com.bytecubed.models.PlayCard;
 import com.bytecubed.persistence.PlayCardRepository;
+import com.bytecubed.web.PlayCardController;
 import org.junit.Ignore;
 import org.junit.Test;
 

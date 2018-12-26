@@ -1,4 +1,4 @@
-package com.bytecubed;
+package com.bytecubed.web;
 
 import com.bytecubed.models.PlayCard;
 import com.bytecubed.parser.Player;
