@@ -1,6 +1,6 @@
 package com.bytecubed;
 
-import com.bytecubed.models.Placement;
+import com.bytecubed.models.PlayCard;
 import com.bytecubed.parser.Player;
 import com.bytecubed.parser.RavensPowerPointParser;
 import com.bytecubed.persistence.PlayCardRepository;
@@ -14,8 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -36,24 +36,27 @@ public class PlayCardController {
     private List<Player> players;
     private Logger logger = LoggerFactory.getLogger(PlayCardController.class);
 
-    public PlayCardController(){
-        players = new ArrayList<>();
-    }
 
     @PostMapping()
-    public HttpEntity<List<Player>> importCard(@RequestParam("file") MultipartFile file,
+    public HttpEntity<Iterable<Player>> importCard(@RequestParam("file") MultipartFile file,
                                                RedirectAttributes redirectAttributes) throws IOException {
         XMLSlideShow ppt = new XMLSlideShow(file.getInputStream());
         logger.debug( "PowerPoint with slidecount:  "+ ppt.getSlides().size());
 
-        this.players = new RavensPowerPointParser(ppt).extractPlayerPlacements();
+        PlayCard card = new PlayCard(new RavensPowerPointParser(ppt).extractPlayerPlacements());
+        repository.save(card);
 
-        return ok(players);
+        return ok(card.getPlayers());
     }
 
     @GetMapping()
-    public HttpEntity<List<Player>> getPlayCards(){
-        return ok(players);
+    public HttpEntity<Iterable<PlayCard>> getPlayCards(){
+        return ok(repository.getPlayCards());
+    }
+
+    @GetMapping("/{id}")
+    public HttpEntity<Iterable<Player>> getPlayCard(@PathVariable  UUID id){
+        return ok(repository.getPlayCards().iterator().next().getPlayers());
     }
 
 }

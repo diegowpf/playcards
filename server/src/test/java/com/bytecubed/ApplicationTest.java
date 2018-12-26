@@ -1,11 +1,9 @@
 package com.bytecubed;
 
-import com.bytecubed.parser.RavensPowerPointParser;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.xdgf.usermodel.XDGFShape;
 import org.apache.poi.xdgf.usermodel.XmlVisioDocument;
 import org.apache.poi.xdgf.usermodel.section.geometry.Ellipse;
-import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFFreeformShape;
 import org.apache.poi.xslf.usermodel.XSLFSheet;
 import org.junit.Ignore;
@@ -13,11 +11,8 @@ import org.junit.Test;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class ApplicationTest {
 
