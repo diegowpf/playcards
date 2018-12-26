@@ -24,4 +24,4 @@ jobs:
       - setup_remote_docker
       - checkout
       - run: cd server && mvn clean install 
-      - run: cd ../client && build-container.sh 
+      - run: cd client && build-container.sh 
