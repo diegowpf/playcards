@@ -45,5 +45,9 @@ variable "timeout" {
   default = 60
 }
 
+variable "REACT_APP_SERVER_URL" {
+  default = "foo"
+}
+
 variable "base_domain" {default="immersivesports.ai"}
 variable "zone_id" {}

@@ -37,6 +37,7 @@ resource "aws_ecs_task_definition" "service" {
                 }
             },
    "environment" : [
+     {"name": "REACT_APP_SERVER_URL", "value" :"${var.REACT_APP_SERVER_URL}"}
    ]
  }
 ]

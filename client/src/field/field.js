@@ -78,6 +78,9 @@ var routeColor = "navy";
 // { placement: { relativeX: 150, relativeY: 1}, pos: "wr", tag: "11" },
 // { placement: { relativeX: 109, relativeY: 3}, pos: "wr", tag: "19" }
 // ]
+
+var serverUrl = process.env.REACT_APP_SERVER_URL;
+
 class Field extends React.Component {
 
   state = {
@@ -92,7 +95,7 @@ class Field extends React.Component {
     // }
 
     componentDidMount() {
-        axios.get(`http://tf-lb-20181225234519875600000003-1500620053.us-east-1.elb.amazonaws.com/playcards`)
+        axios.get("http://server.immersivesports.ai/playcards")
           .then(res => {
             const placements = res.data;
             console.log(JSON.stringify(placements));

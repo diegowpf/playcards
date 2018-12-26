@@ -23,6 +23,7 @@ module "client" {
   container_port     = 3000
   loadbalancer_port  = 80
 
+  REACT_APP_SERVER_URL = "${module.server.dns_name}"
   instance_count     = 1
   timeout            = 180
   zone_id = "${aws_route53_zone.primary.zone_id}"
@@ -40,6 +41,7 @@ module "server" {
   container_family   = "server"
   # memory             = 4096
   # cpu                = 2048
+  REACT_APP_SERVER_URL = "http://www.google.com"
   instance_count     = 2
   timeout            = 180
   container_port     = 8080
