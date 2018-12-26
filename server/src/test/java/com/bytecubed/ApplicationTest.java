@@ -8,6 +8,7 @@ import org.apache.poi.xdgf.usermodel.section.geometry.Ellipse;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFFreeformShape;
 import org.apache.poi.xslf.usermodel.XSLFSheet;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.awt.geom.AffineTransform;
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ApplicationTest {
 
     @Test
+    @Ignore
     public void should() throws IOException, OpenXML4JException {
         XmlVisioDocument doc = new XmlVisioDocument(new FileInputStream("/Users/carlyledavis/Downloads/MIXEDRIVER.vsdx"));
         System.out.println(doc.getPages().size());
