@@ -12,13 +12,11 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RavensPowerPointParser {
+public class RavensPowerPointParser implements PlayCardParser {
     private XMLSlideShow ppt;
     static int maxX = 1000;
     static int maxY = 600;
     static int lineOfScrimage = 400;
-    static int yard5 = 500;
-    static int yard0 = 600;
 
     private Logger logger = LoggerFactory.getLogger(RavensPowerPointParser.class);
 
@@ -58,10 +56,6 @@ public class RavensPowerPointParser {
             XSLFGroupShape shape = (XSLFGroupShape) s;
 
             List<XSLFShape> groupShapes = new ArrayList(shape.getShapes());
-            XSLFGroupShape group = (XSLFGroupShape) s;
-
-
-
             groupShapes.stream()
                     .filter(f -> f.getShapeName().contains("Oval") || f.getShapeName().contains("Rectangle"))
                     .forEach(f -> {
@@ -71,15 +65,12 @@ public class RavensPowerPointParser {
                         logger.debug( "Y: " + f.getAnchor().getY());
                         placements.add(player);
                     });
-
-
         }
 
         return placements;
     }
 
     private Player playerExtractor(XSLFShape shape) {
-
         if (shape.getShapeName().contains("Oval") || shape.getShapeName().contains("Rect")) {
             boolean isCenter = shape.getShapeName().contains("Rect" );
             int translatedX = 0;
@@ -89,7 +80,6 @@ public class RavensPowerPointParser {
 
             double adjustedY = shape.getAnchor().getY() - lineOfScrimage;
 
-//            getNearestRoute(shape.getAnchor().getX(), shape.getAnchor().getY(), shape.getSheet());
             translatedY = (int) Math.round(((adjustedY / 200) * 30));
             return new Player( new Placement(translatedX, translatedY), "wr", ((TextShape) shape).getText(), isCenter);
         }
@@ -97,11 +87,9 @@ public class RavensPowerPointParser {
         return null;
     }
 
+    @Override
     public List<Player> extractPlayerPlacements() {
-
-
         return extractPlayersOnSlide(ppt.getSlides().get(0));
-//        return null;
     }
 
     private boolean isOnCanvas(XSLFShape s) {

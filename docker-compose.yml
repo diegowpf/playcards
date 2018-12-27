@@ -1,0 +1,14 @@
+version: '3'
+services:
+  client:
+    build: ./client
+    ports:
+     - "3000:3000"
+  server:
+    image: 068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-server
+    ports:
+     - "8080:8080"
+  mongo:
+    image: "mongo:latest"
+    ports:
+     - "27017:27017"
