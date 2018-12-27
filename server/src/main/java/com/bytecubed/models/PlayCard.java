@@ -13,7 +13,7 @@ public class PlayCard {
         return players;
     }
 
-    public PlayCard(Iterable<Player> players ){
+    public PlayCard(UUID teamId, Iterable<Player> players){
         this.players = players;
         this.id = UUID.randomUUID();
     }

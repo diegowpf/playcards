@@ -20,4 +20,8 @@ public class PlayCardRepository {
     public void save(PlayCard card) {
         playCards.put(card.getId(), card);
     }
+
+    public Iterable<PlayCard> findPlayCardsByTeamId(UUID teamId) {
+        return null;
+    }
 }

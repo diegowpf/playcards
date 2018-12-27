@@ -4,6 +4,7 @@ import com.bytecubed.models.PlayCard;
 import com.bytecubed.parser.Player;
 import com.bytecubed.parser.RavensPowerPointParser;
 import com.bytecubed.persistence.PlayCardRepository;
+import javafx.scene.shape.Path;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,38 +23,31 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping("/playcards")
 public class PlayCardController {
     private PlayCardRepository repository;
+    private Logger logger = LoggerFactory.getLogger(PlayCardController.class);
 
     @Autowired
     public PlayCardController(PlayCardRepository repository) {
         this.repository = repository;
     }
 
-    @GetMapping("/card")
-    public HttpEntity getPlayCard(){
-        return ok("Test");
-    }
-    private Logger logger = LoggerFactory.getLogger(PlayCardController.class);
-
-
-    @PostMapping()
+    @PostMapping("/team/{id}")
     public HttpEntity<Iterable<Player>> importCard(@RequestParam("file") MultipartFile file,
-                                               RedirectAttributes redirectAttributes) throws IOException {
+                                                   RedirectAttributes redirectAttributes,
+                                                   @PathVariable UUID id) throws IOException {
         XMLSlideShow ppt = new XMLSlideShow(file.getInputStream());
-        logger.debug( "PowerPoint with slidecount:  "+ ppt.getSlides().size());
-
-        PlayCard card = new PlayCard(new RavensPowerPointParser(ppt).extractPlayerPlacements());
+        PlayCard card = new PlayCard(id, new RavensPowerPointParser(ppt).extractPlayerPlacements());
         repository.save(card);
 
         return ok(card.getPlayers());
     }
 
-    @GetMapping()
-    public HttpEntity<Iterable<PlayCard>> getPlayCards(){
-        return ok(repository.getPlayCards());
+    @GetMapping("/team/{id}")
+    public HttpEntity<Iterable<PlayCard>> getPlayCards(@PathVariable UUID id) {
+        return ok(repository.findPlayCardsByTeamId(id));
     }
 
     @GetMapping("/{id}")
-    public HttpEntity<Iterable<Player>> getPlayCard(@PathVariable  UUID id){
+    public HttpEntity<Iterable<Player>> getPlayCard(@PathVariable UUID id) {
         return ok(repository.getPlayCards().iterator().next().getPlayers());
     }
 
