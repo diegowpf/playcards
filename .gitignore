@@ -2,6 +2,6 @@
 .idea/
 target/
 *.iml
-*.log
+*.log*
 .terraform/
 terraform.tf*

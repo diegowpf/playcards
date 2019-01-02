@@ -95,7 +95,7 @@ class Field extends React.Component {
     // }
 
     componentDidMount() {
-        axios.get("http://server.immersivesports.ai/playcards")
+        axios.get("http://server.immersivesports.ai/playcards/17457259-a836-a23e-567e-2d70a95df9af")
           .then(res => {
             const placements = res.data;
             console.log(JSON.stringify(placements));
@@ -224,7 +224,6 @@ class Field extends React.Component {
               <br/>
                 <img src="images/ravens-30-no-logo.png"k style={outerField}/>
               <br/>
-
               <svg width={fieldWidth} height={fieldHeight} style={outerField} id="svg">
                 <marker id='head' orient='auto' markerWidth='2' markerHeight='4'
                         refX='0.1' refY='2'>

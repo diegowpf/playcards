@@ -39,6 +39,7 @@ module "server" {
   public_subnets     = "${module.network.public_subnets}"
   docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-server"
   container_family   = "server"
+  health_check_path  = "/playcards/team/123e4567-e89b-12d3-a456-426655440000"
   # memory             = 4096
   # cpu                = 2048
   REACT_APP_SERVER_URL = "http://www.google.com"
@@ -46,6 +47,17 @@ module "server" {
   timeout            = 180
   container_port     = 8080
   zone_id = "${aws_route53_zone.primary.zone_id}"
+}
+
+module "mongo" {
+  source = "./modules/mongo"
+
+  ecs_cluster_name = "${module.ecs.ecs_cluster_name}"
+  cluster_id       = "${module.ecs.ecs_cluster_id}"
+  vpc_id           = "${module.network.vpc_id}"
+  vpc_cidr         = "${var.cidr_block}"
+  private_subnets  = "${module.network.private_subnets}"
+  public_subnets   = "${module.network.public_subnets}"
 }
 
 module "network" {
