@@ -23,7 +23,7 @@ jobs:
     steps:
       - setup_remote_docker
       - checkout
-      - run: cd service && mvn clean install
+      - run: cd services && mvn clean install
       # - run: cd client && ./build-container.sh
 workflows:
   version: 2
