@@ -1,12 +1,11 @@
 package com.bytecubed;
 
-import com.bytecubed.models.PlayCard;
-import com.bytecubed.persistence.PlayCardRepository;
-import com.bytecubed.web.PlayCardController;
+import com.bytecubed.studio.models.PlayCard;
+import com.bytecubed.studio.persistence.PlayCardRepository;
+import com.bytecubed.studio.web.PlayCardController;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 import static java.util.Arrays.asList;
@@ -23,7 +22,7 @@ public class PlayCardControllerTest {
     public void shouldReturnAllPlayersBasedOnPlayCardId(){
         PlayCardRepository repository = mock(PlayCardRepository.class);
         teamId = UUID.randomUUID();
-        PlayCard playCard = new PlayCard(teamId, new ArrayList<>());
+        PlayCard playCard = null;//new PlayCardController.PlayCard(teamId, null);
         when(repository.findAll()).thenReturn( asList(playCard));
 
         PlayCardController controller = new PlayCardController(repository);

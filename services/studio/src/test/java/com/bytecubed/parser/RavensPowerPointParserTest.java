@@ -1,12 +1,12 @@
 package com.bytecubed.parser;
 
+import com.bytecubed.studio.parser.RavensPowerPointParser;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
