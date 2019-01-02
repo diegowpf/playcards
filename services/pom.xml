@@ -98,7 +98,7 @@
         </plugins>
     </build>
     <modules>
-        <module>common</module>
+        <module>commons</module>
         <module>studio</module>
         <module>teams</module>
     </modules>

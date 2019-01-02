@@ -97,9 +97,7 @@
             <artifactId>spring-data-releasetrain</artifactId>
             <version>Lovelace-M3</version>
             <type>pom</type>
-            <scope>import</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -111,13 +109,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
             </plugin>
             <plugin>
