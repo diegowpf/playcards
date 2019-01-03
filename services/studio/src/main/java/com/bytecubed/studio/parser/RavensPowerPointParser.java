@@ -1,7 +1,7 @@
 package com.bytecubed.studio.parser;
 
 import com.bytecubed.commons.models.Placement;
-import com.bytecubed.commons.models.Player;
+import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.commons.models.Route;
 import org.apache.poi.sl.usermodel.TextShape;
 import org.apache.poi.xslf.usermodel.*;
@@ -25,33 +25,33 @@ public class RavensPowerPointParser implements PlayCardParser {
         this.ppt = ppt;
     }
 
-    private List<Player> extractPlayersOnSlide(XSLFSlide slide) {
-        List<Player> players = new ArrayList<>();
+    private List<PlayerMarker> extractPlayersOnSlide(XSLFSlide slide) {
+        List<PlayerMarker> playerMarkers = new ArrayList<>();
 
         slide.getShapes().forEach(x-> logger.debug( "Shape:  " + x.getShapeName()));
 
         slide.getShapes().stream()
                 .filter(this::isOnCanvas)
                 .forEach(s -> {
-                    Player placement = playerExtractor(s);
+                    PlayerMarker placement = playerExtractor(s);
                     if (placement != null)
-                        players.add(placement);
+                        playerMarkers.add(placement);
 
-                    players.addAll(nestedPlayerExtractor(s));
+                    playerMarkers.addAll(nestedPlayerExtractor(s));
                 });
 
-        players.forEach(f -> {
+        playerMarkers.forEach(f -> {
             String pos = f.isCenter() ? "center" : "wr";
             logger.debug("{ placement: { relativeX: " + f.getPlacement().getRelativeX() + ", relativeY: "
                     + f.getPlacement().getRelativeY() + "}, pos: \"" + pos + "\", tag: \"" +f.getTag() + "\" },");
         });
 
-        return players;
+        return playerMarkers;
     }
 
-    private List<Player> nestedPlayerExtractor(XSLFShape s) {
+    private List<PlayerMarker> nestedPlayerExtractor(XSLFShape s) {
 
-        List<Player> placements = new ArrayList<>();
+        List<PlayerMarker> placements = new ArrayList<>();
 
         if (s.getShapeName().contains("Group")) {
             XSLFGroupShape shape = (XSLFGroupShape) s;
@@ -61,17 +61,17 @@ public class RavensPowerPointParser implements PlayCardParser {
                     .filter(f -> f.getShapeName().contains("Oval") || f.getShapeName().contains("Rectangle"))
                     .forEach(f -> {
 
-                        Player player = playerExtractor(f);
+                        PlayerMarker playerMarker = playerExtractor(f);
                         logger.debug( "X: " + f.getAnchor().getX());
                         logger.debug( "Y: " + f.getAnchor().getY());
-                        placements.add(player);
+                        placements.add(playerMarker);
                     });
         }
 
         return placements;
     }
 
-    private Player playerExtractor(XSLFShape shape) {
+    private PlayerMarker playerExtractor(XSLFShape shape) {
         if (shape.getShapeName().contains("Oval") || shape.getShapeName().contains("Rect")) {
             boolean isCenter = shape.getShapeName().contains("Rect" );
             int translatedX = 0;
@@ -82,14 +82,14 @@ public class RavensPowerPointParser implements PlayCardParser {
             double adjustedY = shape.getAnchor().getY() - lineOfScrimage;
 
             translatedY = (int) Math.round(((adjustedY / 200) * 30));
-            return new Player( new Placement(translatedX, translatedY), "wr", ((TextShape) shape).getText(), isCenter);
+            return new PlayerMarker( new Placement(translatedX, translatedY), "wr", ((TextShape) shape).getText(), isCenter);
         }
 
         return null;
     }
 
     @Override
-    public List<Player> extractPlayerPlacements() {
+    public List<PlayerMarker> extractPlayerPlacements() {
         return extractPlayersOnSlide(ppt.getSlides().get(0));
     }
 

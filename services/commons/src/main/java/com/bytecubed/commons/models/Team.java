@@ -11,13 +11,19 @@ public class Team {
     private UUID Id;
     private String name;
     private League league;
+    private String abbr;
     private UUID id;
 
     public Team(League league, String name){
-        this(league, name, UUID.randomUUID());
+        this(league, name, "", UUID.randomUUID());
     }
 
-    public Team(League league, String name, UUID id) {
+    public String getAbbr() {
+        return abbr;
+    }
+
+    public Team(League league, String name, String abbr, UUID id) {
+        this.abbr = abbr;
         this.id = id;
         this.name = name;
         this.league = league;

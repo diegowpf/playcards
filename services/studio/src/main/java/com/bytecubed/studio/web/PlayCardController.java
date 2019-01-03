@@ -1,6 +1,6 @@
 package com.bytecubed.studio.web;
 
-import com.bytecubed.commons.models.Player;
+import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.studio.models.PlayCard;
 import com.bytecubed.studio.parser.RavensPowerPointParser;
 import com.bytecubed.studio.persistence.PlayCardRepository;
@@ -30,9 +30,9 @@ public class PlayCardController {
     }
 
     @PostMapping("/team/{id}")
-    public HttpEntity<Iterable<Player>> importCard(@RequestParam("file") MultipartFile file,
-                                                   RedirectAttributes redirectAttributes,
-                                                   @PathVariable UUID id) throws IOException {
+    public HttpEntity<Iterable<PlayerMarker>> importCard(@RequestParam("file") MultipartFile file,
+                                                         RedirectAttributes redirectAttributes,
+                                                         @PathVariable UUID id) throws IOException {
         XMLSlideShow ppt = new XMLSlideShow(file.getInputStream());
         PlayCard card = new PlayCard(id, new RavensPowerPointParser(ppt).extractPlayerPlacements());
         repository.save(card);
@@ -46,7 +46,7 @@ public class PlayCardController {
     }
 
     @GetMapping("/{id}")
-    public HttpEntity<Iterable<Player>> getPlayCard(@PathVariable UUID id) {
+    public HttpEntity<Iterable<PlayerMarker>> getPlayCard(@PathVariable UUID id) {
         return ok(repository.findAll().iterator().next().getPlayers());
     }
 

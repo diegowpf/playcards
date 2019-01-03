@@ -15,38 +15,38 @@ public class TeamRegistry {
 
     public TeamRegistry(){
         teams.put(League.nfl, asList(
-                nfl("Baltimore Ravens"),
-                nfl("Arizona Cardinals"),
-                nfl("Atlanta Falcons"),
-                nfl("Buffalo Bills"),
-                nfl( "Carolina Panthers" ),
-                nfl( "Chicago Bears" ),
-                nfl( "Cincinnati Bengals" ),
-                nfl( "Cleveland Browns" ),
-                nfl( "Dallas Cowboys" ),
-                nfl( "Denver Broncos" ),
-                nfl( "Detroit Lions" ),
-                nfl( "Green Bay Packers" ),
-                nfl( "Houston Texans" ),
-                nfl( "Indianapolis Colts" ),
-                nfl( "Jacksonville Jaguars" ),
-                nfl( "Kansas City Chiefs" ),
-                nfl( "Los Angeles Chargers" ),
-                nfl( "Los Angeles Rams" ),
-                nfl( "Miami Dolphins"),
-                nfl( "Minnesota Vikings" ),
-                nfl( "New England Patriots" ),
-                nfl( "New Orleans Saints" ),
-                nfl( "New York Giants" ),
-                nfl( "New York Jets" ),
-                nfl( "Oakland Raiders" ),
-                nfl( "Philadelphia Eagles" ),
-                nfl( "Pittsburg Steelers" ),
-                nfl( "San Francisco 49ers" ),
-                nfl( "Seattle Seahawks" ),
-                nfl( "Tampa Bay Buccaneers" ),
-                nfl( "Tennesse Titans" ),
-                nfl( "Washington Redskins" )));
+                nfl("Baltimore Ravens", "BAL"),
+                nfl("Arizona Cardinals", "ARI"),
+                nfl("Atlanta Falcons", "ATL"),
+                nfl("Buffalo Bills", "BUF"),
+                nfl( "Carolina Panthers", "CAR" ),
+                nfl( "Chicago Bears", "CHI" ),
+                nfl( "Cincinnati Bengals", "CIN" ),
+                nfl( "Cleveland Browns", "CLE" ),
+                nfl( "Dallas Cowboys", "DAL" ),
+                nfl( "Denver Broncos", "DEN" ),
+                nfl( "Detroit Lions", "DET" ),
+                nfl( "Green Bay Packers","GB" ),
+                nfl( "Houston Texans", "Hou" ),
+                nfl( "Indianapolis Colts", "IND" ),
+                nfl( "Jacksonville Jaguars", "JAX" ),
+                nfl( "Kansas City Chiefs", "KC" ),
+                nfl( "Los Angeles Chargers", "LAC" ),
+                nfl( "Los Angeles Rams", "LAR" ),
+                nfl( "Miami Dolphins", "MIA"),
+                nfl( "Minnesota Vikings", "MIN" ),
+                nfl( "New England Patriots", "NE" ),
+                nfl( "New Orleans Saints", "NO" ),
+                nfl( "New York Giants", "NYG" ),
+                nfl( "New York Jets", "NYJ" ),
+                nfl( "Oakland Raiders", "OAK" ),
+                nfl( "Philadelphia Eagles", "PHL" ),
+                nfl( "Pittsburg Steelers", "PIT" ),
+                nfl( "San Francisco 49ers", "SF" ),
+                nfl( "Seattle Seahawks", "SEA" ),
+                nfl( "Tampa Bay Buccaneers", "TB" ),
+                nfl( "Tennesse Titans", "TEN" ),
+                nfl( "Washington Redskins", "WAS" )));
     }
 
     public List<Team> getTeamsBy( League league ){
@@ -55,7 +55,7 @@ public class TeamRegistry {
         return teams == null ? asList() : teams;
     }
 
-    static Team nfl(String name){
-        return new Team(League.nfl, name, UUID.nameUUIDFromBytes(name.getBytes()));
+    static Team nfl(String name, String abbr){
+        return new Team(League.nfl, name, abbr, UUID.nameUUIDFromBytes(name.getBytes()));
     }
 }

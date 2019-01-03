@@ -1,16 +1,16 @@
 package com.bytecubed.studio.models;
 
-import com.bytecubed.commons.models.Player;
+import com.bytecubed.commons.models.PlayerMarker;
 
 import java.util.List;
 import java.util.UUID;
 
 public class PlayCard {
-    public PlayCard(UUID id, List<Player> extractPlayerPlacements) {
+    public PlayCard(UUID id, List<PlayerMarker> extractPlayerMarkerPlacements) {
 
     }
 
-    public List<Player> getPlayers() {
+    public List<PlayerMarker> getPlayers() {
         return null;
     }
 }
