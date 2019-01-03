@@ -11,8 +11,14 @@ public class Team {
     private UUID Id;
     private String name;
     private League league;
+    private UUID id;
 
-    public Team( String name, League league ){
+    public Team(League league, String name){
+        this(league, name, UUID.randomUUID());
+    }
+
+    public Team(League league, String name, UUID id) {
+        this.id = id;
         this.name = name;
         this.league = league;
     }
