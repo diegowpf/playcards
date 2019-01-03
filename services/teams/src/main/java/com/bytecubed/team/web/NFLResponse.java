@@ -1,13 +1,12 @@
 package com.bytecubed.team.web;
 
-import com.bytecubed.commons.models.Player;
-
 import java.util.List;
 
 public class NFLResponse {
-    public List<Player> getPlayers() {
+    public List<NFLResponsePlayerObj> getPlayers() {
         return players;
     }
 
-    private List<Player> players;
+    private List<NFLResponsePlayerObj> players;
+
 }

@@ -58,4 +58,11 @@ public class TeamRegistry {
     static Team nfl(String name, String abbr){
         return new Team(League.nfl, name, abbr, UUID.nameUUIDFromBytes(name.getBytes()));
     }
+
+    public Team getTeamByAbbr(League league, String teamAbbr) {
+        return teams.get(league).stream()
+                .filter(f->f.getAbbr().equals(teamAbbr))
+                .findFirst()
+                .orElse( new Team(League.nfl, "Fake"));
+    }
 }
