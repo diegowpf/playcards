@@ -14,7 +14,7 @@
         </repository>
     </repositories>
 
-    <artifactId>teams</artifactId>
+    <artifactId>playcards-teams</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -96,7 +96,7 @@
         </dependency>
         <dependency>
             <groupId>com.bytecubed</groupId>
-            <artifactId>commons</artifactId>
+            <artifactId>playcards-commons</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
