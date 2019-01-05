@@ -1,9 +1,10 @@
 package com.bytecubed.team.web;
 
+import com.bytecubed.commons.models.League;
 import com.bytecubed.commons.models.Player;
 import com.bytecubed.commons.models.Roster;
 import com.bytecubed.commons.models.Team;
-import com.bytecubed.team.repository.TeamRegistry;
+import com.bytecubed.team.provisioning.TeamRosterLoader;
 import com.bytecubed.team.repository.TeamRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,11 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
@@ -34,9 +33,9 @@ public class TeamController {
         this.rosters = rosters;
     }
 
-    @GetMapping("/{teamId}")
-    public ResponseEntity<Roster> getTeamRoster(@PathVariable UUID teamId){
-        List<Player> players = new RosterDiscoveryClient().getPlayers("Baltimore Ravens");
+    @GetMapping("/{league}/{teamId}")
+    public ResponseEntity<Roster> getTeamRoster(@PathVariable League league, @PathVariable UUID teamId){
+        List<Player> players = new TeamRosterLoader(this).load();
         logger.debug("Players:  " + players );
 
         return ok(new Roster(players));
@@ -47,20 +46,6 @@ public class TeamController {
     public HttpEntity create( Team team ){
         repository.save(team);
         return created(null).build();
-    }
-
-    private class RosterDiscoveryClient {
-
-        public List<Player> getPlayers(String teamName) {
-
-            NFLResponse response = new RestTemplate().getForObject("http://api.fantasy.nfl.com/v1/players/stats?statType=seasonStats&season=2018&week=1&format=json", NFLResponse.class);
-            logger.debug( "Player Response size:  " + response.getPlayers().size());
-
-            return response.getPlayers().stream()
-                    .map(n->n.toPlayer(new TeamRegistry()))
-                    .collect(Collectors.toList());
-        }
-
     }
 
 }

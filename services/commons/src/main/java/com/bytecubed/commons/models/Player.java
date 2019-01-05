@@ -1,9 +1,16 @@
 package com.bytecubed.commons.models;
 
+import org.springframework.data.annotation.Id;
+
+import java.util.UUID;
+
 public class Player {
     private String name;
     private String position;
     private Team team;
+
+    @Id
+    private UUID id;
 
     public Player(){}
 
@@ -11,6 +18,8 @@ public class Player {
         this.name = name;
         this.position = position;
         this.team = team;
+
+        id = UUID.nameUUIDFromBytes((name+position+team.getName()).getBytes());
     }
 
     public Team getTeam() {
