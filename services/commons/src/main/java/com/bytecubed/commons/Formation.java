@@ -1,6 +1,9 @@
 package com.bytecubed.commons;
 
 import com.bytecubed.commons.models.PlayerMarker;
+import com.bytecubed.nlp.exceptions.InvalidPlayerException;
+
+import java.util.Arrays;
 
 public class Formation {
 
@@ -11,6 +14,9 @@ public class Formation {
     }
 
     public PlayerMarker getPlayerMarkerAt(String tag) {
-        return null;
+        return Arrays.stream(players)
+                .filter(f->f.getTag().equals(tag))
+                .findFirst()
+                .orElseThrow(() -> new InvalidPlayerException( "No such player:  " + tag));
     }
 }

@@ -1,4 +1,4 @@
-package com.bytecubed.nlp;
+package com.bytecubed.nlp.design;
 
 public enum FormationType {
     StandardLeft,
