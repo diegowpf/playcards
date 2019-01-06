@@ -28,8 +28,10 @@ jobs:
          cd ../
          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
          cd config
+         terraform init
          terraform apply --target module.ecr --auto-approve
          ./tag-push.sh
+         ./push-images.sh
       # - run: cd client && ./build-container.sh
   deploy:
     docker:
