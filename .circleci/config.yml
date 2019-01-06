@@ -51,7 +51,7 @@ jobs:
          cd ../
          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
          cd config
-         ./tag-push.sh
+         source ./tag-push.sh
          ./push-images.sh
       # - run: cd client && ./build-container.sh
   deploy:
