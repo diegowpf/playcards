@@ -30,8 +30,34 @@ jobs:
          cd config
          ./tag-push.sh
       # - run: cd client && ./build-container.sh
+  deploy:
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:8-jdk
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+   #  working_directory: ./server
+
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+
+    steps:
+      - checkout
+      - run: |
+         echo "Deploying"
 workflows:
   version: 2
   build_server:
     jobs:
       - build
+      - deploy:
+          requires:
+            - build
+          filters:
+              branches:
+                only: master
