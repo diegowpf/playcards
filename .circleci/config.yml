@@ -26,11 +26,6 @@ jobs:
       - run: cd services && mvn clean install
       - run: |
          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
-<<<<<<< HEAD
-         cd config
-         ./tag-push.sh
-=======
->>>>>>> @carlyledavis:  Updating docker credentials in circle.
       # - run: cd client && ./build-container.sh
 workflows:
   version: 2
