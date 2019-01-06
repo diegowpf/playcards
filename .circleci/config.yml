@@ -83,7 +83,7 @@ workflows:
   build_server:
     jobs:
       - repos
-      - build
+      - build:
           requires:
             - repos
           filters:
