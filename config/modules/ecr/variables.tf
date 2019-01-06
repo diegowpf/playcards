@@ -1,5 +1,5 @@
 variable "repo_names" {
   type="list"
-  default = ["playcards-teams","playcards-nlp"]
+  default = []
   # default = ["playcards-client","playcards-server","playcards-teams","playcards-nlp"]
 }
