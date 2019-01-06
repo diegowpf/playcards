@@ -25,7 +25,7 @@ jobs:
       - checkout
       - run: cd services && mvn clean install
       - run: |
-         docker login -u $DOCKER_USER -p $DOCKER_PASS
+         docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
          cd config
          ./tag-push.sh
       # - run: cd client && ./build-container.sh
