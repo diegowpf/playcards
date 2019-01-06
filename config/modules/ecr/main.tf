@@ -1,9 +1,6 @@
-resource "aws_ecr_repository" "server" {
-  name = "playcards-server"
-}
-
-resource "aws_ecr_repository" "client" {
-  name = "playcards-client"
+resource "aws_ecr_repository" "repo" {
+  count = "${length(var.repo_names)}"
+  name = "${element(var.repo_names, count.index)}"
 }
 
 resource "aws_iam_role_policy" "ecr_admin_policy" {

@@ -28,6 +28,7 @@ jobs:
          cd ../
          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
          cd config
+         terraform apply --target module.ecr --auto-approve
          ./tag-push.sh
       # - run: cd client && ./build-container.sh
   deploy:
@@ -52,6 +53,7 @@ jobs:
          echo "Deploying"
          cd config
          terraform init
+         terraform apply --target module.ecr --auto-approve
          terraform apply --auto-approve
 workflows:
   version: 2
