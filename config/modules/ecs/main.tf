@@ -28,7 +28,7 @@ resource "aws_iam_role_policy_attachment" "ecs-service-role-attachment" {
 resource "aws_instance" "compute" {
   # ECS-optimized AMI for us-east-1
   ami           = "ami-cb2305a1"
-  instance_type = "m4.xlarge"
+  instance_type = "m4.large"
   count         = 1
 
   user_data = <<EOF

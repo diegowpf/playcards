@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <docker.image.prefix>068681799287.dkr.ecr.us-east-1.amazonaws.com</docker.image.prefix>
+        <docker.image.prefix>bytecubedlabs</docker.image.prefix>
     </properties>
 
     <dependencyManagement>
@@ -68,6 +68,7 @@
                         </goals>
                     </execution>
                 </executions>
+
                 <configuration>
                     <repository>${docker.image.prefix}/${project.artifactId}</repository>
                     <buildArgs>

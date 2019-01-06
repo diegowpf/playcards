@@ -1,11 +1,13 @@
 package com.bytecubed.team.repository;
 
 import com.bytecubed.commons.models.League;
-import com.bytecubed.commons.models.Player;
 import com.bytecubed.commons.models.Team;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static java.util.Arrays.asList;
 

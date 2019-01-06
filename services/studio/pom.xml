@@ -15,7 +15,7 @@
     </repositories>
 
 
-    <artifactId>playcards-studio</artifactId>
+    <artifactId>playcards-server</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <parent>
@@ -27,7 +27,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <docker.image.prefix>068681799287.dkr.ecr.us-east-1.amazonaws.com</docker.image.prefix>
+        <docker.image.prefix>bytecubedlabs</docker.image.prefix>
     </properties>
 
     <dependencies>
