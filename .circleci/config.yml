@@ -4,11 +4,33 @@
 #
 version: 2
 jobs:
-  build:
+  repos:
     docker:
       # specify the version you desire here
       - image: carlyledavis/bytecubed-circle-ci
-      # circleci/openjdk:8-jdk
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+   #  working_directory: ./server
+
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+
+    steps:
+      - checkout
+      - run: |
+         echo "Deploying"
+         cd config
+         terraform init
+         terraform apply --target module.ecr --auto-approve
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:8-jdk
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -29,8 +51,6 @@ jobs:
          cd ../
          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
          cd config
-         terraform init
-         terraform apply --target module.ecr --auto-approve
          ./tag-push.sh
          ./push-images.sh
       # - run: cd client && ./build-container.sh
@@ -62,7 +82,10 @@ workflows:
   version: 2
   build_server:
     jobs:
+      - repos
       - build
+          requires:
+            - repos
       - deploy:
           requires:
             - build
