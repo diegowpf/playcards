@@ -86,6 +86,9 @@ workflows:
       - build
           requires:
             - repos
+          filters:
+              branches:
+                only: master
       - deploy:
           requires:
             - build
