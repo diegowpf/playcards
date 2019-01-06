@@ -23,8 +23,9 @@ jobs:
     steps:
       - setup_remote_docker
       - checkout
-      - run: cd services && mvn clean install
       - run: |
+         cd services && mvn clean install
+         cd ../
          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
          cd config
          ./tag-push.sh
