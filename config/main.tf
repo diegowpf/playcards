@@ -2,6 +2,14 @@ provider "aws" {
   region = "${var.region}"
 }
 
+terraform {
+  backend "s3" {
+    bucket = "immersivesports-deployments"
+    key    = "deploynents/playcards"
+    region = "us-east-1"
+  }
+}
+
 resource "aws_route53_zone" "primary" {
   name = "immersivesports.ai"
 }
@@ -17,7 +25,7 @@ module "client" {
   vpc_id             = "${module.network.vpc_id}"
   private_subnets    = "${module.network.private_subnets}"
   public_subnets     = "${module.network.public_subnets}"
-  docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-client"
+  docker_image       = "bytecubedlabs/playcards-client"
   container_family   = "client"
   health_check_path  = "/"
   container_port     = 3000
@@ -37,8 +45,48 @@ module "server" {
   vpc_id             = "${module.network.vpc_id}"
   private_subnets    = "${module.network.private_subnets}"
   public_subnets     = "${module.network.public_subnets}"
-  docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-server"
+  docker_image       = "bytecubedlabs/playcards-server"
   container_family   = "server"
+  health_check_path  = "/playcards/team/123e4567-e89b-12d3-a456-426655440000"
+  # memory             = 4096
+  # cpu                = 2048
+  REACT_APP_SERVER_URL = "http://www.google.com"
+  instance_count     = 1
+  timeout            = 180
+  container_port     = 8080
+  zone_id = "${aws_route53_zone.primary.zone_id}"
+}
+
+module "teams" {
+  source = "./modules/container"
+
+  execution_role_arn = "${module.ecr.execution_role_arn}"
+  cluster_id         = "${module.ecs.ecs_cluster_id}"
+  vpc_id             = "${module.network.vpc_id}"
+  private_subnets    = "${module.network.private_subnets}"
+  public_subnets     = "${module.network.public_subnets}"
+  docker_image       = "bytecubedlabs/playcards-teams"
+  container_family   = "teams"
+  health_check_path  = "/playcards/team/123e4567-e89b-12d3-a456-426655440000"
+  # memory             = 4096
+  # cpu                = 2048
+  REACT_APP_SERVER_URL = "http://www.google.com"
+  instance_count     = 1
+  timeout            = 180
+  container_port     = 8080
+  zone_id = "${aws_route53_zone.primary.zone_id}"
+}
+
+module "nlp" {
+  source = "./modules/container"
+
+  execution_role_arn = "${module.ecr.execution_role_arn}"
+  cluster_id         = "${module.ecs.ecs_cluster_id}"
+  vpc_id             = "${module.network.vpc_id}"
+  private_subnets    = "${module.network.private_subnets}"
+  public_subnets     = "${module.network.public_subnets}"
+  docker_image       = "bytecubedlabs/playcards-nlp"
+  container_family   = "nlp"
   health_check_path  = "/playcards/team/123e4567-e89b-12d3-a456-426655440000"
   # memory             = 4096
   # cpu                = 2048
