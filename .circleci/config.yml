@@ -48,9 +48,9 @@ jobs:
       - checkout
       - run: |
          sudo apt-get install yarn -f
-         docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
          cd config
          ./build-platform.sh
+         docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
          ./tag-push.sh
          ./push-images.sh
       # - run: cd client && ./build-container.sh
