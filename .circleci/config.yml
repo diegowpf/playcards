@@ -47,6 +47,7 @@ jobs:
       - setup_remote_docker
       - checkout
       - run: |
+         sudo apt-get install yarn -f
          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
          cd config
          ./build-platform.sh
