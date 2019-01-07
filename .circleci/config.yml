@@ -30,7 +30,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: carlyledavis/bytecubed-circle-ci
+      - image: carlyledavis/bytecubed-circle-ci-mvn
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -47,7 +47,7 @@ jobs:
       - setup_remote_docker
       - checkout
       - run: |
-         sudo apt-get update && sudo apt-get install mvn -f
+         sudo apt-get update && sudo ub.apt-get install mvn -f
          cd config
          ./build-platform.sh
          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
