@@ -30,7 +30,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
+      - image: carlyledavis/bytecubed-circle-ci
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -47,9 +47,6 @@ jobs:
       - setup_remote_docker
       - checkout
       - run: |
-         curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-         echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-         sudo apt update && sudo apt install yarn -y
          cd config
          ./build-platform.sh
          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
