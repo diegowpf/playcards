@@ -47,7 +47,6 @@ jobs:
       - setup_remote_docker
       - checkout
       - run: |
-         sudo apt-get update && sudo ub.apt-get install mvn -f
          cd config
          ./build-platform.sh
          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
