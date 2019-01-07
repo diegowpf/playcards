@@ -47,11 +47,9 @@ jobs:
       - setup_remote_docker
       - checkout
       - run: |
-         cd services && mvn clean install
-         cd ../
          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
          cd config
-	 ./build-platform.sh
+         ./build-platform.sh
          ./tag-push.sh
          ./push-images.sh
       # - run: cd client && ./build-container.sh
