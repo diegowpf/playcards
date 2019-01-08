@@ -18,6 +18,10 @@ variable "ami" {
   }
 }
 
+variable "version" {
+  default = "110"
+}
+
 variable "cidr_block" {
   default = "172.17.0.0/16"
 }

@@ -25,7 +25,7 @@ module "client" {
   vpc_id             = "${module.network.vpc_id}"
   private_subnets    = "${module.network.private_subnets}"
   public_subnets     = "${module.network.public_subnets}"
-  docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-client"
+  docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-client:${var.version}"
   container_family   = "client"
   health_check_path  = "/"
   container_port     = 3000
@@ -45,7 +45,7 @@ module "server" {
   vpc_id             = "${module.network.vpc_id}"
   private_subnets    = "${module.network.private_subnets}"
   public_subnets     = "${module.network.public_subnets}"
-  docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-server"
+  docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-server:${var.version}"
   container_family   = "server"
   health_check_path  = "/playcards/team/123e4567-e89b-12d3-a456-426655440000"
   # memory             = 4096
@@ -65,7 +65,7 @@ module "teams" {
   vpc_id             = "${module.network.vpc_id}"
   private_subnets    = "${module.network.private_subnets}"
   public_subnets     = "${module.network.public_subnets}"
-  docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-teams"
+  docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-teams:${var.version}"
   container_family   = "teams"
   health_check_path  = "/playcards/team/123e4567-e89b-12d3-a456-426655440000"
   # memory             = 4096
@@ -85,7 +85,7 @@ module "nlp" {
   vpc_id             = "${module.network.vpc_id}"
   private_subnets    = "${module.network.private_subnets}"
   public_subnets     = "${module.network.public_subnets}"
-  docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-nlp"
+  docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-nlp:${var.version}"
   container_family   = "nlp"
   health_check_path  = "/playcards/team/123e4567-e89b-12d3-a456-426655440000"
   # memory             = 4096
