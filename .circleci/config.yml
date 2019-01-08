@@ -75,6 +75,7 @@ jobs:
          echo "Deploying"
          cd config
          terraform init
+         export TF_VAR_version=$CIRCLE_BUILD_NUM
          terraform apply --target module.ecr --auto-approve
          terraform apply --auto-approve
 workflows:
