@@ -37,7 +37,7 @@ public class PlayCardController {
         PlayCard card = new PlayCard(id, new RavensPowerPointParser(ppt).extractPlayerPlacements());
         repository.save(card);
 
-        return ok(card.getPlayers());
+        return ok(card.getPlayerMarkers());
     }
 
     @GetMapping("/team/{id}")
@@ -47,7 +47,7 @@ public class PlayCardController {
 
     @GetMapping("/{id}")
     public HttpEntity<Iterable<PlayerMarker>> getPlayCard(@PathVariable UUID id) {
-        return ok(repository.findAll().iterator().next().getPlayers());
+        return ok(repository.findAll().iterator().next().getPlayerMarkers());
     }
 
     @GetMapping()
