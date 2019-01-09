@@ -13,14 +13,18 @@ class App extends Component {
       <div className="App">
 
         <PrimarySearchAppBar/>
-        <Grid container spacing={24}>
-
-          <Grid item xs={12}>
+        <Grid container direction="row" justify="flex-end">
+          <Grid item xs ={11}>
+          </Grid>
+          <Grid  item xs={1}>
           <br/>
             <Fab color="primary" aria-label="Add">
               <AddIcon />
             </Fab>
           </Grid>
+        </Grid>
+
+        <Grid container spacing={24}>
           <Grid item xs={8}>
           </Grid>
           <Grid item xs={4}>
