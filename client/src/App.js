@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PrimarySearchAppBar from './nav/primaryNavigation'
 import Field from './field/field'
 import './App.css';
+import Grid from '@material-ui/core/Grid';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 // import primaryNavigation from "./nav/primaryNavigation";
 
 class App extends Component {
@@ -10,7 +13,21 @@ class App extends Component {
       <div className="App">
 
         <PrimarySearchAppBar/>
-        <Field/>
+        <Grid container spacing={24}>
+
+          <Grid item xs={12}>
+          <br/>
+            <Fab color="primary" aria-label="Add">
+              <AddIcon />
+            </Fab>
+          </Grid>
+          <Grid item xs={8}>
+          </Grid>
+          <Grid item xs={4}>
+            <Field/>
+          </Grid>
+        </Grid>
+
         <header className="App-header">
         </header>
       </div>
