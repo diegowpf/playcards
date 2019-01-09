@@ -11,8 +11,8 @@ var outerField = {
    "-webkit-transform": "perspective(700px) rotateX(45deg)",
   "-webkit-transform-style": "preserve-3d",
   "position": "absolute",
-  "top": "100px",
-  "left": "100px"
+  "top": "0px",
+  "left": "0px"
 }
 
 var fieldStyle={
@@ -222,7 +222,8 @@ class Field extends React.Component {
         return (
             <div>
               <br/>
-                <img src="images/ravens-30-no-logo.png"k style={outerField}/>
+                <img src="images/ravens-30-no-logo.png" width={fieldWidth}
+                  height={fieldHeight} style={outerField}/>
               <br/>
               <svg width={fieldWidth} height={fieldHeight} style={outerField} id="svg">
                 <marker id='head' orient='auto' markerWidth='2' markerHeight='4'
