@@ -9,12 +9,25 @@ import java.util.UUID;
 public class PlayCard {
 
     @Id
-    private final UUID id;
-    private final List<PlayerMarker> playerMarkers;
+    private UUID id;
+    private List<PlayerMarker> playerMarkers;
+    private PlayCardType playCardType;
     private UUID teamId;
+
+    protected PlayCard(){}
+
     public PlayCard(UUID id, List<PlayerMarker> playerMarkers) {
+        this( id, playerMarkers, PlayCardType.Offense);
+    }
+
+    public PlayCard(UUID id, List<PlayerMarker> playerMarkers, PlayCardType playCardType) {
         this.id = id;
         this.playerMarkers = playerMarkers;
+        this.playCardType = playCardType;
+    }
+
+    public PlayCardType getPlayCardType() {
+        return playCardType;
     }
 
     public UUID getId() {
@@ -31,5 +44,11 @@ public class PlayCard {
 
     public void setTeamId(UUID teamId) {
         this.teamId = teamId;
+    }
+
+    public enum PlayCardType {
+        Offense,
+        Defense,
+        SpecialTeams
     }
 }

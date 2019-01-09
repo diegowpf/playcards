@@ -33,6 +33,13 @@ public class PlayCardController {
     public HttpEntity<Iterable<PlayerMarker>> importCard(@RequestParam("file") MultipartFile file,
                                                          RedirectAttributes redirectAttributes,
                                                          @PathVariable UUID id) throws IOException {
+        return importOffensiveCard(file, redirectAttributes, id );
+    }
+
+    @PostMapping("/team/offense/{id}")
+    public HttpEntity<Iterable<PlayerMarker>> importOffensiveCard(@RequestParam("file") MultipartFile file,
+                                                         RedirectAttributes redirectAttributes,
+                                                         @PathVariable UUID id) throws IOException {
         XMLSlideShow ppt = new XMLSlideShow(file.getInputStream());
         PlayCard card = new PlayCard(id, new RavensPowerPointParser(ppt).extractPlayerPlacements());
         repository.save(card);
