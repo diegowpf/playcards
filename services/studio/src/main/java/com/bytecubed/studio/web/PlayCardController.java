@@ -46,8 +46,8 @@ public class PlayCardController {
     }
 
     @GetMapping("/{id}")
-    public HttpEntity<Iterable<PlayerMarker>> getPlayCard(@PathVariable UUID id) {
-        return ok(repository.findAll().iterator().next().getPlayerMarkers());
+    public HttpEntity<PlayCard> getPlayCard(@PathVariable UUID id) {
+        return ok(repository.findById(id).get());
     }
 
     @GetMapping()
