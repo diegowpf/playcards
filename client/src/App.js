@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PrimarySearchAppBar from './nav/primaryNavigation'
 import Field from './field/field'
 import Focus from './field/focus'
+import PlayCardMenu from './plays/playcardsmenu'
 import './App.css';
 import Grid from '@material-ui/core/Grid';
 import Fab from '@material-ui/core/Fab';
@@ -33,22 +34,7 @@ class App extends Component {
 
         <Grid container>
           <Grid  justify="center" item xs={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
-              </Typography>
-              <Typography variant="h5" component="h2">
-                OFFENSE
-              </Typography>
-              <Typography color="textSecondary">
-                Offense Plays
-              </Typography>
-              <Typography component="p">
-                Design offensive plays
-                <br />
-              </Typography>
-            </CardContent>
-          </Card>
+            <PlayCardMenu/>
           </Grid>
           <Grid item xs={7}>
             <Field/>
