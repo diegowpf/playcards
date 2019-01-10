@@ -6,6 +6,11 @@ import './App.css';
 import Grid from '@material-ui/core/Grid';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 // import primaryNavigation from "./nav/primaryNavigation";
 
 class App extends Component {
@@ -26,14 +31,29 @@ class App extends Component {
           </Grid>
         </Grid>
 
-        <Grid container spacing={24}>
-          <Grid item xs={8}>
+        <Grid container>
+          <Grid  justify="center" item xs={3}>
+          <Card>
+            <CardContent>
+              <Typography color="textSecondary" gutterBottom>
+              </Typography>
+              <Typography variant="h5" component="h2">
+                OFFENSE
+              </Typography>
+              <Typography color="textSecondary">
+                Offense Plays
+              </Typography>
+              <Typography component="p">
+                Design offensive plays
+                <br />
+              </Typography>
+            </CardContent>
+          </Card>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={7}>
             <Field/>
           </Grid>
         </Grid>
-
         <header className="App-header">
         </header>
       </div>

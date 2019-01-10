@@ -4,13 +4,13 @@ import axios from 'axios'
 
 var props = {stroke: "white", "stroke-width": 5}
 var outerField = {
-  "stroke-width":5,
-  "fill-opacity":0.1,
-  "-webkit-transform": "rotateX(-45deg)",
-  "-webkit-transform-origin": "bottom center",
-   "-webkit-transform": "perspective(700px) rotateX(45deg)",
-  "-webkit-transform-style": "preserve-3d",
-  "position": "absolute",
+  // "stroke-width":5,
+  // "fill-opacity":0.1,
+  // "-webkit-transform": "rotateX(-45deg)",
+  // "-webkit-transform-origin": "bottom center",
+  //  "-webkit-transform": "perspective(700px) rotateX(45deg)",
+  // "-webkit-transform-style": "preserve-3d",
+  // "position": "absolute",
   "top": "0px",
   "left": "0px"
 }
@@ -222,10 +222,18 @@ class Field extends React.Component {
         return (
             <div>
               <br/>
-                <img src="images/ravens-30-no-logo.png" width={fieldWidth}
-                  height={fieldHeight} style={outerField}/>
               <br/>
               <svg width={fieldWidth} height={fieldHeight} style={outerField} id="svg">
+
+              <defs>
+    <pattern id="img1" patternUnits="userSpaceOnUse" x="0" y="0" width={fieldWidth} height={fieldHeight}>
+                <image xlinkHref="images/ravens-30-no-logo.png" width={fieldWidth} height={fieldHeight}/>
+        </pattern>
+</defs>
+<path d="M5,5
+    l0,767 l1443,0 l0,-767 l-{fieldWidth},0"
+    fill="url(#img1)" />
+
                 <marker id='head' orient='auto' markerWidth='2' markerHeight='4'
                         refX='0.1' refY='2'>
                   <path d='M0,0 V4 L2,2 Z' fill='red' />
