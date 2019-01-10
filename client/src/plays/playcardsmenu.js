@@ -37,14 +37,6 @@ function PlayCardMenu(props) {
 
   return (
     <div>
-    <Paper className={classes.root} elevation={1}>
-      <InputBase className={classes.input} placeholder="Search PlayCards" />
-      <IconButton className={classes.iconButton} aria-label="Search">
-        <SearchIcon />
-      </IconButton>
-      <Divider className={classes.divider} />
-    </Paper>
-    <br/>
     <Card className={classes.card}>
       <CardContent>
         <Typography variant="h5" component="h2">

@@ -221,18 +221,16 @@ class Field extends React.Component {
     render() {
         return (
             <div>
-              <br/>
-              <br/>
-              <svg width={fieldWidth} height={fieldHeight} style={outerField} id="svg">
+                  <svg viewBox="0 0 1443 767" preserveAspectRatio="xMidYMid meet" width="100%" height={fieldHeight} style={outerField} id="svg">
 
-              <defs>
-    <pattern id="img1" patternUnits="userSpaceOnUse" x="0" y="0" width={fieldWidth} height={fieldHeight}>
-                <image xlinkHref="images/ravens-30-no-logo.png" width={fieldWidth} height={fieldHeight}/>
-        </pattern>
-</defs>
-<path d="M5,5
-    l0,767 l1443,0 l0,-767 l-{fieldWidth},0"
-    fill="url(#img1)" />
+                <defs>
+                  <pattern id="img1" patternUnits="userSpaceOnUse" x="0" y="0" width={fieldWidth} height={fieldHeight}>
+                      <image xlinkHref="images/ravens-30-no-logo.png" width={fieldWidth} height={fieldHeight}/>
+                  </pattern>
+              </defs>
+              <path d="M5,5
+                  l0,767 l1443,0 l0,-767 l-{fieldWidth},0"
+                  fill="url(#img1)" />
 
                 <marker id='head' orient='auto' markerWidth='2' markerHeight='4'
                         refX='0.1' refY='2'>
@@ -240,6 +238,7 @@ class Field extends React.Component {
                 </marker>
 
               </svg>
+
             </div>
         );
     }
