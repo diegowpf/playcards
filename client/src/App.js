@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PrimarySearchAppBar from './nav/primaryNavigation'
 import Field from './field/field'
-import Focus from './field/focus'
+import Focus from './field/focusTabs'
 import PlayCardMenu from './plays/playcardsmenu'
 import './App.css';
 import Grid from '@material-ui/core/Grid';
@@ -19,10 +19,11 @@ class App extends Component {
     return (
       <div className="App">
         <PrimarySearchAppBar/>
+        <Focus/>
         <Grid container direction="row" justify="center">
           <Grid item xs ={11}>
             <br/>
-            <Focus/>
+
           </Grid>
           <Grid  item xs={1}>
           <br/>
