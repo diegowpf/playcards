@@ -2,6 +2,8 @@ package com.bytecubed.nlp.web;
 
 import com.bytecubed.commons.Play;
 import com.bytecubed.commons.models.PlayDescription;
+import com.bytecubed.commons.models.PlayerMarker;
+import com.bytecubed.nlp.design.FormationFactory;
 import com.bytecubed.nlp.models.PlayerMovementDescription;
 import com.bytecubed.nlp.parsing.InstructionParser;
 import com.bytecubed.nlp.repository.PlayRepository;
@@ -46,6 +48,18 @@ public class CoachController {
         parser.parse(commandAsString, play.getFormation() );
 
         return null;
+    }
+
+    @GetMapping("/formation/{name}")
+    public HttpEntity<Iterable<PlayerMarker>> getFormationByName(@PathVariable String name ){
+        return ok(new FormationFactory()
+                .withStandardTemplateInTheCenter()
+                .andQbUnderCenter()
+                .andXIsOnLeftOffTheBallOutsideTheNumbers()
+                .andYIsOnTheRightLinedUpWithQBOutSideTheNumbers()
+                .andFullBackBehindQB()
+                .andHalfBackBehindFullBack()
+                .addTightEndOnTheBallOnTheRight().getPLayerMarkers());
     }
 
 }

@@ -1,10 +1,14 @@
 package com.bytecubed.commons.models;
 
 public class PlayerMarker {
-    private final Placement placement;
-    private final String pos;
-    private final String tag;
-    private final boolean isCenter;
+    private Placement placement;
+    private String pos;
+    private String tag;
+    private boolean isCenter;
+
+    public PlayerMarker(Placement placement, String pos, String tag) {
+        this( placement, pos, tag, false );
+    }
 
     public Placement getPlacement() {
         return placement;

@@ -8,28 +8,34 @@ import org.springframework.stereotype.Component;
 @Component
 public class FormationFactory {
 
-    public Formation standardFormationCenter(){
-        return null;
+    public Formation withStandardTemplateInTheCenter(){
+        return new Formation(
+                new PlayerMarker(new Placement(72,0 ), "lt", "lt"),
+                new PlayerMarker(new Placement(64,0 ), "lg", "lg"),
+                new PlayerMarker(new Placement(88,0 ), "rt", "rt"),
+                new PlayerMarker(new Placement(96,0 ), "rg", "rg"),
+                new PlayerMarker(new Placement(80,0 ), "C", "C", true)
+        );
     }
 
-    public Formation standardFormationLeftHash(){
+    public Formation standardTemplateFromLeftHash(){
         return new Formation(new PlayerMarker(new Placement(70,0), "center", "", true ));
     }
 
-    public Formation standardFormationRightHash(){
+    public Formation standardTemplateFromRightHash(){
         return null;
     }
 
     public Formation buildFormation(FormationType formationType ){
         switch(formationType){
             case StandardLeft:
-                return standardFormationLeftHash();
+                return standardTemplateFromLeftHash();
             case StandardRight:
-                return standardFormationRightHash();
+                return standardTemplateFromRightHash();
             case StandardCenter:
-                return standardFormationCenter();
+                return withStandardTemplateInTheCenter();
         }
 
-        return standardFormationCenter();
+        return withStandardTemplateInTheCenter();
     }
 }
