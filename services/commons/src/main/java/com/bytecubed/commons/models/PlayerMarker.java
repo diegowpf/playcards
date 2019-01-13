@@ -6,6 +6,9 @@ public class PlayerMarker {
     private String tag;
     private boolean isCenter;
 
+    public PlayerMarker(){
+    }
+
     public PlayerMarker(Placement placement, String pos, String tag) {
         this( placement, pos, tag, false );
     }
