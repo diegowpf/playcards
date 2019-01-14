@@ -8,7 +8,39 @@ services:
     image: 068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-server
     ports:
      - "8080:8080"
+    environment:
+      PERSISTENCE_MONGO_URL: "172.28.1.100"
+    networks:
+      playcards-network:
+        ipv4_address: 172.28.1.101
+  nlp:
+    image: 068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-nlp
+    ports:
+     - "8081:8081"
+    environment:
+      PERSISTENCE_MONGO_URL: "172.28.1.100"
+    networks:
+      playcards-network:
+        ipv4_address: 172.28.1.102
+  teams:
+    image: 068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-teams
+    ports:
+     - "8082:8082"
+    environment:
+      PERSISTENCE_MONGO_URL: "172.28.1.100"
+    networks:
+      playcards-network:
+        ipv4_address: 172.28.1.103
   mongo:
     image: "mongo:latest"
     ports:
      - "27017:27017"
+    networks:
+      playcards-network:
+        ipv4_address: 172.28.1.100
+networks:
+  playcards-network:
+      ipam:
+          driver: default
+          config:
+              - subnet: 172.28.0.0/16
