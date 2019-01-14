@@ -23,6 +23,7 @@ var fieldStyle={
   "transform": "rotate(90deg)"
 }
 
+var fontSize = 30;
 var fieldWidth = 1443;
 var fieldHeight = 767;
 var numSections = 3;
@@ -33,22 +34,15 @@ var standardFieldWidthInFt = 160
 var standardDownHeightInFt = 30
 var defaultGoSteps = 15
 
-var playerWidth = (usableFieldWidth) / (fieldWidth/32);
+var playerWidth = (usableFieldWidth) / (fieldWidth/28);
 var gridSize = usableFieldWidth / standardFieldWidthInFt
 var yard = gridSize * 3
 
 var line = 510;
 var routeColor = "navy";
 
-// var players = [
-  // { placement: { relativeX: 80, relativeY: 0 }, pos: "center" },
-  // { placement: { relativeX: 72, relativeY: 0 }, pos: "lt" },
-  // { placement: { relativeX: 64, relativeY: 0 }, pos: "lt" },
-  // { placement: { relativeX: 88, relativeY: 0 }, pos: "rt" },
-  // { placement: { relativeX: 96, relativeY: 0 }, pos: "rg" },
-  // { placement: { relativeX: 102, relativeY: 6 }, pos: "te", tag: 'H' },
-  // { placement: { relativeX: 20, relativeY: 10 }, pos: "wr", tag: "W" ,
-  //   route:[{move: "go"}]},
+var players = [{"placement":{"relativeX":72,"relativeY":0},"pos":"lt","center":false},{"placement":{"relativeX":64,"relativeY":0},"pos":"lg","center":false},{"placement":{"relativeX":88,"relativeY":0},"pos":"rt","center":false},{"placement":{"relativeX":96,"relativeY":0},"pos":"rg","center":false},{"placement":{"relativeX":80,"relativeY":0},"pos":"C","center":true},{"placement":{"relativeX":80,"relativeY":8},"pos":"QB","tag":"QB","center":false},{"placement":{"relativeX":20,"relativeY":2},"pos":"wr","tag":"X","center":false},{"placement":{"relativeX":145,"relativeY":8},"pos":"wr","tag":"Y","center":false},{"placement":{"relativeX":80,"relativeY":16},"pos":"FB","tag":"FB","center":false},{"placement":{"relativeX":80,"relativeY":24},"pos":"HB","tag":"HB","center":false},{"placement":{"relativeX":104,"relativeY":2},"pos":"te","tag":"T","center":false}];
+
   // { placement: { relativeX: 30, relativeY: 10 }, pos: "wr", tag: "Y" ,
   //   route:[{steps: 5, move: "curl"}]},
   // { placement: { relativeX: 143, relativeY: 10 }, pos: "wr", tag: "Z",
@@ -98,6 +92,7 @@ class Field extends React.Component {
         axios.get("http://server.immersivesports.ai/playcards/123e4567-e89b-12d3-a456-426655440000")
           .then(res => {
             const placements = res.data.playerMarkers;
+            // const placements = players;
             console.log(JSON.stringify(placements));
             this.setState({ placements });
             placements.forEach( (x)=> {
@@ -151,7 +146,7 @@ class Field extends React.Component {
         .attr("stroke", "black")
         .attr("stroke-width", "2px")
         .attr("dy", ".3em")
-        .attr("style", "font: italic 40px serif; fill: red")
+        .attr("style", "font: italic " + fontSize + "px serif; fill: red")
       label.text(player.tag)
 
       if( player.route) {
@@ -206,6 +201,8 @@ class Field extends React.Component {
         .attr( "cy", coordinates.y + (playerWidth) )
         .attr( "r", playerWidth )
         .attr( "fill", "red" )
+        .attr( "stroke-width", "5px" )
+        .attr( "stroke", "black")
     }
 
     addCenter(svg, player){
@@ -221,7 +218,7 @@ class Field extends React.Component {
     render() {
         return (
             <div>
-                  <svg viewBox="0 0 1443 767" preserveAspectRatio="none" width="100%" height={fieldHeight} style={outerField} id="svg">
+                  <svg viewBox="0 0 1443 767" preserveAspectRatio="xMidYMid meet" width="100%" height={fieldHeight} style={outerField} id="svg">
 
                 <defs>
                   <pattern id="img1" patternUnits="userSpaceOnUse" x="0" y="0" width={fieldWidth} height={fieldHeight}>
