@@ -218,7 +218,7 @@ class Field extends React.Component {
     render() {
         return (
             <div>
-                  <svg viewBox="0 0 1443 767" preserveAspectRatio="xMidYMid meet" width="100%" height={fieldHeight} style={outerField} id="svg">
+                  <svg viewBox="0 0 1443 767" preserveAspectRatio="xMidYMid meet" x="0"   y="0" width="100%" height={fieldHeight} style={outerField} id="svg">
 
                 <defs>
                   <pattern id="img1" patternUnits="userSpaceOnUse" x="0" y="0" width={fieldWidth} height={fieldHeight}>

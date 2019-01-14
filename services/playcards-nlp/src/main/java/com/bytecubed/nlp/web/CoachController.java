@@ -1,15 +1,20 @@
 package com.bytecubed.nlp.web;
 
+import com.bytecubed.commons.Formation;
 import com.bytecubed.commons.Play;
 import com.bytecubed.commons.models.PlayDescription;
 import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.nlp.design.FormationFactory;
 import com.bytecubed.nlp.parsing.InstructionParser;
+import com.bytecubed.nlp.repository.FormationRepository;
 import com.bytecubed.nlp.repository.PlayRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -22,11 +27,16 @@ public class CoachController {
 
     private PlayRepository repository;
     private InstructionParser parser;
+    private FormationRepository formationRepository;
+    private Logger logger = LoggerFactory.getLogger(CoachController.class);
 
     @Autowired
-    public CoachController(PlayRepository repository, InstructionParser parser ){
+    public CoachController(PlayRepository repository,
+                           InstructionParser parser,
+                           FormationRepository formationRepository){
         this.repository = repository;
         this.parser = parser;
+        this.formationRepository = formationRepository;
     }
 
     @PostMapping("/play" )
@@ -35,6 +45,7 @@ public class CoachController {
         repository.save(play);
         return ok(play.getId());
     }
+
 
     @GetMapping("/play/{id}")
     public HttpEntity<Play> getPlay(@PathVariable UUID id ){
@@ -58,9 +69,20 @@ public class CoachController {
                 .andYIsOnTheRightLinedUpWithQBOutSideTheNumbers()
                 .andFullBackBehindQB()
                 .andHalfBackBehindFullBack()
-                .addTightEndOnTheBallOnTheRight().getPLayerMarkers());
+                .addTightEndOnTheBallOnTheRight().getPlayerMarkers());
     }
 
+    @GetMapping("/formations" )
+    public HttpEntity<List<Formation>> getAllFormations(){
+        return ok(formationRepository.findAll());
+    }
 
+    @PostMapping("/formation" )
+    public HttpEntity addFormation(@RequestBody Formation formation ){
+        Formation target = new Formation(randomUUID(), formation);
+        formationRepository.save(target);
 
+        logger.debug( "saving fomration:  " + target.toString());
+        return ok().build();
+    }
 }

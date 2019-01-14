@@ -19,7 +19,7 @@ public class FormationFactoryTest {
                 .andHalfBackBehindFullBack()
                 .addTightEndOnTheBallOnTheRight();
 
-        assertThat(formation.getPLayerMarkers().size()).isEqualTo(11);
+        assertThat(formation.getPlayerMarkers().size()).isEqualTo(11);
 
     }
 

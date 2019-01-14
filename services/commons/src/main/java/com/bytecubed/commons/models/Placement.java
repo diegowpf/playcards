@@ -2,10 +2,12 @@ package com.bytecubed.commons.models;
 
 public class Placement {
 
-    private final int relativeX;
-    private final int relativeY;
+    private int relativeX;
+    private int relativeY;
 
-
+    public Placement(){
+        this(0,0);
+    }
 
     public Placement(int relativeX, int relativeY ) {
         this.relativeX = relativeX;

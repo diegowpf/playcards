@@ -3,19 +3,44 @@ package com.bytecubed.commons;
 import com.bytecubed.commons.models.Placement;
 import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.nlp.exceptions.InvalidPlayerException;
+import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static java.util.Arrays.asList;
+import static java.util.UUID.randomUUID;
 
 public class Formation {
 
     public static final int PLAYER_HORIZONTAL_SPACING = 8;
+    private String name;
     private List<PlayerMarker> players;
 
+    @Id
+    private UUID id;
+
+    public Formation(){
+        this(null, "",new PlayerMarker[0]);
+    }
     public Formation(PlayerMarker... players) {
+        this(randomUUID(), "", players);
+    }
+
+    public Formation(UUID id, String name, PlayerMarker... players ){
+        this.id = id;
+        this.name = name;
         this.players = new ArrayList(asList(players));
+    }
+
+    public Formation(UUID id, Formation formation) {
+        this(id, formation.getName(),
+                formation.getPlayerMarkers().toArray(new PlayerMarker[0]));
+    }
+
+    private String getName() {
+        return name;
     }
 
     public PlayerMarker getPlayerMarkerAt(String tag) {
@@ -48,10 +73,6 @@ public class Formation {
         return this;
     }
 
-    public Formation andHalfBackYardsBehindQB(int numYards) {
-        return this;
-    }
-
     public Formation andYIsOnTheRightLinedUpWithQBOutSideTheNumbers() {
         this.players.add(new PlayerMarker(new Placement(145, 8 ), "wr", "Y"));
         return this;
@@ -71,12 +92,25 @@ public class Formation {
         return this;
     }
 
-    public List<PlayerMarker> getPLayerMarkers() {
+    public List<PlayerMarker> getPlayerMarkers() {
         return players;
     }
 
     public Formation addTightEndOnTheBallOnTheRight() {
         this.players.add(new PlayerMarker(new Placement(104, 2 ), "te", "T"));
         return this;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Formation{" +
+                "name='" + name + '\'' +
+                ", players=" + players +
+                ", id=" + id +
+                '}';
     }
 }
