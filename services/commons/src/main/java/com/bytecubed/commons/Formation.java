@@ -20,7 +20,7 @@ public class Formation {
 
     public PlayerMarker getPlayerMarkerAt(String tag) {
         return players.stream()
-                .filter(f->f.getTag().equalsIgnoreCase(tag))
+                .filter(f->f.getTag() != null && f.getTag().equalsIgnoreCase(tag))
                 .findFirst()
                 .orElseThrow(() -> new InvalidPlayerException( "No such player:  " + tag));
     }

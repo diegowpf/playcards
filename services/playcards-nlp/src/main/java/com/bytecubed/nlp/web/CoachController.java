@@ -4,7 +4,6 @@ import com.bytecubed.commons.Play;
 import com.bytecubed.commons.models.PlayDescription;
 import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.nlp.design.FormationFactory;
-import com.bytecubed.nlp.models.PlayerMovementDescription;
 import com.bytecubed.nlp.parsing.InstructionParser;
 import com.bytecubed.nlp.repository.PlayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,5 +60,7 @@ public class CoachController {
                 .andHalfBackBehindFullBack()
                 .addTightEndOnTheBallOnTheRight().getPLayerMarkers());
     }
+
+
 
 }

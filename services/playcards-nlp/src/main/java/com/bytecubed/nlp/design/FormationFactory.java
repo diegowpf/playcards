@@ -8,22 +8,48 @@ import org.springframework.stereotype.Component;
 @Component
 public class FormationFactory {
 
+    private static final int HASH_SPACING = 10;
+
     public Formation withStandardTemplateInTheCenter(){
+        return getStandardTemplate(HashMarking.center);
+    }
+
+    public Formation getStandardTemplate(HashMarking hash ){
+
+        switch(hash) {
+            case left:
+                return new Formation(
+                        new PlayerMarker(new Placement(64 - HASH_SPACING, 0), "lg", null),
+                        new PlayerMarker(new Placement(72 - HASH_SPACING, 0), "lt", null),
+                        new PlayerMarker(new Placement(80 - HASH_SPACING, 0), "C", null, true),
+                        new PlayerMarker(new Placement(88 - HASH_SPACING, 0), "rt", null),
+                        new PlayerMarker(new Placement(96 - HASH_SPACING, 0), "rg", null)
+                );
+            case right:
+                return new Formation(
+                        new PlayerMarker(new Placement(64 + HASH_SPACING, 0), "lg", null),
+                        new PlayerMarker(new Placement(72 + HASH_SPACING, 0), "lt", null),
+                        new PlayerMarker(new Placement(80 + HASH_SPACING, 0), "C", null, true),
+                        new PlayerMarker(new Placement(88 + HASH_SPACING, 0), "rt", null),
+                        new PlayerMarker(new Placement(96 + HASH_SPACING, 0), "rg", null)
+                );
+        }
+
         return new Formation(
-                new PlayerMarker(new Placement(72,0 ), "lt", "lt"),
-                new PlayerMarker(new Placement(64,0 ), "lg", "lg"),
-                new PlayerMarker(new Placement(88,0 ), "rt", "rt"),
-                new PlayerMarker(new Placement(96,0 ), "rg", "rg"),
-                new PlayerMarker(new Placement(80,0 ), "C", "C", true)
+                new PlayerMarker(new Placement(64, 0), "lg", null),
+                new PlayerMarker(new Placement(72, 0), "lt", null),
+                new PlayerMarker(new Placement(80, 0), "C", null, true),
+                new PlayerMarker(new Placement(88, 0), "rt", null),
+                new PlayerMarker(new Placement(96, 0), "rg", null)
         );
     }
 
     public Formation standardTemplateFromLeftHash(){
-        return new Formation(new PlayerMarker(new Placement(70,0), "center", "", true ));
+        return getStandardTemplate(HashMarking.left);
     }
 
     public Formation standardTemplateFromRightHash(){
-        return null;
+        return getStandardTemplate(HashMarking.right);
     }
 
     public Formation buildFormation(FormationType formationType ){
@@ -37,5 +63,11 @@ public class FormationFactory {
         }
 
         return withStandardTemplateInTheCenter();
+    }
+
+    public enum HashMarking{
+        center,
+        left,
+        right
     }
 }
