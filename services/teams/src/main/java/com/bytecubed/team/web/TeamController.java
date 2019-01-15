@@ -33,9 +33,10 @@ public class TeamController {
         this.rosters = rosters;
     }
 
-    @GetMapping("/{league}/{teamId}")
+//    @GetMapping("/{league}/{teamId}")
+    @GetMapping("/load")
     public ResponseEntity<Roster> getTeamRoster(@PathVariable League league, @PathVariable UUID teamId){
-        List<Player> players = new TeamRosterLoader(this).load();
+        List<Player> players = new TeamRosterLoader(repository).load();
         logger.debug("Players:  " + players );
 
         return ok(new Roster(players));

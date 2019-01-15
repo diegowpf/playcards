@@ -2,8 +2,8 @@ package com.bytecubed.team.provisioning;
 
 import com.bytecubed.commons.models.Player;
 import com.bytecubed.team.repository.TeamRegistry;
+import com.bytecubed.team.repository.TeamRepository;
 import com.bytecubed.team.web.NFLResponse;
-import com.bytecubed.team.web.TeamController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 @Service
 public class TeamRosterLoader {
 
-    private TeamController teamController;
+    private TeamRepository teamRepository;
     private Logger logger = LoggerFactory.getLogger(TeamRosterLoader.class);
 
-    public TeamRosterLoader(TeamController teamController) {
-        this.teamController = teamController;
+    public TeamRosterLoader(TeamRepository teamRepository) {
+        this.teamRepository = teamRepository;
     }
 
     public List<Player> load() {
@@ -27,9 +27,13 @@ public class TeamRosterLoader {
         NFLResponse response = new RestTemplate().getForObject("http://api.fantasy.nfl.com/v1/players/stats?statType=seasonStats&season=2018&week=1&format=json", NFLResponse.class);
         logger.debug( "Player Response size:  " + response.getPlayers().size());
 
-        return response.getPlayers().stream()
+        List<Player> players = response.getPlayers().stream()
                 .map(n->n.toPlayer(new TeamRegistry()))
                 .collect(Collectors.toList());
+
+        players.forEach(p->teamRepository.save(p.getTeam()));
+
+        return players;
     }
 
 }

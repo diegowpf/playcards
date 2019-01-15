@@ -5,6 +5,8 @@ import org.springframework.data.annotation.Id;
 
 import java.util.UUID;
 
+import static java.util.UUID.randomUUID;
+
 public class Team {
 
     private String name;
@@ -17,7 +19,7 @@ public class Team {
     public Team(){}
 
     public Team(League league, String name){
-        this(league, name, "", UUID.randomUUID());
+        this(league, name, "", randomUUID());
     }
 
     public String getAbbr() {
