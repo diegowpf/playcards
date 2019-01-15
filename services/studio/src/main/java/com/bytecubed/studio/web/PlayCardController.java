@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.util.UUID;
 
+import static java.util.UUID.randomUUID;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -36,12 +37,12 @@ public class PlayCardController {
         return importOffensiveCard(file, redirectAttributes, id );
     }
 
-    @PostMapping("/team/offense/{id}")
+    @PostMapping("/team/offense/{teamId}")
     public HttpEntity<Iterable<PlayerMarker>> importOffensiveCard(@RequestParam("file") MultipartFile file,
                                                          RedirectAttributes redirectAttributes,
-                                                         @PathVariable UUID id) throws IOException {
+                                                         @PathVariable UUID teamId) throws IOException {
         XMLSlideShow ppt = new XMLSlideShow(file.getInputStream());
-        PlayCard card = new PlayCard(id, new RavensPowerPointParser(ppt).extractPlayerPlacements());
+        PlayCard card = new PlayCard(randomUUID(), teamId, new RavensPowerPointParser(ppt).extractPlayerPlacements());
         repository.save(card);
 
         return ok(card.getPlayerMarkers());

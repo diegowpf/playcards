@@ -39,7 +39,6 @@ public class TeamController {
         logger.debug("Players:  " + players );
 
         return ok(new Roster(players));
-//        return ok(rosters.findByTeamIdAndActiveTrue(teamId).stream().findFirst().get());
     }
 
     @RequestMapping( method = RequestMethod.PUT )

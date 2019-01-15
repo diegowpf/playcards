@@ -13,6 +13,7 @@ persistence:
     port: 27017
 
 management:
-  endpoint:
-    health:
-      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: heapdump,liquibase,loggers,prometheus,threaddump,info,metrics,health

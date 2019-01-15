@@ -7,12 +7,14 @@ import java.util.UUID;
 
 public class Team {
 
-    @Id
-    private UUID Id;
     private String name;
     private League league;
     private String abbr;
+
+    @Id
     private UUID id;
+
+    public Team(){}
 
     public Team(League league, String name){
         this(league, name, "", UUID.randomUUID());
@@ -30,7 +32,7 @@ public class Team {
     }
 
     public UUID getId() {
-        return Id;
+        return id;
     }
 
     public String getName() {

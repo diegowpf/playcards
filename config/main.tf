@@ -49,7 +49,6 @@ module "server" {
   public_subnets     = "${module.network.public_subnets}"
   docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-server:${var.version}"
   container_family   = "server"
-  health_check_path  = "/playcards/team/123e4567-e89b-12d3-a456-426655440000"
   # memory             = 4096
   # cpu                = 2048
   REACT_APP_SERVER_URL = "http://www.google.com"
@@ -71,7 +70,6 @@ module "teams" {
   public_subnets     = "${module.network.public_subnets}"
   docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-teams:${var.version}"
   container_family   = "teams"
-  health_check_path  = "/playcards/team/123e4567-e89b-12d3-a456-426655440000"
   # memory             = 4096
   # cpu                = 2048
   REACT_APP_SERVER_URL = "http://www.google.com"
@@ -93,7 +91,6 @@ module "nlp" {
   public_subnets     = "${module.network.public_subnets}"
   docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-nlp:${var.version}"
   container_family   = "nlp"
-  health_check_path  = "/playcards/team/123e4567-e89b-12d3-a456-426655440000"
   # memory             = 4096
   # cpu                = 2048
   REACT_APP_SERVER_URL = "http://www.google.com"

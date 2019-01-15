@@ -34,7 +34,7 @@ variable "memory" {
 }
 
 variable "health_check_path" {
-  default = "/health"
+  default = "/actuator/health"
 }
 
 variable "matcher_ports" {
