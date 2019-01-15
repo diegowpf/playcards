@@ -13,6 +13,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import DirectionsIcon from '@material-ui/icons/Directions';
+import * as d3 from "d3";
+import axios from 'axios'
 
 const styles = {
   card: {
@@ -31,31 +33,56 @@ const styles = {
   },
 };
 
-function PlayCardMenu(props) {
-  const { classes } = props;
-  const bull = <span className={classes.bullet}>•</span>;
+var playCards = [];
 
-  return (
-    <div>
-    <Card className={classes.card}>
-      <CardContent>
-        <Typography variant="h5" component="h2">
-          Danger Right
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          Standard Layout
-        </Typography>
-        <Typography component="p">
-          Running Back Wide
-        </Typography>
-      </CardContent>
-    </Card>
-    </div>
-  );
+export default class PersonList extends React.Component{
+
+    // const { classes } = props;
+    // const bull = <span className={classes.bullet}>•</span>;
+  state = {
+      playCards: [{name: "Danger Right", formation: "Standard Layout", description: "Running Back Wide"},
+                  {name: "Some New Play", formation: "Standard Layout", description: "Three Wide Recievers"},
+                  {name: "True Detective", formation: "Standard Layout", description: "Halfback"}]
+  }
+
+  componentDidMount(){
+    axios.get("http://server.immersivesports.ai/playcards/team/c679919f-d524-3f75-ad2a-5161706e12a5")
+      .then(res => {
+        playCards = res.data;
+        console.log(JSON.stringify(playCards));
+
+        //this.setState({playCards});
+      })
+  }
+
+  render(){
+    return (
+      <div id="availableCards">
+       { this.state.playCards.map(card =>
+         <div>
+           <Card>
+            <CardContent>
+            <Typography variant="h5" component="h2">
+              {card.name}
+            </Typography>
+            <Typography  color="textSecondary">
+              {card.formation}
+            </Typography>
+            <Typography component="p">
+              {card.description}
+            </Typography>
+            </CardContent>
+           </Card>
+           <br/>
+         </div>
+     )}
+      </div>
+    );
+  }
 }
 
-PlayCardMenu.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+// PlayCardMenu.propTypes = {
+//   classes: PropTypes.object.isRequired,
+// };
 
-export default withStyles(styles)(PlayCardMenu);
+// export default withStyles(styles)(PlayCardMenu);
