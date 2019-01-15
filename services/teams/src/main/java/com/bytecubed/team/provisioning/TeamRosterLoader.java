@@ -22,16 +22,20 @@ public class TeamRosterLoader {
         this.teamRepository = teamRepository;
     }
 
+    //Todo: Fix this to return all teams as a bisected list.
     public List<Player> load() {
-
         NFLResponse response = new RestTemplate().getForObject("http://api.fantasy.nfl.com/v1/players/stats?statType=seasonStats&season=2018&week=1&format=json", NFLResponse.class);
-        logger.debug( "Player Response size:  " + response.getPlayers().size());
+        logger.debug("Player Response size:  " + response.getPlayers().size());
+        TeamRegistry registry = new TeamRegistry();
 
         List<Player> players = response.getPlayers().stream()
-                .map(n->n.toPlayer(new TeamRegistry()))
+                .map(n -> n.toPlayer(registry))
                 .collect(Collectors.toList());
 
-        players.forEach(p->teamRepository.save(p.getTeam()));
+        players.forEach(p -> {
+            teamRepository.save(p.getTeam());
+            logger.debug("Team id:  " + p.getTeam().getId() + ":  " + p.getTeam().getName());
+        });
 
         return players;
     }

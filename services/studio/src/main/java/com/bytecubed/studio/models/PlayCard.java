@@ -16,11 +16,11 @@ public class PlayCard {
 
     protected PlayCard(){}
 
-    public PlayCard(UUID teamId, UUID id, List<PlayerMarker> playerMarkers) {
-        this( teamId, id, playerMarkers, PlayCardType.Offense);
+    public PlayCard(UUID id, UUID teamId, List<PlayerMarker> playerMarkers) {
+        this( id, teamId, playerMarkers, PlayCardType.Offense);
     }
 
-    public PlayCard(UUID teamId, UUID id, List<PlayerMarker> playerMarkers, PlayCardType playCardType) {
+    public PlayCard(UUID id, UUID teamId, List<PlayerMarker> playerMarkers, PlayCardType playCardType) {
         this.teamId = teamId;
         this.id = id;
         this.playerMarkers = playerMarkers;

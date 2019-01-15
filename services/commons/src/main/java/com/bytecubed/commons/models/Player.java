@@ -22,6 +22,10 @@ public class Player {
         id = UUID.nameUUIDFromBytes((name+position+team.getName()).getBytes());
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public Team getTeam() {
         return team;
     }

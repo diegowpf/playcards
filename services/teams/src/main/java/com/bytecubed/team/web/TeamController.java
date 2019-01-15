@@ -5,6 +5,7 @@ import com.bytecubed.commons.models.Player;
 import com.bytecubed.commons.models.Roster;
 import com.bytecubed.commons.models.Team;
 import com.bytecubed.team.provisioning.TeamRosterLoader;
+import com.bytecubed.team.repository.PlayerRepository;
 import com.bytecubed.team.repository.TeamRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,21 +26,24 @@ public class TeamController {
 
     private TeamRepository repository;
     private RosterRepository rosters;
+    private PlayerRepository players;
     private Logger logger = LoggerFactory.getLogger(TeamController.class);
 
     @Autowired
-    public TeamController(TeamRepository repository, RosterRepository rosters ) {
+    public TeamController(TeamRepository repository, RosterRepository rosters, PlayerRepository players) {
         this.repository = repository;
         this.rosters = rosters;
+        this.players = players;
     }
 
 //    @GetMapping("/{league}/{teamId}")
     @GetMapping("/load")
-    public ResponseEntity<Roster> getTeamRoster(@PathVariable League league, @PathVariable UUID teamId){
-        List<Player> players = new TeamRosterLoader(repository).load();
-        logger.debug("Players:  " + players );
+    public ResponseEntity<Roster> getTeamRoster(){
+        List<Player> extractedPlayers = new TeamRosterLoader(repository).load();
+        extractedPlayers.forEach(players::save);
+        logger.debug("Players:  " + extractedPlayers);
 
-        return ok(new Roster(players));
+        return ok(new Roster(extractedPlayers));
     }
 
     @RequestMapping( method = RequestMethod.PUT )
