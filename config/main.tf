@@ -32,6 +32,8 @@ module "client" {
   loadbalancer_port  = 80
 
   REACT_APP_SERVER_URL = "${module.server.dns_name}"
+  PERSISTENCE_MONGO_URL =  "infra.immersivesports.ai"
+  PERSISTENCE_MONGO_PORT =  27017
   instance_count     = 1
   timeout            = 180
   zone_id = "${aws_route53_zone.primary.zone_id}"
@@ -51,6 +53,8 @@ module "server" {
   # memory             = 4096
   # cpu                = 2048
   REACT_APP_SERVER_URL = "http://www.google.com"
+  PERSISTENCE_MONGO_URL =  "infra.immersivesports.ai"
+  PERSISTENCE_MONGO_PORT =  27017
   instance_count     = 1
   timeout            = 180
   container_port     = 8080
@@ -71,6 +75,8 @@ module "teams" {
   # memory             = 4096
   # cpu                = 2048
   REACT_APP_SERVER_URL = "http://www.google.com"
+  PERSISTENCE_MONGO_URL =  "infra.immersivesports.ai"
+  PERSISTENCE_MONGO_PORT =  27017
   instance_count     = 1
   timeout            = 180
   container_port     = 8080
@@ -91,6 +97,8 @@ module "nlp" {
   # memory             = 4096
   # cpu                = 2048
   REACT_APP_SERVER_URL = "http://www.google.com"
+  PERSISTENCE_MONGO_URL =  "infra.immersivesports.ai"
+  PERSISTENCE_MONGO_PORT =  27017
   instance_count     = 1
   timeout            = 180
   container_port     = 8080

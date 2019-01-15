@@ -37,7 +37,9 @@ resource "aws_ecs_task_definition" "service" {
                 }
             },
    "environment" : [
-     {"name": "REACT_APP_SERVER_URL", "value" :"${var.REACT_APP_SERVER_URL}"}
+     { "name": "REACT_APP_SERVER_URL", "value" :"${var.REACT_APP_SERVER_URL}"}
+     { "name": "PERSISTENCE_MONGO_PORT", "value" :"${var.PERSISTENCE_MONGO_PORT}"}
+     { "name": "PERSISTENCE_MONGO_URL", "value" :"${var.PERSISTENCE_MONGO_URL}"}
    ]
  }
 ]

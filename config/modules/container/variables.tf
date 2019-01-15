@@ -49,5 +49,13 @@ variable "REACT_APP_SERVER_URL" {
   default = "foo"
 }
 
+variable "PERSISTENCE_MONGO_URL" {
+  default = "infra.immersivesports.ai"
+}
+
+variable "PERSISTENCE_MONGO_PORT" {
+  default = 27017
+}
+
 variable "base_domain" {default="immersivesports.ai"}
 variable "zone_id" {}
