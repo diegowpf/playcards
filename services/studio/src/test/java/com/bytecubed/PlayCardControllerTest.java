@@ -1,6 +1,6 @@
 package com.bytecubed;
 
-import com.bytecubed.studio.models.PlayCard;
+import com.bytecubed.commons.PlayCard;
 import com.bytecubed.studio.persistence.PlayCardRepository;
 import com.bytecubed.studio.web.PlayCardController;
 import org.junit.Ignore;

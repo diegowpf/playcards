@@ -1,7 +1,7 @@
 package com.bytecubed.studio.web;
 
 import com.bytecubed.commons.models.PlayerMarker;
-import com.bytecubed.studio.models.PlayCard;
+import com.bytecubed.commons.PlayCard;
 import com.bytecubed.studio.parser.RavensPowerPointParser;
 import com.bytecubed.studio.persistence.PlayCardRepository;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -32,14 +31,16 @@ public class PlayCardController {
         this.repository = repository;
     }
 
-    @PostMapping("/team/{id}")
+    @PostMapping("/team/import/{id}")
     public HttpEntity<Iterable<PlayerMarker>> importCard(@RequestParam("file") MultipartFile file,
                                                          RedirectAttributes redirectAttributes,
                                                          @PathVariable UUID id) throws IOException {
         return importOffensiveCard(file, redirectAttributes, id );
     }
 
-    @PostMapping("/team/offense/{teamId}")
+
+
+    @PostMapping("/team/import/offense/{teamId}")
     public HttpEntity<Iterable<PlayerMarker>> importOffensiveCard(@RequestParam("file") MultipartFile file,
                                                          RedirectAttributes redirectAttributes,
                                                          @PathVariable UUID teamId) throws IOException {

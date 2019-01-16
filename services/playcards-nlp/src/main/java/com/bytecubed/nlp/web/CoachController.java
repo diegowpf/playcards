@@ -2,9 +2,10 @@ package com.bytecubed.nlp.web;
 
 import com.bytecubed.commons.Formation;
 import com.bytecubed.commons.Play;
+import com.bytecubed.commons.PlayCard;
 import com.bytecubed.commons.models.PlayDescription;
 import com.bytecubed.commons.models.PlayerMarker;
-import com.bytecubed.nlp.design.FormationFactory;
+import com.bytecubed.commons.FormationFactory;
 import com.bytecubed.nlp.parsing.InstructionParser;
 import com.bytecubed.nlp.repository.FormationRepository;
 import com.bytecubed.nlp.repository.PlayRepository;
@@ -85,4 +86,11 @@ public class CoachController {
         logger.debug( "saving fomration:  " + target.toString());
         return ok().build();
     }
+
+    @PostMapping("/playcards/team/{id}/formation/{name}")
+    public HttpEntity<PlayCard> add(@PathVariable UUID id, @PathVariable  String name ){
+
+        return null;
+    }
+
 }

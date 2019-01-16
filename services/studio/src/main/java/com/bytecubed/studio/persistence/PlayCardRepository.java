@@ -1,6 +1,6 @@
 package com.bytecubed.studio.persistence;
 
-import com.bytecubed.studio.models.PlayCard;
+import com.bytecubed.commons.PlayCard;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

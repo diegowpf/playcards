@@ -1,4 +1,4 @@
-package com.bytecubed.studio.models;
+package com.bytecubed.commons;
 
 import com.bytecubed.commons.models.PlayerMarker;
 import org.springframework.data.annotation.Id;

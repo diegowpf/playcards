@@ -1,9 +1,10 @@
-package com.bytecubed.nlp.design;
+package com.bytecubed.commons;
 
-import com.bytecubed.commons.Formation;
 import com.bytecubed.commons.models.Placement;
 import com.bytecubed.commons.models.PlayerMarker;
 import org.springframework.stereotype.Component;
+
+import static com.bytecubed.commons.FormationType.*;
 
 @Component
 public class FormationFactory {

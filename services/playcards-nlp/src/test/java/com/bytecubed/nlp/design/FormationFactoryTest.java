@@ -1,6 +1,7 @@
 package com.bytecubed.nlp.design;
 
 import com.bytecubed.commons.Formation;
+import com.bytecubed.commons.FormationFactory;
 import org.junit.Test;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
