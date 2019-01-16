@@ -159,6 +159,6 @@ public class RavensPowerPointParser implements PlayCardParser {
                 .collect(toList());
 
         logger.debug( "Title Text: " + strings.toString());
-        return strings.get(0);
+        return strings.get(0).replaceAll("\t", " " ).trim();
     }
 }

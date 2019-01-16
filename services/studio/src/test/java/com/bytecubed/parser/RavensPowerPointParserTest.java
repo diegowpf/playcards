@@ -20,7 +20,7 @@ public class RavensPowerPointParserTest {
 
     @Test
     public void shouldExtractName() throws IOException {
-        assertThat(new RavensPowerPointParser(getPowerPoint()).getName()).isEqualTo("CIN-32\t3-6\t+30\t");
+        assertThat(new RavensPowerPointParser(getPowerPoint()).getName()).isEqualTo("CIN-32 3-6 +30");
     }
 
     private XMLSlideShow getPowerPoint() throws IOException {
