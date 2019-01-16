@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -38,7 +39,13 @@ public class PlayCardController {
         return importOffensiveCard(file, redirectAttributes, id );
     }
 
+    @PostMapping("/team/import/{id}")
+    public HttpEntity<PlayCard> add(@PathVariable UUID id, @RequestBody PlayCard playCard ){
+        playCard.setTeamId(id);
+        repository.save(playCard);
 
+        return ok(playCard);
+    }
 
     @PostMapping("/team/import/offense/{teamId}")
     public HttpEntity<Iterable<PlayerMarker>> importOffensiveCard(@RequestParam("file") MultipartFile file,

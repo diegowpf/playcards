@@ -17,7 +17,6 @@ public class PlayCard {
     private String name;
     private LocalDateTime createTime;
     private UUID teamId;
-
     protected PlayCard(){}
 
     public PlayCard(LocalDateTime createTime,
@@ -52,6 +51,10 @@ public class PlayCard {
 
     public PlayCardType getPlayCardType() {
         return playCardType;
+    }
+
+    public void setPlayCardType(PlayCardType playCardType) {
+        this.playCardType = playCardType;
     }
 
     public UUID getId() {
