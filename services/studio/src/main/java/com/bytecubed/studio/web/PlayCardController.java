@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
@@ -42,7 +44,8 @@ public class PlayCardController {
                                                          RedirectAttributes redirectAttributes,
                                                          @PathVariable UUID teamId) throws IOException {
         XMLSlideShow ppt = new XMLSlideShow(file.getInputStream());
-        PlayCard card = new PlayCard(randomUUID(), teamId, new RavensPowerPointParser(ppt).extractPlayerPlacements());
+        PlayCard card = new PlayCard(LocalDateTime.now(), randomUUID(), teamId,
+                new RavensPowerPointParser(ppt).extractPlayerPlacements());
         repository.save(card);
 
         return ok(card.getPlayerMarkers());

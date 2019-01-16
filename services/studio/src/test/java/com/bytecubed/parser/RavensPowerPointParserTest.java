@@ -18,6 +18,11 @@ public class RavensPowerPointParserTest {
         assertThat(new RavensPowerPointParser(getPowerPoint()).extractPlayerPlacements()).hasSize(11);
     }
 
+    @Test
+    public void shouldExtractName() throws IOException {
+        assertThat(new RavensPowerPointParser(getPowerPoint()).getName()).isEqualTo("CIN-32\t3-6\t+30\t");
+    }
+
     private XMLSlideShow getPowerPoint() throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("test.pptx").getFile());

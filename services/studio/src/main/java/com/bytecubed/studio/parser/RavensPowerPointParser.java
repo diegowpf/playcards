@@ -11,7 +11,12 @@ import org.slf4j.LoggerFactory;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 
 public class RavensPowerPointParser implements PlayCardParser {
     private XMLSlideShow ppt;
@@ -50,7 +55,6 @@ public class RavensPowerPointParser implements PlayCardParser {
     }
 
     private List<PlayerMarker> nestedPlayerExtractor(XSLFShape s) {
-
         List<PlayerMarker> placements = new ArrayList<>();
 
         if (s.getShapeName().contains("Group")) {
@@ -113,14 +117,6 @@ public class RavensPowerPointParser implements PlayCardParser {
                     logger.debug(f.getXmlObject().xmlText());
                     XSLFAutoShape connector = (XSLFAutoShape)f;
                     logger.debug( "Shape type:  " + connector.getShapeType().nativeName);
-
-//
-//                    Iterator iterate = connector.getGeometry().iterator();
-//                    while( iterate.hasNext() ){
-//                        logger.debug( "Shape geometery:  "+ f.getShapeId() + " : " + ((Path)iterate.next()).getH());
-//                    }
-
-//                    logger.debug(connector.getAnchor().)
                 });
 
         ppt.getSlides().get(0).getShapes().stream()
@@ -135,17 +131,34 @@ public class RavensPowerPointParser implements PlayCardParser {
                     logger.debug("Path Iterator:  " + pathIterator.getClass().getName());
                     while(!pathIterator.isDone()) {
                         pathIterator.next();
-//                        logger.debug("path:  " + pathIterator.);
                     }
-
-//
-//                    Iterator iterate = connector.getGeometry().iterator();
-//                    while( iterate.hasNext() ){
-//                        logger.debug( "Shape geometery:  "+ f.getShapeId() + " : " + ((Path)iterate.next()).getH());
-//                    }
-
-//                    logger.debug(connector.getAnchor().)
                 });
         return null;
+    }
+
+    public String getName() {
+
+        int longest = 0;
+        String longestText = "";
+
+        List<XSLFTextBox> textBoxes = asList(this.ppt.getSlides().get(0).getShapes()
+                .stream()
+                .filter(s->s.getShapeName().contains("Text"))
+                .collect(toList()).toArray(new XSLFTextBox[0]));
+
+        for( XSLFTextBox textBox : textBoxes ){
+            if( longest < textBox.getText().length()){
+                longest = textBox.getText().length();
+                longestText = textBox.getText();
+            }
+        }
+
+        List<String> strings = Arrays.asList(longestText.split(" " ))
+                .stream()
+                .filter(f->!f.trim().equals(""))
+                .collect(toList());
+
+        logger.debug( "Title Text: " + strings.toString());
+        return strings.get(0);
     }
 }
