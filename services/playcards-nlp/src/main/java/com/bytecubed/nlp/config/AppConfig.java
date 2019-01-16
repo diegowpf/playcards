@@ -12,4 +12,5 @@ public class AppConfig {
     public WitClient witClient(@Value("${wit.ai.key}") String key){
         return new WitClient(key);
     }
+
 }
