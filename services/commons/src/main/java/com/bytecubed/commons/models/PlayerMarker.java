@@ -42,6 +42,10 @@ public class PlayerMarker {
         return isCenter;
     }
 
+    public List<Route> getRoutes() {
+        return routes;
+    }
+
     @Override
     public String toString() {
         return "PlayerMarker{" +
