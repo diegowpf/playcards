@@ -91,7 +91,7 @@ class Field extends React.Component {
     componentDidMount() {
         axios.get("http://server.immersivesports.ai/playcards/team/c679919f-d524-3f75-ad2a-5161706e12a5")
           .then(res => {
-            const placements = res.data[0].playerMarkers;
+            const placements = res.data[0].formation.playerMarkers;
             // const placements = players;
             console.log(JSON.stringify(placements));
             this.setState({ placements });
