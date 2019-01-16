@@ -80,6 +80,7 @@ public class CoachController {
 
     @PostMapping("/formation" )
     public HttpEntity addFormation(@RequestBody Formation formation ){
+        logger.debug("Formation added: " + formation.getName());
         Formation target = new Formation(randomUUID(), formation);
         formationRepository.save(target);
 

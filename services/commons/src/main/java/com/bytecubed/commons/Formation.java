@@ -39,7 +39,7 @@ public class Formation {
                 formation.getPlayerMarkers().toArray(new PlayerMarker[0]));
     }
 
-    private String getName() {
+    public String getName() {
         return name;
     }
 
