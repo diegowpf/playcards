@@ -30,7 +30,7 @@ public class InstructionParserTest {
         Route route = new InstructionParser(getClient()).parse("X has a 5 yard go route");
         assertThat(route.getMove()).isEqualTo(go);
         assertThat(route.getDistance()).isEqualTo(5);
-        assertThat(route.getPlayer()).isEqualTo(playerMarker);
+        assertThat(route.getPlayer()).isEqualToIgnoringCase(playerMarker.getTag());
     }
 
     @Test
@@ -59,7 +59,7 @@ public class InstructionParserTest {
         Route route = new InstructionParser(getClient()).parse("X has a 5 yard comeback");
         assertThat(route.getMove()).isEqualTo(comeback);
         assertThat(route.getDistance()).isEqualTo(5);
-        assertThat(route.getPlayer()).isEqualTo(playerMarker.getTag());
+        assertThat(route.getPlayer()).isEqualToIgnoringCase(playerMarker.getTag());
     }
 
     private WitClient getClient() {

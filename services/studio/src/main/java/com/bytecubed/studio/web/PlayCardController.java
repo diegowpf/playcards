@@ -44,6 +44,8 @@ public class PlayCardController {
         playCard.setTeamId(id);
         playCard.setId(randomUUID());
 
+        logger.debug("PlayCard:  " + playCard.toString());
+
         repository.save(playCard);
         return ok(playCard);
     }
@@ -59,7 +61,7 @@ public class PlayCardController {
                 ravensPowerPointParser.getName());
         repository.save(card);
 
-        return ok(card.getPlayerMarkers());
+        return ok(card.getFormation().getPlayerMarkers());
     }
 
     @GetMapping("/team/{id}")

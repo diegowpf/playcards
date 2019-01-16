@@ -85,10 +85,6 @@ public class PlayCard {
         return id;
     }
 
-    public List<PlayerMarker> getPlayerMarkers() {
-        return formation.getPlayerMarkers();
-    }
-
     public UUID getTeamId() {
         return teamId;
     }

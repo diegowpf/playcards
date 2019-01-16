@@ -5,7 +5,9 @@ import com.bytecubed.commons.models.PlayerMarker;
 public class IFormation extends Formation{
 
     public IFormation(){
-        super(new FormationFactory().withStandardTemplateInTheCenter().getPlayerMarkers().toArray(new PlayerMarker[0]));
+        super(new FormationFactory()
+                .withStandardTemplateInTheCenter()
+                .getPlayerMarkers().toArray(new PlayerMarker[0]));
 
         this.andQbUnderCenter()
                 .andXIsOnLeftOffTheBallOutsideTheNumbers()
