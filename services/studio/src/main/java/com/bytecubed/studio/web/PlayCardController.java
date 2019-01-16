@@ -39,11 +39,12 @@ public class PlayCardController {
         return importOffensiveCard(file, redirectAttributes, id );
     }
 
-    @PostMapping("/team/import/{id}")
+    @PostMapping("/team/{id}")
     public HttpEntity<PlayCard> add(@PathVariable UUID id, @RequestBody PlayCard playCard ){
         playCard.setTeamId(id);
-        repository.save(playCard);
+        playCard.setId(randomUUID());
 
+        repository.save(playCard);
         return ok(playCard);
     }
 

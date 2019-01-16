@@ -101,6 +101,10 @@ public class PlayCard {
         route.getPlayer().addRoute(route);
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     public enum PlayCardType {
         Offense,
         Defense,

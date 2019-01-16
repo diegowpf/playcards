@@ -1,7 +1,6 @@
 package com.bytecubed.nlp;
 
 import com.bytecubed.commons.Formation;
-import com.bytecubed.commons.FormationFactory;
 import com.bytecubed.commons.IFormation;
 import com.bytecubed.commons.PlayCard;
 import com.bytecubed.commons.models.PlayerMarker;
@@ -9,6 +8,7 @@ import com.bytecubed.commons.models.Route;
 import com.bytecubed.nlp.parsing.InstructionParser;
 import org.bots4j.wit.WitClient;
 import org.junit.Test;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
 
@@ -42,7 +42,10 @@ public class InstructionParserTest {
 
         System.out.println(card);
 
-        
+        RestTemplate template = new RestTemplate();
+        String response = template.postForEntity( "http://localhost:8080/playcards/team/c679919f-d524-3f75-ad2a-5161706e12a5", card, String.class).getBody();
+        System.out.println( response );
+
     }
 
     @Test
