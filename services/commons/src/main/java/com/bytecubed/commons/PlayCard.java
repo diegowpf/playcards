@@ -1,6 +1,7 @@
 package com.bytecubed.commons;
 
 import com.bytecubed.commons.models.PlayerMarker;
+import com.bytecubed.commons.models.Route;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDate;
@@ -26,6 +27,18 @@ public class PlayCard {
         this( createTime, id, teamId, playerMarkers, PlayCardType.Offense, name );
     }
 
+    @Override
+    public String toString() {
+        return "PlayCard{" +
+                "id=" + id +
+                ", formation=" + formation +
+                ", playCardType=" + playCardType +
+                ", name='" + name + '\'' +
+                ", createTime=" + createTime +
+                ", teamId=" + teamId +
+                '}';
+    }
+
     public PlayCard(LocalDateTime createTime,
                     UUID id,
                     UUID teamId,
@@ -41,7 +54,11 @@ public class PlayCard {
     }
 
     public PlayCard(UUID teamId, Formation formation, String name) {
-        this(LocalDateTime.now(), UUID.randomUUID(), teamId, formation.getPlayerMarkers(), name );
+        this.createTime = LocalDateTime.now();
+        this.id = UUID.randomUUID();
+        this.teamId = teamId;
+        this.formation = formation;
+        this.name = name;
     }
 
     public Formation getFormation() {
@@ -78,6 +95,10 @@ public class PlayCard {
 
     public void setTeamId(UUID teamId) {
         this.teamId = teamId;
+    }
+
+    public void addRoute(Route route) {
+        route.getPlayer().addRoute(route);
     }
 
     public enum PlayCardType {

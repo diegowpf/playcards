@@ -5,6 +5,14 @@ public class Route {
     private Move move;
     private PlayerMarker marker;
 
+    @Override
+    public String toString() {
+        return "Route{" +
+                "distance=" + distance +
+                ", move=" + move +
+                '}';
+    }
+
     public Route(double distance, Move move, PlayerMarker marker) {
         this.distance = distance;
         this.move = move;
