@@ -43,8 +43,8 @@ public class InstructionParserTest {
         System.out.println(card);
 
         RestTemplate template = new RestTemplate();
-        String response = template.postForEntity( "http://localhost:8080/playcards/team/c679919f-d524-3f75-ad2a-5161706e12a5", card, String.class).getBody();
-        System.out.println( response );
+//        String response = template.postForEntity( "http://localhost:8080/playcards/team/c679919f-d524-3f75-ad2a-5161706e12a5", card, String.class).getBody();
+//        System.out.println( response );
 
     }
 
