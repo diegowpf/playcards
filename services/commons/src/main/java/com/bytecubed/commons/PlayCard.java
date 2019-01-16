@@ -9,10 +9,9 @@ import java.util.List;
 import java.util.UUID;
 
 public class PlayCard {
-
     @Id
     private UUID id;
-    private List<PlayerMarker> playerMarkers;
+    private Formation formation;
     private PlayCardType playCardType;
     private String name;
     private LocalDateTime createTime;
@@ -36,9 +35,17 @@ public class PlayCard {
         this.createTime = createTime;
         this.teamId = teamId;
         this.id = id;
-        this.playerMarkers = playerMarkers;
+        this.formation = new Formation(playerMarkers.toArray(new PlayerMarker[0]));
         this.playCardType = playCardType;
         this.name = name;
+    }
+
+    public PlayCard(UUID teamId, Formation formation, String name) {
+        this(LocalDateTime.now(), UUID.randomUUID(), teamId, formation.getPlayerMarkers(), name );
+    }
+
+    public Formation getFormation() {
+        return formation;
     }
 
     public String getName() {
@@ -62,7 +69,7 @@ public class PlayCard {
     }
 
     public List<PlayerMarker> getPlayerMarkers() {
-        return playerMarkers;
+        return formation.getPlayerMarkers();
     }
 
     public UUID getTeamId() {

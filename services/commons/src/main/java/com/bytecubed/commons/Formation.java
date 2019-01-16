@@ -2,6 +2,7 @@ package com.bytecubed.commons;
 
 import com.bytecubed.commons.models.Placement;
 import com.bytecubed.commons.models.PlayerMarker;
+import com.bytecubed.commons.models.Route;
 import com.bytecubed.nlp.exceptions.InvalidPlayerException;
 import org.springframework.data.annotation.Id;
 
@@ -113,4 +114,8 @@ public class Formation {
                 ", id=" + id +
                 '}';
     }
+
+//    public void apply(Route route) {
+//        getPlayerMarkerAt(route.getPlayer())
+//    }
 }

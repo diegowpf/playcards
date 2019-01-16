@@ -1,11 +1,16 @@
 package com.bytecubed.nlp;
 
 import com.bytecubed.commons.Formation;
+import com.bytecubed.commons.FormationFactory;
+import com.bytecubed.commons.IFormation;
+import com.bytecubed.commons.PlayCard;
 import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.commons.models.Route;
 import com.bytecubed.nlp.parsing.InstructionParser;
 import org.bots4j.wit.WitClient;
 import org.junit.Test;
+
+import java.util.UUID;
 
 import static com.bytecubed.commons.models.Move.comeback;
 import static com.bytecubed.commons.models.Move.go;
@@ -27,7 +32,14 @@ public class InstructionParserTest {
         assertThat(route.getPlayer()).isEqualTo(playerMarker);
     }
 
+    @Test
+    public void shouldCreateXWithA5StepComebackFromStandardFormation(){
+        Formation formation = new IFormation();
+        PlayCard card = new PlayCard(UUID.randomUUID(), formation, "Fake card");
 
+        Route route = new InstructionParser(getClient()).parse("X has a 5 yard go route", formation);
+//        formation.apply(route);
+    }
 
     @Test
     public void shouldReturnComebackRouteForPlayerX(){
