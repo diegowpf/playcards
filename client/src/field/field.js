@@ -149,8 +149,8 @@ class Field extends React.Component {
         .attr("style", "font: italic " + fontSize + "px serif; fill: red")
       label.text(player.tag)
 
-      if( player.route) {
-        player.route.forEach((x) => {
+      if( player.routes) {
+        player.routes.forEach((x) => {
           switch( x.move ){
             case "curl":
               this.generateComebackRoute(g, player, coordinates, x)
