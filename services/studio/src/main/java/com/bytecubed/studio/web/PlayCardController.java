@@ -44,8 +44,10 @@ public class PlayCardController {
                                                          RedirectAttributes redirectAttributes,
                                                          @PathVariable UUID teamId) throws IOException {
         XMLSlideShow ppt = new XMLSlideShow(file.getInputStream());
+        RavensPowerPointParser ravensPowerPointParser = new RavensPowerPointParser(ppt);
         PlayCard card = new PlayCard(LocalDateTime.now(), randomUUID(), teamId,
-                new RavensPowerPointParser(ppt).extractPlayerPlacements());
+                ravensPowerPointParser.extractPlayerPlacements(),
+                ravensPowerPointParser.getName());
         repository.save(card);
 
         return ok(card.getPlayerMarkers());

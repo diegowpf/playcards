@@ -14,21 +14,36 @@ public class PlayCard {
     private UUID id;
     private List<PlayerMarker> playerMarkers;
     private PlayCardType playCardType;
+    private String name;
     private LocalDateTime createTime;
     private UUID teamId;
 
     protected PlayCard(){}
 
-    public PlayCard(LocalDateTime createTime, UUID id, UUID teamId, List<PlayerMarker> playerMarkers) {
-        this( createTime, id, teamId, playerMarkers, PlayCardType.Offense);
+    public PlayCard(LocalDateTime createTime,
+                    UUID id,
+                    UUID teamId,
+                    List<PlayerMarker> playerMarkers,
+                    String name) {
+        this( createTime, id, teamId, playerMarkers, PlayCardType.Offense, name );
     }
 
-    public PlayCard(LocalDateTime createTime, UUID id, UUID teamId, List<PlayerMarker> playerMarkers, PlayCardType playCardType) {
+    public PlayCard(LocalDateTime createTime,
+                    UUID id,
+                    UUID teamId,
+                    List<PlayerMarker> playerMarkers,
+                    PlayCardType playCardType,
+                    String name) {
         this.createTime = createTime;
         this.teamId = teamId;
         this.id = id;
         this.playerMarkers = playerMarkers;
         this.playCardType = playCardType;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public LocalDateTime getCreateTime() {
