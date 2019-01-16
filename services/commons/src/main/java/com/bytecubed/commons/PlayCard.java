@@ -98,7 +98,7 @@ public class PlayCard {
     }
 
     public void addRoute(Route route) {
-        route.getPlayer().addRoute(route);
+        formation.getPlayerMarkerAt(route.getPlayer()).addRoute(route);
     }
 
     public void setId(UUID id) {

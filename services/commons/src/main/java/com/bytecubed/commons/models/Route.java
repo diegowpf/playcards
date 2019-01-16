@@ -3,7 +3,7 @@ package com.bytecubed.commons.models;
 public class Route {
     private double distance;
     private Move move;
-    private PlayerMarker marker;
+    private String marker;
 
     @Override
     public String toString() {
@@ -13,17 +13,20 @@ public class Route {
                 '}';
     }
 
-    public Route(double distance, Move move, PlayerMarker marker) {
+    public Route(double distance, Move move, String marker) {
         this.distance = distance;
         this.move = move;
         this.marker = marker;
+    }
+
+    public Route() {
     }
 
     public Move getMove() {
         return move;
     }
 
-    public PlayerMarker getPlayer() {
+    public String getPlayer() {
         return marker;
     }
 

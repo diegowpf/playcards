@@ -56,7 +56,7 @@ public class CoachController {
     @PostMapping("/play/{id}")
     public HttpEntity addMove(@RequestBody String commandAsString, @PathVariable UUID id){
         Play play = repository.findById(id).get();
-        parser.parse(commandAsString, play.getFormation() );
+        parser.parse(commandAsString );
 
         return null;
     }

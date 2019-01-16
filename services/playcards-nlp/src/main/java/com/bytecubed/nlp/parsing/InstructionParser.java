@@ -25,16 +25,15 @@ public class InstructionParser {
         this.client = client;
     }
 
-    public Route parse(String routeDescription, Formation formation) {
+    public Route parse(String routeDescription) {
         GetIntentViaTextResponse response = client.getIntentViaText(routeDescription,null,null,null,null);
         ArrayMap distanceMap = (ArrayMap) ((List)response.getOutcomes().get(0).getEntities().get("distance")).get(0);
         double yards = Double.valueOf( distanceMap.get("value").toString());
 
         String playerTag = response.getOutcomes().get(0).getEntities().firstEntityValue("player_position");
         String route_type = response.getOutcomes().get(0).getEntities().firstEntityValue("route_type");
-        PlayerMarker marker = formation.getPlayerMarkerAt(playerTag);
 
-        return new Route(yards, Move.valueOf(route_type), marker);
+        return new Route(yards, Move.valueOf(route_type), playerTag);
     }
 
 }

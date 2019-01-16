@@ -7,6 +7,7 @@ import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.commons.models.Route;
 import com.bytecubed.nlp.parsing.InstructionParser;
 import org.bots4j.wit.WitClient;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,25 +27,26 @@ public class InstructionParserTest {
         PlayerMarker playerMarker = new PlayerMarker(null, "wr", "x", false);
         when(formation.getPlayerMarkerAt("X")).thenReturn(playerMarker);
 
-        Route route = new InstructionParser(getClient()).parse("X has a 5 yard go route", formation);
+        Route route = new InstructionParser(getClient()).parse("X has a 5 yard go route");
         assertThat(route.getMove()).isEqualTo(go);
         assertThat(route.getDistance()).isEqualTo(5);
         assertThat(route.getPlayer()).isEqualTo(playerMarker);
     }
 
     @Test
+    @Ignore
     public void shouldCreateXWithA5StepComebackFromStandardFormation(){
         Formation formation = new IFormation();
         PlayCard card = new PlayCard(UUID.randomUUID(), formation, "Fake card");
 
-        Route route = new InstructionParser(getClient()).parse("X has a 5 yard go route", formation);
+        Route route = new InstructionParser(getClient()).parse("X has a 5 yard go route");
         card.addRoute(route);
 
         System.out.println(card);
 
         RestTemplate template = new RestTemplate();
-//        String response = template.postForEntity( "http://localhost:8080/playcards/team/c679919f-d524-3f75-ad2a-5161706e12a5", card, String.class).getBody();
-//        System.out.println( response );
+        String response = template.postForEntity( "http://localhost:8080/playcards/team/c679919f-d524-3f75-ad2a-5161706e12a5", card, String.class).getBody();
+        System.out.println( response );
 
     }
 
@@ -54,10 +56,10 @@ public class InstructionParserTest {
         PlayerMarker playerMarker = new PlayerMarker(null, "wr", "x", false);
         when(formation.getPlayerMarkerAt("X")).thenReturn(playerMarker);
 
-        Route route = new InstructionParser(getClient()).parse("X has a 5 yard comeback", formation);
+        Route route = new InstructionParser(getClient()).parse("X has a 5 yard comeback");
         assertThat(route.getMove()).isEqualTo(comeback);
         assertThat(route.getDistance()).isEqualTo(5);
-        assertThat(route.getPlayer()).isEqualTo(playerMarker);
+        assertThat(route.getPlayer()).isEqualTo(playerMarker.getTag());
     }
 
     private WitClient getClient() {
