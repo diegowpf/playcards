@@ -33,25 +33,24 @@ const styles = {
   },
 };
 
-var playCards = [];
+var playCards = [{name: "Danger Right", formation: "Standard Layout", description: "Running Back Wide"},
+            {name: "Some New Play", formation: "Standard Layout", description: "Three Wide Recievers"},
+            {name: "True Detective", formation: "Standard Layout", description: "Halfback"}];
 
 export default class PersonList extends React.Component{
 
     // const { classes } = props;
     // const bull = <span className={classes.bullet}>•</span>;
   state = {
-      playCards: [{name: "Danger Right", formation: "Standard Layout", description: "Running Back Wide"},
-                  {name: "Some New Play", formation: "Standard Layout", description: "Three Wide Recievers"},
-                  {name: "True Detective", formation: "Standard Layout", description: "Halfback"}]
+      playCards: []
   }
 
   componentDidMount(){
     axios.get("http://server.immersivesports.ai/playcards/team/c679919f-d524-3f75-ad2a-5161706e12a5")
       .then(res => {
-        playCards = res.data;
-        console.log(JSON.stringify(playCards));
+        res.data.forEach(card=> playCards.push({name: card.name, formation: "Standard Layout", description:"Imported"}));
+        this.setState({playCards});
 
-        //this.setState({playCards});
       })
   }
 
