@@ -41,18 +41,19 @@ var yard = gridSize * 3
 var line = 510;
 var routeColor = "navy";
 
-var players = [{"placement":{"relativeX":72,"relativeY":0},"pos":"lt","center":false},{"placement":{"relativeX":64,"relativeY":0},"pos":"lg","center":false},{"placement":{"relativeX":88,"relativeY":0},"pos":"rt","center":false},{"placement":{"relativeX":96,"relativeY":0},"pos":"rg","center":false},{"placement":{"relativeX":80,"relativeY":0},"pos":"C","center":true},{"placement":{"relativeX":80,"relativeY":8},"pos":"QB","tag":"QB","center":false},{"placement":{"relativeX":20,"relativeY":2},"pos":"wr","tag":"X","center":false},{"placement":{"relativeX":145,"relativeY":8},"pos":"wr","tag":"Y","center":false},{"placement":{"relativeX":80,"relativeY":16},"pos":"FB","tag":"FB","center":false},{"placement":{"relativeX":80,"relativeY":24},"pos":"HB","tag":"HB","center":false},{"placement":{"relativeX":104,"relativeY":2},"pos":"te","tag":"T","center":false}];
+ // var players = [ [{"placement":{"relativeX":72,"relativeY":0},"pos":"lt","center":false},{"placement":{"relativeX":64,"relativeY":0},"pos":"lg","center":false},{"placement":{"relativeX":88,"relativeY":0},"pos":"rt","center":false},{"placement":{"relativeX":96,"relativeY":0},"pos":"rg","center":false},{"placement":{"relativeX":80,"relativeY":0},"pos":"C","center":true},{"placement":{"relativeX":80,"relativeY":8},"pos":"QB","tag":"QB","center":false},{"placement":{"relativeX":20,"relativeY":2},"pos":"wr","tag":"X","center":false},{"placement":{"relativeX":145,"relativeY":8},"pos":"wr","tag":"Y","center":false},{"placement":{"relativeX":80,"relativeY":16},"pos":"FB","tag":"FB","center":false},{"placement":{"relativeX":80,"relativeY":24},"pos":"HB","tag":"HB","center":false},{"placement":{"relativeX":104,"relativeY":2},"pos":"te","tag":"T","center":false}];
 
-  // { placement: { relativeX: 30, relativeY: 10 }, pos: "wr", tag: "Y" ,
-  //   route:[{steps: 5, move: "curl"}]},
-  // { placement: { relativeX: 143, relativeY: 10 }, pos: "wr", tag: "Z",
-  //   route:[{steps: 5, move: "curl"}] },
-  // { placement: { relativeX: 80, relativeY: 9 }, pos: "qb" },
-  // { placement: { relativeX: 80, relativeY: 18 }, pos: "rb", tag: "F",
-  //   motion:[{steps: 4, direction: "left"}]}
-//   { placement: { relativeX: 91, relativeY: 0}, pos: "wr", tag: "19" },
-// { placement: { relativeX: 67, relativeY: 0}, pos: "wr", tag: "19" },
-// { placement: { relativeX: 83, relativeY: 0}, pos: "wr", tag: "19" },
+var players = [
+  { placement: { relativeX: 30, relativeY: 10 }, pos: "wr", tag: "Y" ,
+    routes:[{distance: 5, move: "go"}]},
+  { placement: { relativeX: 143, relativeY: 10 }, pos: "wr", tag: "Z",
+    routes:[{distance: 5, move: "curl"}] },
+  { placement: { relativeX: 80, relativeY: 9 }, pos: "qb" },
+  { placement: { relativeX: 80, relativeY: 18 }, pos: "rb", tag: "F",
+    routes:[{distance: 4, move: ""}]},
+  { placement: { relativeX: 91, relativeY: 0}, pos: "wr", tag: "19" },
+{ placement: { relativeX: 67, relativeY: 0}, pos: "wr", tag: "19" },
+{ placement: { relativeX: 83, relativeY: 0}, pos: "wr", tag: "19" }]
 // { placement: { relativeX: 59, relativeY: 0}, pos: "wr", tag: "19" },
   // { placement: { relativeX: 11, relativeY: 0}, pos: "wr", tag: "84" },
   // { placement: { relativeX: 70, relativeY: 15}, pos: "wr", tag: "7" },
@@ -153,7 +154,7 @@ class Field extends React.Component {
         player.routes.forEach((x) => {
           switch( x.move ){
             case "curl":
-              this.generateComebackRoute(g, player, coordinates, x)
+              this.generateCurlRoute(g, player, coordinates, x)
               break;
             default:
               this.generateGoRoute(g, player, coordinates, x )
@@ -170,17 +171,18 @@ class Field extends React.Component {
         this.generatePlayerRoute(g, path);
     }
 
-    generateComebackRoute(g, player, coordinates, route ){
+    generateCurlRoute(g, player, coordinates, route ){
       var inverter = 1;
 
       if( player.placement.relativeX > 80 ){
         inverter = -1;
       }
 
+
       var path = "M " + (coordinates.x + playerWidth) + " " + coordinates.y + " " +
-        (coordinates.x + playerWidth) + " " + (coordinates.y - ((route.steps) * yard)) + " " +
-        (coordinates.x + playerWidth + (inverter * ((2 * yard)))) + " " + (coordinates.y - ((route.steps) * yard)) + " " +
-        (coordinates.x + playerWidth + (inverter * ((2 * yard)))) + " " + (coordinates.y - (route.steps * yard) + yard)
+        (coordinates.x + playerWidth) + " " + (coordinates.y - ((route.distance) * yard)) + " " +
+        (coordinates.x + playerWidth + (inverter * ((2 * yard)))) + " " + (coordinates.y - ((route.distance) * yard)) + " " +
+        (coordinates.x + playerWidth + (inverter * ((2 * yard)))) + " " + (coordinates.y - (route.distance * yard) + yard)
 
         this.generatePlayerRoute(g, path);
     }
@@ -190,6 +192,7 @@ class Field extends React.Component {
         .attr("marker-end", "url(#head)")
         .attr("d", path)
         .attr("fill", "none" )
+        .attr( "stroke-width", "5px" )
         .attr("stroke",routeColor)
     }
 
@@ -231,7 +234,7 @@ class Field extends React.Component {
 
                 <marker id='head' orient='auto' markerWidth='2' markerHeight='4'
                         refX='0.1' refY='2'>
-                  <path d='M0,0 V4 L2,2 Z' fill='red' />
+                      <path d='M0,0 V4 L2,2 Z' fill='red' />
                 </marker>
 
               </svg>
