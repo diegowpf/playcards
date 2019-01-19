@@ -119,6 +119,11 @@ module "network" {
   cidr_block = "${var.cidr_block}"
 }
 
+module "routes" {
+  source = "./modules/routes"
+  zone_id = "${aws_route53_zone.primary.zone_id}"
+}
+
 module "ecs" {
   source           = "./modules/ecs"
   ecs_cluster_name = "immersivesports"
