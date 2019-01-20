@@ -1,9 +1,8 @@
 package com.bytecubed.nlp.parsing;
 
-import com.bytecubed.commons.Formation;
-import com.bytecubed.commons.models.Move;
-import com.bytecubed.commons.models.PlayerMarker;
-import com.bytecubed.commons.models.Route;
+import com.bytecubed.commons.models.movement.Move;
+import com.bytecubed.commons.models.movement.Route;
+import com.bytecubed.commons.models.movement.StandardMoveDescriptor;
 import com.google.api.client.util.ArrayMap;
 import org.bots4j.wit.WitClient;
 import org.bots4j.wit.beans.GetIntentViaTextResponse;
@@ -13,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 @Component
 public class InstructionParser {
@@ -33,7 +34,10 @@ public class InstructionParser {
         String playerTag = response.getOutcomes().get(0).getEntities().firstEntityValue("player_position");
         String route_type = response.getOutcomes().get(0).getEntities().firstEntityValue("route_type");
 
-        return new Route(yards, Move.valueOf(route_type), playerTag);
+        logger.debug("Found:   " + playerTag );
+
+        return new Route( asList(new StandardMoveDescriptor(yards, Move.valueOf(route_type))), playerTag );
+//        return new Route(yards, Move.valueOf(route_type), playerTag);
     }
 
 }

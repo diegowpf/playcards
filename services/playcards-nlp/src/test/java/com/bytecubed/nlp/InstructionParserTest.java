@@ -4,17 +4,20 @@ import com.bytecubed.commons.Formation;
 import com.bytecubed.commons.IFormation;
 import com.bytecubed.commons.PlayCard;
 import com.bytecubed.commons.models.PlayerMarker;
-import com.bytecubed.commons.models.Route;
+import com.bytecubed.commons.models.movement.MoveDescriptor;
+import com.bytecubed.commons.models.movement.Route;
+import com.bytecubed.commons.models.movement.StandardMoveDescriptor;
 import com.bytecubed.nlp.parsing.InstructionParser;
 import org.bots4j.wit.WitClient;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.UUID;
 
-import static com.bytecubed.commons.models.Move.comeback;
-import static com.bytecubed.commons.models.Move.go;
+import static com.bytecubed.commons.models.movement.Move.comeback;
+import static com.bytecubed.commons.models.movement.Move.go;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -28,8 +31,10 @@ public class InstructionParserTest {
         when(formation.getPlayerMarkerAt("X")).thenReturn(playerMarker);
 
         Route route = new InstructionParser(getClient()).parse("X has a 5 yard go route");
-        assertThat(route.getMove()).isEqualTo(go);
-        assertThat(route.getDistance()).isEqualTo(5);
+        StandardMoveDescriptor moveDescriptor = (StandardMoveDescriptor) route.getMoveDescriptors().get(0);
+
+        assertThat(moveDescriptor.getMove()).isEqualTo(go);
+        assertThat(moveDescriptor.getDistance()).isEqualTo(5);
         assertThat(route.getPlayer()).isEqualToIgnoringCase(playerMarker.getTag());
     }
 
@@ -57,8 +62,10 @@ public class InstructionParserTest {
         when(formation.getPlayerMarkerAt("X")).thenReturn(playerMarker);
 
         Route route = new InstructionParser(getClient()).parse("X has a 5 yard comeback");
-        assertThat(route.getMove()).isEqualTo(comeback);
-        assertThat(route.getDistance()).isEqualTo(5);
+        StandardMoveDescriptor moveDescriptor = (StandardMoveDescriptor) route.getMoveDescriptors().get(0);
+
+        assertThat(moveDescriptor.getMove()).isEqualTo(comeback);
+        assertThat(moveDescriptor.getDistance()).isEqualTo(5);
         assertThat(route.getPlayer()).isEqualToIgnoringCase(playerMarker.getTag());
     }
 

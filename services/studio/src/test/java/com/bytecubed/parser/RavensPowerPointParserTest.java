@@ -2,6 +2,7 @@ package com.bytecubed.parser;
 
 import com.bytecubed.studio.parser.RavensPowerPointParser;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
+import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -43,10 +44,11 @@ public class RavensPowerPointParserTest {
     @Test
     @Ignore
     public void shouldReturnAllRoutesWithinCanvas() throws IOException {
-        assertThat(new RavensPowerPointParser(new XMLSlideShow(new FileInputStream(
-                new File("/Users/carlyledavis/Desktop/test-scrubbed.pptx")))).getRoutes()).hasSize(4);
+        XMLSlideShow show = new XMLSlideShow(new FileInputStream(
+                new File("/Users/carlyledavis/Desktop/test-scrubbed.pptx")));
+        XSLFSlide firstSlide = show.getSlides().get(0);
 
-//        assertThat(new RavensPowerPointParser(getPowerPoint()).getRoutes()).hasSize(4);
+        assertThat(new RavensPowerPointParser(show).getRoutes(firstSlide)).hasSize(4);
     }
 
 

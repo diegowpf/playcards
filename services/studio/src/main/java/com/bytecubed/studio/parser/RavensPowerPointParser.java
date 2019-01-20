@@ -4,8 +4,7 @@ import com.bytecubed.commons.Formation;
 import com.bytecubed.commons.PlayCard;
 import com.bytecubed.commons.models.Placement;
 import com.bytecubed.commons.models.PlayerMarker;
-import com.bytecubed.commons.models.Route;
-import org.apache.poi.sl.usermodel.TextShape;
+import com.bytecubed.commons.models.movement.Route;
 import org.apache.poi.xslf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +32,6 @@ public class RavensPowerPointParser implements PlayCardParser {
 
     private PlayCard extractPlayersOnSlide(XSLFSlide slide) {
         List<PlayerMarker> playerMarkers = new ArrayList<>();
-
-        slide.getShapes().forEach(x -> logger.debug("Shape:  " + x.getShapeName()));
-
         slide.getShapes().stream()
                 .filter( f-> isOnCanvas(f) )
                 .forEach(s -> {
@@ -47,6 +43,7 @@ public class RavensPowerPointParser implements PlayCardParser {
                 });
 
         PlayCard playCard = new PlayCard(UUID.randomUUID(), new Formation(playerMarkers), "foo");
+        List<Route> routes = getRoutes(slide);
 
         playerMarkers.forEach(f -> {
             String pos = f.isCenter() ? "center" : "wr";
@@ -114,12 +111,11 @@ public class RavensPowerPointParser implements PlayCardParser {
 
     }
 
-    public List<Route> getRoutes() {
+    public List<Route> getRoutes(XSLFSlide slide) {
 
-        ppt.getSlides().get(0).getShapes().stream()
-                .forEach(f -> logger.debug("Shape:  " + f.getClass().getName() + " name:  " + f.getShapeName()));
+        List<Route> routes = new ArrayList();
 
-        ppt.getSlides().get(0).getShapes().stream()
+        slide.getShapes().stream()
                 .filter(this::isOnCanvas)
                 .filter(f -> f.getShapeName().contains("Straight"))
                 .forEach(f -> {
@@ -127,26 +123,16 @@ public class RavensPowerPointParser implements PlayCardParser {
 
                     logger.debug(f.getXmlObject().xmlText());
                     Rectangle2D bounds = f.getAnchor().getBounds2D();
-
-                    XSLFAutoShape shape = (XSLFAutoShape) f;
-
-                    System.out.println("Is flip:  " + shape.getFlipVertical());
-//                    System.out.println("Rotation:  " + shape.getRotation());
-//                    System.out.println("Start:  " + f.getAnchor().getBounds2D().getX());
-//                    System.out.println("Center:  " + f.getAnchor().getBounds2D().getCenterX());
+                    logger.debug( "This is the shape type:  " + f.getShapeName());
+                    XSLFSimpleShape shape = (XSLFSimpleShape) f;
 
                     if (shape.getFlipVertical()) {
-
-                        System.out.println(newX(bounds.getMaxX()) + " " + newY(bounds.getMinY()) + " " +
+                        logger.debug(newX(bounds.getMaxX()) + " " + newY(bounds.getMinY()) + " " +
                                 newX(bounds.getMinX()) + " " + newY(bounds.getMaxY()));
                     } else {
-
-                        System.out.println(newX(bounds.getMinX()) + " " + newY(bounds.getMaxY()) + " " +
+                        logger.debug(newX(bounds.getMinX()) + " " + newY(bounds.getMaxY()) + " " +
                                 newX(bounds.getMaxX()) + " " + newY(bounds.getMinY()));
                     }
-
-                    System.out.println();
-//                    print(extract(f));
                 });
 
         ppt.getSlides().get(0)

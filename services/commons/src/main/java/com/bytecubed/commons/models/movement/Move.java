@@ -1,4 +1,4 @@
-package com.bytecubed.commons.models;
+package com.bytecubed.commons.models.movement;
 
 public enum Move {
     slant,
@@ -7,5 +7,6 @@ public enum Move {
     curl,
     comeback,
     post,
-    out
+    out,
+    custom
 }

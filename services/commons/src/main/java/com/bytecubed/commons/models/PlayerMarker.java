@@ -1,5 +1,7 @@
 package com.bytecubed.commons.models;
 
+import com.bytecubed.commons.models.movement.Route;
+
 import java.util.ArrayList;
 import java.util.List;
 

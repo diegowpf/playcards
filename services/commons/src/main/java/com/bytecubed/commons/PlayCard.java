@@ -1,10 +1,9 @@
 package com.bytecubed.commons;
 
 import com.bytecubed.commons.models.PlayerMarker;
-import com.bytecubed.commons.models.Route;
+import com.bytecubed.commons.models.movement.Route;
 import org.springframework.data.annotation.Id;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
