@@ -24,7 +24,8 @@ public class PlayCard {
                     UUID teamId,
                     List<PlayerMarker> playerMarkers,
                     String name) {
-        this( createTime, id, teamId, playerMarkers, PlayCardType.Offense, name );
+        //Todo: Make these constructors make sense.
+        this( teamId, new Formation(playerMarkers), name );
     }
 
     @Override
@@ -93,7 +94,7 @@ public class PlayCard {
         this.teamId = teamId;
     }
 
-    public void addRoute(Route route) {
+    public void apply(Route route) {
         formation.getPlayerMarkerAt(route.getPlayer()).addRoute(route);
     }
 

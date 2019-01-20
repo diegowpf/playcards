@@ -40,7 +40,7 @@ public class InstructionParserTest {
         PlayCard card = new PlayCard(UUID.randomUUID(), formation, "Fake card");
 
         Route route = new InstructionParser(getClient()).parse("X has a 5 yard go route");
-        card.addRoute(route);
+        card.apply(route);
 
         System.out.println(card);
 

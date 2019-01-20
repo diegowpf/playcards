@@ -35,10 +35,16 @@ public class RavensPowerPointParserTest {
     }
 
     @Test
+    public void shouldOpenSlidesWith2Plays() throws IOException {
+        assertThat(new RavensPowerPointParser(new XMLSlideShow(new FileInputStream(
+                new File("/Users/carlyledavis/Desktop/test-2-play.pptx")))).extractPlayCards()).hasSize(2);
+    }
+
+    @Test
     @Ignore
     public void shouldReturnAllRoutesWithinCanvas() throws IOException {
         assertThat(new RavensPowerPointParser(new XMLSlideShow(new FileInputStream(
-                new File("/Users/carlyledavis/Desktop/test-simple.pptx")))).getRoutes()).hasSize(4);
+                new File("/Users/carlyledavis/Desktop/test-scrubbed.pptx")))).getRoutes()).hasSize(4);
 
 //        assertThat(new RavensPowerPointParser(getPowerPoint()).getRoutes()).hasSize(4);
     }

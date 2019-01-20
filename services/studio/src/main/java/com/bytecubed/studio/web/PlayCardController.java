@@ -32,13 +32,13 @@ public class PlayCardController {
 
     @PostMapping("/team/import/{id}")
     public HttpEntity<Iterable<PlayCard>> importCard(@RequestParam("file") MultipartFile file,
-                                                         RedirectAttributes redirectAttributes,
-                                                         @PathVariable UUID id) throws IOException {
-        return importOffensiveCard(file, redirectAttributes, id );
+                                                     RedirectAttributes redirectAttributes,
+                                                     @PathVariable UUID id) throws IOException {
+        return importOffensiveCard(file, redirectAttributes, id);
     }
 
     @PostMapping("/team/{id}")
-    public HttpEntity<PlayCard> add(@PathVariable UUID id, @RequestBody PlayCard playCard ){
+    public HttpEntity<PlayCard> add(@PathVariable UUID id, @RequestBody PlayCard playCard) {
         playCard.setTeamId(id);
         playCard.setId(randomUUID());
 
@@ -50,11 +50,13 @@ public class PlayCardController {
 
     @PostMapping("/team/import/offense/{teamId}")
     public HttpEntity<Iterable<PlayCard>> importOffensiveCard(@RequestParam("file") MultipartFile file,
-                                                         RedirectAttributes redirectAttributes,
-                                                         @PathVariable UUID teamId) throws IOException {
+                                                              RedirectAttributes redirectAttributes,
+                                                              @PathVariable UUID teamId) throws IOException {
         XMLSlideShow ppt = new XMLSlideShow(file.getInputStream());
         RavensPowerPointParser ravensPowerPointParser = new RavensPowerPointParser(ppt);
         List<PlayCard> playCards = ravensPowerPointParser.extractPlayCards();
+
+        playCards.forEach(repository::save);
 
         return ok(playCards);
     }
@@ -70,7 +72,7 @@ public class PlayCardController {
     }
 
     @GetMapping()
-    public HttpEntity<Iterable<PlayCard>> getAll(){
+    public HttpEntity<Iterable<PlayCard>> getAll() {
         return ok(repository.findAll());
     }
 
