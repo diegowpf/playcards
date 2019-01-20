@@ -127,7 +127,7 @@ public class RavensPowerPointParser implements PlayCardParser {
                 .map(this::extract)
                 .collect(toList())
                 .forEach(this::print);
-        return null;
+        return routes;
     }
 
     private List<Route> extractStraightRoutes(XSLFSlide slide ) {
