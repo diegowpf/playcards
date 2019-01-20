@@ -15,7 +15,11 @@ public class RavensPowerPointParserTest {
 
     @Test
     public void shouldOpenUpPowerpoint() throws IOException {
-        assertThat(new RavensPowerPointParser(getPowerPoint()).extractPlayerPlacements()).hasSize(11);
+        assertThat(new RavensPowerPointParser(getPowerPoint())
+                .extractPlayCards()
+                .get(0)
+                .getFormation()
+                .getPlayerMarkers()).hasSize(11);
     }
 
     @Test

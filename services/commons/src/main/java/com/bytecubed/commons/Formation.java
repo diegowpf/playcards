@@ -25,6 +25,11 @@ public class Formation {
     public Formation(){
         this(null, "",new PlayerMarker[0]);
     }
+
+    public Formation(List<PlayerMarker> playerMarkers ){
+        this(playerMarkers.toArray(new PlayerMarker[0]));
+    }
+
     public Formation(PlayerMarker... players) {
         this(randomUUID(), "", players);
     }

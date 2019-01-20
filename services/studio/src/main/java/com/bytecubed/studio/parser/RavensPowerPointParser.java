@@ -1,5 +1,7 @@
 package com.bytecubed.studio.parser;
 
+import com.bytecubed.commons.Formation;
+import com.bytecubed.commons.PlayCard;
 import com.bytecubed.commons.models.Placement;
 import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.commons.models.Route;
@@ -13,6 +15,7 @@ import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
@@ -30,7 +33,7 @@ public class RavensPowerPointParser implements PlayCardParser {
         this.ppt = ppt;
     }
 
-    private List<PlayerMarker> extractPlayersOnSlide(XSLFSlide slide) {
+    private PlayCard extractPlayersOnSlide(XSLFSlide slide) {
         List<PlayerMarker> playerMarkers = new ArrayList<>();
 
         slide.getShapes().forEach(x-> logger.debug( "Shape:  " + x.getShapeName()));
@@ -45,13 +48,15 @@ public class RavensPowerPointParser implements PlayCardParser {
                     playerMarkers.addAll(nestedPlayerExtractor(s));
                 });
 
+        PlayCard playCard = new PlayCard(UUID.randomUUID(), new Formation(playerMarkers),  "foo");
+
         playerMarkers.forEach(f -> {
             String pos = f.isCenter() ? "center" : "wr";
             logger.debug("{ placement: { relativeX: " + f.getPlacement().getRelativeX() + ", relativeY: "
                     + f.getPlacement().getRelativeY() + "}, pos: \"" + pos + "\", tag: \"" +f.getTag() + "\" },");
         });
 
-        return playerMarkers;
+        return playCard;
     }
 
     private List<PlayerMarker> nestedPlayerExtractor(XSLFShape s) {
@@ -93,8 +98,10 @@ public class RavensPowerPointParser implements PlayCardParser {
     }
 
     @Override
-    public List<PlayerMarker> extractPlayerPlacements() {
-        return extractPlayersOnSlide(ppt.getSlides().get(0));
+    public List<PlayCard> extractPlayCards() {
+        return ppt.getSlides().stream()
+                .map(this::extractPlayersOnSlide)
+                .collect(toList());
     }
 
     private boolean isOnCanvas(XSLFShape s) {

@@ -1,6 +1,5 @@
 package com.bytecubed.studio.web;
 
-import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.commons.PlayCard;
 import com.bytecubed.studio.parser.RavensPowerPointParser;
 import com.bytecubed.studio.persistence.PlayCardRepository;
@@ -13,9 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
@@ -33,7 +31,7 @@ public class PlayCardController {
     }
 
     @PostMapping("/team/import/{id}")
-    public HttpEntity<Iterable<PlayerMarker>> importCard(@RequestParam("file") MultipartFile file,
+    public HttpEntity<Iterable<PlayCard>> importCard(@RequestParam("file") MultipartFile file,
                                                          RedirectAttributes redirectAttributes,
                                                          @PathVariable UUID id) throws IOException {
         return importOffensiveCard(file, redirectAttributes, id );
@@ -51,17 +49,14 @@ public class PlayCardController {
     }
 
     @PostMapping("/team/import/offense/{teamId}")
-    public HttpEntity<Iterable<PlayerMarker>> importOffensiveCard(@RequestParam("file") MultipartFile file,
+    public HttpEntity<Iterable<PlayCard>> importOffensiveCard(@RequestParam("file") MultipartFile file,
                                                          RedirectAttributes redirectAttributes,
                                                          @PathVariable UUID teamId) throws IOException {
         XMLSlideShow ppt = new XMLSlideShow(file.getInputStream());
         RavensPowerPointParser ravensPowerPointParser = new RavensPowerPointParser(ppt);
-        PlayCard card = new PlayCard(LocalDateTime.now(), randomUUID(), teamId,
-                ravensPowerPointParser.extractPlayerPlacements(),
-                ravensPowerPointParser.getName());
-        repository.save(card);
+        List<PlayCard> playCards = ravensPowerPointParser.extractPlayCards();
 
-        return ok(card.getFormation().getPlayerMarkers());
+        return ok(playCards);
     }
 
     @GetMapping("/team/{id}")
