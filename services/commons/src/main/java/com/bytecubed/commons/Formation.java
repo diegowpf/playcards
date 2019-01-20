@@ -40,6 +40,10 @@ public class Formation {
                 formation.getPlayerMarkers().toArray(new PlayerMarker[0]));
     }
 
+    public Formation(List<PlayerMarker> playerMarkers) {
+        this(playerMarkers.toArray(new PlayerMarker[0]));
+    }
+
     public String getName() {
         return name;
     }
