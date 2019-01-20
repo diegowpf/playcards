@@ -4,6 +4,9 @@ import com.bytecubed.commons.Formation;
 import com.bytecubed.commons.PlayCard;
 import com.bytecubed.commons.models.Placement;
 import com.bytecubed.commons.models.PlayerMarker;
+import com.bytecubed.commons.models.movement.CustomMoveDescriptor;
+import com.bytecubed.commons.models.movement.Move;
+import com.bytecubed.commons.models.movement.MoveDescriptor;
 import com.bytecubed.commons.models.movement.Route;
 import org.apache.poi.xslf.usermodel.*;
 import org.slf4j.Logger;
@@ -114,26 +117,7 @@ public class RavensPowerPointParser implements PlayCardParser {
     public List<Route> getRoutes(XSLFSlide slide) {
 
         List<Route> routes = new ArrayList();
-
-        slide.getShapes().stream()
-                .filter(this::isOnCanvas)
-                .filter(f -> f.getShapeName().contains("Straight"))
-                .forEach(f -> {
-                    logger.debug((f.getClass().getName()));
-
-                    logger.debug(f.getXmlObject().xmlText());
-                    Rectangle2D bounds = f.getAnchor().getBounds2D();
-                    logger.debug( "This is the shape type:  " + f.getShapeName());
-                    XSLFSimpleShape shape = (XSLFSimpleShape) f;
-
-                    if (shape.getFlipVertical()) {
-                        logger.debug(newX(bounds.getMaxX()) + " " + newY(bounds.getMinY()) + " " +
-                                newX(bounds.getMinX()) + " " + newY(bounds.getMaxY()));
-                    } else {
-                        logger.debug(newX(bounds.getMinX()) + " " + newY(bounds.getMaxY()) + " " +
-                                newX(bounds.getMaxX()) + " " + newY(bounds.getMinY()));
-                    }
-                });
+        routes.addAll(extractStraightRoutes(slide));
 
         ppt.getSlides().get(0)
                 .getShapes()
@@ -144,6 +128,48 @@ public class RavensPowerPointParser implements PlayCardParser {
                 .collect(toList())
                 .forEach(this::print);
         return null;
+    }
+
+    private List<Route> extractStraightRoutes(XSLFSlide slide ) {
+        List<Route> routes = new ArrayList();
+
+        slide.getShapes().stream()
+                .filter(this::isOnCanvas)
+                .filter(f -> f.getShapeName().contains("Straight"))
+                .forEach(f -> {
+                    logger.debug((f.getClass().getName()));
+                    logger.debug(f.getXmlObject().xmlText());
+                    logger.debug( "This is the shape type:  " + f.getShapeName());
+
+                    Rectangle2D bounds = f.getAnchor().getBounds2D();
+                    XSLFSimpleShape shape = (XSLFSimpleShape) f;
+
+                    double x1, y1, x2, y2 = 0;
+
+                    if (shape.getFlipVertical()) {
+                        x1 = newX(bounds.getMaxX());
+                        y1 = newY(bounds.getMinY());
+                        x2 = newX(bounds.getMinX());
+                        y2 = newY(bounds.getMaxY());
+
+                        logger.debug(x1 + " " + y1 + " " + x2 + " " + y2);
+                    } else {
+                        x1 = newX(bounds.getMinX());
+                        y1 = newY(bounds.getMaxY());
+                        x2 = newX(bounds.getMaxX());
+                        y2 = newY(bounds.getMinY());
+
+                        logger.debug(x1 + " " + y1 + " " + x2 + " " + y2);
+                    }
+
+                    List<MoveDescriptor> moveDescriptors = new ArrayList();
+                    moveDescriptors.add(new CustomMoveDescriptor(Move.custom,
+                            new Placement(x1,y1),
+                            new Placement(x2,y2)));
+                    routes.add(new Route(moveDescriptors, "foo"));
+                });
+
+        return routes;
     }
 
     private void print(List<Line2D.Double> p) {

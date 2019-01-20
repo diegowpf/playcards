@@ -2,19 +2,19 @@ package com.bytecubed.commons.models;
 
 public class Placement {
 
-    private int relativeX;
-    private int relativeY;
+    private double relativeX;
+    private double relativeY;
 
     public Placement(){
         this(0,0);
     }
 
-    public Placement(int relativeX, int relativeY ) {
+    public Placement(double relativeX, double relativeY ) {
         this.relativeX = relativeX;
         this.relativeY = relativeY;
     }
 
-    public int getRelativeX() {
+    public double getRelativeX() {
         return relativeX;
     }
 
@@ -26,7 +26,7 @@ public class Placement {
                 '}';
     }
 
-    public int getRelativeY() {
+    public double getRelativeY() {
         return relativeY;
     }
 

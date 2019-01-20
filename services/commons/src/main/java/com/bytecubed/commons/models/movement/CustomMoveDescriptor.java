@@ -6,7 +6,17 @@ public class CustomMoveDescriptor extends MoveDescriptor{
     Placement start;
     Placement end;
 
-    public CustomMoveDescriptor(Move move) {
+    public CustomMoveDescriptor(Move move, Placement start, Placement end) {
         super(move);
+        this.start = start;
+        this.end = end;
+    }
+
+    public Placement getEnd() {
+        return end;
+    }
+
+    public Placement getStart() {
+        return start;
     }
 }
