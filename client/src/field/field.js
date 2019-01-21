@@ -94,7 +94,6 @@ class Field extends React.Component {
           .then(res => {
             const placements = res.data[0].formation.playerMarkers;
             // const placements = players;
-            console.log(JSON.stringify(placements));
             this.setState({ placements });
             placements.forEach( (x)=> {
                    this.addPlayer(d3.select("#svg"), x)
@@ -106,8 +105,6 @@ class Field extends React.Component {
     drawFieldGrid(x1,y1,x2,y2){
       var horizontalUnits = ((x2-x1)/10)
       var verticalUnits = ((y2-y1)/10)
-
-      // generateGrid
 
     }
 

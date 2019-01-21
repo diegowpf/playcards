@@ -26,7 +26,8 @@ public class RavensPowerPointParserTest {
 
     @Test
     public void shouldExtractName() throws IOException {
-        assertThat(new RavensPowerPointParser(getDefaultPowerPoint()).getName()).isEqualTo("CIN-32 3-6 +30");
+        PlayCard playCard = new RavensPowerPointParser(getDefaultPowerPoint()).extractPlayCards().get(0);
+        assertThat(playCard.getName()).isEqualTo("CIN-32 3-6 +30");
     }
 
     private XMLSlideShow getDefaultPowerPoint() throws IOException {

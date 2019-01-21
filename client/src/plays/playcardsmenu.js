@@ -46,7 +46,7 @@ export default class PersonList extends React.Component{
   }
 
   componentDidMount(){
-    axios.get("http://server.immersivesports.ai/playcards/team/c679919f-d524-3f75-ad2a-5161706e12a5")
+    axios.get("http://server.immersivesports.ai/playcards")
       .then(res => {
         res.data.forEach(card=> playCards.push({name: card.name, formation: "Standard Layout", description:"Imported"}));
         this.setState({playCards});
