@@ -49,6 +49,10 @@ public class Formation {
     }
 
     public PlayerMarker getPlayerMarkerAt(String tag) {
+
+        System.out.println( "Player count:  " + players.size() );
+        players.forEach( f->System.out.println("These are the players;  " + f.getTag()));
+
         return players.stream()
                 .filter(f->f.getTag() != null && f.getTag().equalsIgnoreCase(tag))
                 .findFirst()
