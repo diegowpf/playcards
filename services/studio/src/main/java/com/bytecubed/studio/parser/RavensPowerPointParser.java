@@ -360,7 +360,7 @@ public class RavensPowerPointParser implements PlayCardParser {
                 double nearestPoints = distance(playerShape, shape);
                 logger.debug("Nearest Distance:  " + nearestPoints);
 
-                if (nearestPoints < 40) {
+                if (nearestPoints < 20) {
                     logger.debug("Found intersection....");
 //                    nearestDistance = distance;
                     nearestPlayer = shapeRegistry.get(playerShape);

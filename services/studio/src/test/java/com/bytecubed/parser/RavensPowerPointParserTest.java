@@ -66,12 +66,11 @@ public class RavensPowerPointParserTest {
     }
 
     @Test
-    @Ignore( "Not sure why this is not parsing correctly.")
     public void shouldExtract2MovesFromPlayer89() throws IOException {
         RavensPowerPointParser parser = new RavensPowerPointParser(getPowerPoint("89-crazy-route.pptx"));
         PlayCard playCard = parser.extractPlayCards().get(0);
 
-        assertThat(playCard.getFormation().getPlayerMarkerAt("89").getRoutes()).hasSize(2);
+        assertThat(playCard.getFormation().getPlayerMarkerAt("89").getRoutes()).hasSize(3);
     }
     @Test
     @Ignore("This test picks up routes that have not been collapsed.")
