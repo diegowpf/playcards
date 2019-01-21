@@ -207,7 +207,6 @@ public class RavensPowerPointParser implements PlayCardParser {
         logger.debug(f.getXmlObject().xmlText());
         XSLFFreeformShape connector = (XSLFFreeformShape) f;
         PathIterator pathIterator = connector.getPath().getPathIterator(new AffineTransform());
-        logger.debug("Path Iterator:  " + pathIterator.getClass().getName());
 
         PlayerMarker nearestPlayer = entityRegistry.getNearestPlayer(f);
         if( nearestPlayer != null )
@@ -283,11 +282,11 @@ public class RavensPowerPointParser implements PlayCardParser {
 
     private double newY(double y) {
         double adjustedY = y - lineOfScrimage;
-        return (((adjustedY / 200) * 30) * 8.4) + 510;
+        return ((adjustedY / 200) * 30);
     }
 
     private double newX(double x) {
-        return (x / maxX) * 160 * 8.4;
+        return (x / maxX) * 160;
     }
 
     public String getName() {

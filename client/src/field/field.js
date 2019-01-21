@@ -90,7 +90,7 @@ class Field extends React.Component {
     // }
 
     componentDidMount() {
-        axios.get("http://server.immersivesports.ai/playcards")
+        axios.get("http://localhost:8080/playcards")
           .then(res => {
             const placements = res.data[0].formation.playerMarkers;
             // const placements = players;
@@ -184,12 +184,15 @@ class Field extends React.Component {
 
   //       <polyline points="20,20 40,25 60,40 80,120 120,140 200,180"
   // style="fill:none;stroke:black;stroke-width:3" />
+      var newStartPoints = this.convertX( route.start.relativeX, route.start.relativeY );
+      var newEndPoints = this.convertX( route.end.relativeX, route.end.relativeY );
 
       var points = "";
       console.log( route.start.relativeX + " " + route.start.relativeY + " " + route.end.relativeX + " " + route.end.relativeY );
 
+
       g.append("polyline")
-        .attr( "points", route.start.relativeX + " " + route.start.relativeY + " " + route.end.relativeX + " " + route.end.relativeY )
+        .attr( "points", newStartPoints.x + " " + newStartPoints.y + " " + newEndPoints.x + " " + newEndPoints.y  )
         .attr("fill", "none" )
         .attr( "stroke-width", "5px" )
         .attr("stroke",routeColor)
