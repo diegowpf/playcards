@@ -14,7 +14,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import * as d3 from "d3";
-import axios from 'axios'
+import axios from 'axios';
+import {connect} from 'react-redux';
+import {handleNavigationClick} from '../reducers'
 
 const styles = {
   card: {
@@ -33,12 +35,13 @@ const styles = {
   },
 };
 
-var playCards = [{name: "Danger Right", formation: "Standard Layout", description: "Running Back Wide"},
+/*{name: "Danger Right", formation: "Standard Layout", description: "Running Back Wide"},
             {name: "Some New Play", formation: "Standard Layout", description: "Three Wide Recievers"},
-            {name: "True Detective", formation: "Standard Layout", description: "Halfback"}];
+            {name: "True Detective", formation: "Standard Layout", description: "Halfback"}
+&*/
+var playCards = [];
 
-export default class PersonList extends React.Component{
-
+class PersonList extends React.Component{
     // const { classes } = props;
     // const bull = <span className={classes.bullet}>•</span>;
   state = {
@@ -48,8 +51,8 @@ export default class PersonList extends React.Component{
   componentDidMount(){
     axios.get("http://server.immersivesports.ai/playcards")
       .then(res => {
-        res.data.forEach(card=> playCards.push({name: card.name, formation: "Standard Layout", description:"Imported"}));
-        this.setState({playCards});
+        // res.data.forEach(card=> playCards.push({name: card.name, formation: "Standard Layout", description:"Imported"}));
+        this.setState({playCards: res.data});
 
       })
   }
@@ -61,15 +64,17 @@ export default class PersonList extends React.Component{
          <div>
            <Card>
             <CardContent>
+
             <Typography variant="h5" component="h2">
               {card.name}
             </Typography>
             <Typography  color="textSecondary">
-              {card.formation}
+              Formation []
             </Typography>
             <Typography component="p">
-              {card.description}
+              Imported
             </Typography>
+            <Button onClick={()=>this.props.navigate(card)}>Foo</Button>
             </CardContent>
            </Card>
            <br/>
@@ -79,6 +84,16 @@ export default class PersonList extends React.Component{
     );
   }
 }
+
+const mapDispatchToProps = dispatch => { return {dispatch, navigate: (card) => dispatch(handleNavigationClick(card))}}
+
+
+// const mapDispatchToProps = dispatch;
+
+export default connect(
+ null,
+ mapDispatchToProps
+)(PersonList);
 
 // PlayCardMenu.propTypes = {
 //   classes: PropTypes.object.isRequired,

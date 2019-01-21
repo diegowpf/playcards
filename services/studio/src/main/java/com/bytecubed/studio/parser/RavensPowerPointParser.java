@@ -47,7 +47,7 @@ public class RavensPowerPointParser implements PlayCardParser {
                 });
 
         PlayCard playCard = new PlayCard(UUID.randomUUID(), new Formation(playerMarkers), getName(slide));
-        getRoutes(slide,entityRegistry);
+        getRoutes(slide, entityRegistry);
 
         playerMarkers.forEach(f -> {
             String pos = f.isCenter() ? "center" : "wr";
@@ -120,12 +120,12 @@ public class RavensPowerPointParser implements PlayCardParser {
     public List<Route> getRoutes(XSLFSlide slide, ShapeToEntityRegistry entityRegistry) {
 
         List<Route> routes = new ArrayList(extractStraightRoutes(slide, entityRegistry));
-        routes.addAll( ppt.getSlides().get(0)
+        routes.addAll(ppt.getSlides().get(0)
                 .getShapes()
                 .stream()
                 .filter(this::isOnCanvas)
                 .filter(f -> f.getShapeName().contains("Free"))
-                .map(f->extractCurvedRoutes(f, entityRegistry))
+                .map(f -> extractCurvedRoutes(f, entityRegistry))
                 .collect(toList()));
 
 
@@ -159,19 +159,19 @@ public class RavensPowerPointParser implements PlayCardParser {
                     if (shape.getFlipVertical()) {
 
                         Line2D.Double line = extractAsLine(shape, true);
-
                         x1 = line.x1;
                         y1 = line.y1;
                         x2 = line.x2;
                         y2 = line.y2;
 
+                        logger.debug("Flip Vertical");
                         logger.debug(x1 + " " + y1 + " " + x2 + " " + y2);
                     } else {
                         x1 = newX(bounds.getMinX());
                         y1 = newY(bounds.getMaxY());
                         x2 = newX(bounds.getMaxX());
                         y2 = newY(bounds.getMinY());
-
+                        logger.debug("No Flip");
                         logger.debug(x1 + " " + y1 + " " + x2 + " " + y2);
                     }
 
@@ -201,7 +201,7 @@ public class RavensPowerPointParser implements PlayCardParser {
     }
 
 
-    private Route extractCurvedRoutes(XSLFShape f, ShapeToEntityRegistry entityRegistry ) {
+    private Route extractCurvedRoutes(XSLFShape f, ShapeToEntityRegistry entityRegistry) {
         logger.debug((f.getClass().getName()));
 
         logger.debug(f.getXmlObject().xmlText());
@@ -209,7 +209,7 @@ public class RavensPowerPointParser implements PlayCardParser {
         PathIterator pathIterator = connector.getPath().getPathIterator(new AffineTransform());
 
         PlayerMarker nearestPlayer = entityRegistry.getNearestPlayer(f);
-        if( nearestPlayer != null )
+        if (nearestPlayer != null)
             logger.debug("This is the nearest player:  " + nearestPlayer.getTag());
 
         while (!pathIterator.isDone()) {
@@ -265,16 +265,16 @@ public class RavensPowerPointParser implements PlayCardParser {
         }
 
         String playerTag = "";
-        if( nearestPlayer != null ){
+        if (nearestPlayer != null) {
             playerTag = nearestPlayer.getTag();
         }
 
-        Route route = new Route( areaSegments.stream()
-                .map(b->new CustomMoveDescriptor(Move.custom, new Placement(newX(b.x1), newY(b.y1)),
-                        new Placement(newX(b.x2), newY(b.y2))) )
-                .collect(toList()), playerTag );
+        Route route = new Route(areaSegments.stream()
+                .map(b -> new CustomMoveDescriptor(Move.custom, new Placement(newX(b.x1), newY(b.y1)),
+                        new Placement(newX(b.x2), newY(b.y2))))
+                .collect(toList()), playerTag);
 
-        if( nearestPlayer != null )
+        if (nearestPlayer != null)
             nearestPlayer.addRoute(route);
 
         return route;
@@ -297,7 +297,7 @@ public class RavensPowerPointParser implements PlayCardParser {
         List<XSLFTextBox> textBoxes = asList(slide.getShapes()
                 .stream()
                 .filter(s -> s.getShapeName().contains("Text"))
-                .collect(toList()).toArray(new XSLFTextBox [0]));
+                .collect(toList()).toArray(new XSLFTextBox[0]));
 
         for (XSLFTextBox textBox : textBoxes) {
             if (longest < textBox.getText().length()) {

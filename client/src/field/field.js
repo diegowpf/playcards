@@ -1,7 +1,7 @@
 import React from 'react';
 import * as d3 from "d3";
 import axios from 'axios'
-
+import {connect} from 'react-redux';
 var props = {stroke: "white", "stroke-width": 5}
 var outerField = {
   // "stroke-width":5,
@@ -90,18 +90,27 @@ class Field extends React.Component {
     // }
 
     componentDidMount() {
-        axios.get("http://server.immersivesports.ai/playcards")
+        axios.get("http://localhost:8080/playcards")
           .then(res => {
             const placements = res.data[0].formation.playerMarkers;
             // const placements = players;
             // const placements = []
-            this.setState({ placements });
+            // this.setState({ placements });
             placements.forEach( (x)=> {
-                   this.addPlayer(d3.select("#svg"), x)
+                   this.addPlayer(d3.select("#renderBox"), x)
             })
           })
       }
 
+    componentWillReceiveProps(nextProps) {
+      console.log('Component : nextprops: ', nextProps)
+      this.setState({placements: nextProps.placements.formation.playerMarkers})
+
+      d3.select("#renderBox").html("");
+      nextProps.placements.formation.playerMarkers.forEach( (x)=> {
+             this.addPlayer(d3.select("#renderBox"), x)
+      })
+    }
 
     drawFieldGrid(x1,y1,x2,y2){
       var horizontalUnits = ((x2-x1)/10)
@@ -273,6 +282,9 @@ class Field extends React.Component {
                 </marker>
                 <path d="M200,200 M100,100" fill='black' />
 
+              <g id="renderBox">
+
+              </g>
 
               </svg>
 
@@ -289,4 +301,11 @@ class Field extends React.Component {
 //     classes: PropTypes.object.isRequired,
 // };
 
-export default Field;
+const mapStateToProps = (state) =>{
+  return {
+    placements: state.active_card_id
+  }
+}
+export default connect(
+ mapStateToProps
+)(Field);
