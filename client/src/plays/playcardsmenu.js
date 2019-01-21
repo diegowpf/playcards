@@ -52,6 +52,8 @@ class PersonList extends React.Component{
     axios.get("http://localhost:8080/playcards")
       .then(res => {
         this.setState({playCards: res.data});
+        if( res.data.length > 0 )
+          this.props.navigate(res.data[0])
       })
   }
 
@@ -67,7 +69,7 @@ class PersonList extends React.Component{
               {card.name}
             </Typography>
             <Typography  color="textSecondary">
-              User Defined Formation 
+              User Defined Formation
             </Typography>
             <Typography component="p">
               Imported

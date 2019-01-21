@@ -261,12 +261,6 @@ class Field extends React.Component {
               <g id="renderBox">
 
               </g>
-
-              </svg>
-
-              <svg viewBox="0 0 1000 1000" >
-
-
               </svg>
             </div>
         );
