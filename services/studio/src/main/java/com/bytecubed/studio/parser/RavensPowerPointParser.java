@@ -47,7 +47,7 @@ public class RavensPowerPointParser implements PlayCardParser {
                 });
 
         PlayCard playCard = new PlayCard(UUID.randomUUID(), new Formation(playerMarkers), "foo");
-        List<Route> routes = getRoutes(slide);
+        getRoutes(slide);
 
         playerMarkers.forEach(f -> {
             String pos = f.isCenter() ? "center" : "wr";
@@ -120,16 +120,24 @@ public class RavensPowerPointParser implements PlayCardParser {
     public List<Route> getRoutes(XSLFSlide slide) {
 
         List<Route> routes = new ArrayList(extractStraightRoutes(slide));
-
-        ppt.getSlides().get(0)
+        routes.addAll( ppt.getSlides().get(0)
                 .getShapes()
                 .stream()
                 .filter(this::isOnCanvas)
                 .filter(f -> f.getShapeName().contains("Free"))
                 .map(this::extract)
-                .collect(toList())
-                .forEach(this::print);
+                .collect(toList()));
+
+
         return routes;
+    }
+
+    private Route convertToRoute(ArrayList<Line2D.Double> doubles) {
+        return new Route(doubles.stream()
+                .map(f -> new CustomMoveDescriptor(Move.custom,
+                        new Placement(f.x1, f.y1),
+                        new Placement(f.x2, f.y2)))
+                .collect(toList()), "foo");
     }
 
     private List<Route> extractStraightRoutes(XSLFSlide slide) {
@@ -139,15 +147,10 @@ public class RavensPowerPointParser implements PlayCardParser {
                 .filter(this::isOnCanvas)
                 .filter(f -> f.getShapeName().contains("Straight"))
                 .forEach(f -> {
-                    logger.debug((f.getClass().getName()));
-                    logger.debug("This is the shape type:  " + f.getShapeName());
-
                     Rectangle2D bounds = f.getAnchor().getBounds2D();
-
                     XSLFSimpleShape shape = (XSLFSimpleShape) f;
 
                     PlayerMarker player = entityRegistry.getNearestPlayer(f);
-                    logger.debug("After inspection: ");
                     String nearestPlayerMarker = player == null ? "" : player.getTag();
                     logger.debug("Nearest Player:  " + nearestPlayerMarker);
 
@@ -179,7 +182,7 @@ public class RavensPowerPointParser implements PlayCardParser {
 
                     Route e = new Route(moveDescriptors, nearestPlayerMarker);
 
-                    if( player != null ){
+                    if (player != null) {
                         player.addRoute(e);
                     }
 
@@ -190,7 +193,6 @@ public class RavensPowerPointParser implements PlayCardParser {
     }
 
     private Line2D.Double extractAsLine(XSLFShape shape, boolean b) {
-
         Rectangle2D bounds = shape.getAnchor().getBounds2D();
         return new Line2D.Double(newX(bounds.getMaxX()),
                 newY(bounds.getMinY()),
@@ -205,13 +207,18 @@ public class RavensPowerPointParser implements PlayCardParser {
         System.out.println("done");
     }
 
-    private ArrayList<Line2D.Double> extract(XSLFShape f) {
+    private Route extract(XSLFShape f) {
         logger.debug((f.getClass().getName()));
 
         logger.debug(f.getXmlObject().xmlText());
         XSLFFreeformShape connector = (XSLFFreeformShape) f;
         PathIterator pathIterator = connector.getPath().getPathIterator(new AffineTransform());
         logger.debug("Path Iterator:  " + pathIterator.getClass().getName());
+
+        PlayerMarker nearestPlayer = entityRegistry.getNearestPlayer(f);
+        if( nearestPlayer != null )
+            logger.debug("This is the nearest player:  " + nearestPlayer.getTag());
+
         while (!pathIterator.isDone()) {
             pathIterator.next();
         }
@@ -266,8 +273,19 @@ public class RavensPowerPointParser implements PlayCardParser {
             }
         }
 
+        String playerTag = "";
+        if( nearestPlayer != null ){
+            playerTag = nearestPlayer.getTag();
+        }
 
-        return areaSegments;
+        Route route = new Route( areaSegments.stream()
+                .map(b->new CustomMoveDescriptor(Move.custom, new Placement(b.x1, b.y1), new Placement(b.x2, b.y2)) )
+                .collect(toList()), playerTag );
+
+        if( nearestPlayer != null )
+            nearestPlayer.addRoute(route);
+
+        return route;
     }
 
     private double newY(double y) {
@@ -322,6 +340,10 @@ public class RavensPowerPointParser implements PlayCardParser {
             shapeRegistry.put(shape, marker);
         }
 
+        public PlayerMarker getNearestPlayer(Point2D point){
+            return null;
+        }
+
         public PlayerMarker getNearestPlayer(XSLFShape shape) {
             Point2D points = getAsPoint(shape);
             PlayerMarker nearestPlayer = null;
@@ -331,14 +353,14 @@ public class RavensPowerPointParser implements PlayCardParser {
 
             for (XSLFShape playerShape : shapeRegistry.keySet()) {
                 printBoundingBox(playerShape);
-                Point2D playerShapePoint = getAsPoint(playerShape);
-                double distance = Math.abs(playerShapePoint.distance(points));
+//                Point2D playerShapePoint = getAsPoint(playerShape);
+//                double distance = Math.abs(playerShapePoint.distance(points));
 
-                logger.debug("Distance:  " + distance);
+//                logger.debug("Distance:  " + distance);
                 double nearestPoints = distance(playerShape, shape);
-                logger.debug( "Nearest Distance:  "  + nearestPoints );
+                logger.debug("Nearest Distance:  " + nearestPoints);
 
-                if (nearestPoints < 40d ) {
+                if (nearestPoints < 40) {
                     logger.debug("Found intersection....");
 //                    nearestDistance = distance;
                     nearestPlayer = shapeRegistry.get(playerShape);
@@ -365,10 +387,10 @@ public class RavensPowerPointParser implements PlayCardParser {
 
         private double getMinimumDistance(List<Point2D> shape1Points, List<Point2D> shape2Points) {
             double distance = Double.MAX_VALUE;
-            for( Point2D p : shape1Points ){
-                for(Point2D q : shape2Points ){
+            for (Point2D p : shape1Points) {
+                for (Point2D q : shape2Points) {
                     double latestDistance = Math.abs(p.distance(q));
-                    if( distance > latestDistance){
+                    if (distance > latestDistance) {
                         distance = latestDistance;
                     }
                 }
