@@ -94,6 +94,7 @@ class Field extends React.Component {
           .then(res => {
             const placements = res.data[0].formation.playerMarkers;
             // const placements = players;
+            // const placements = []
             this.setState({ placements });
             placements.forEach( (x)=> {
                    this.addPlayer(d3.select("#svg"), x)
@@ -149,15 +150,49 @@ class Field extends React.Component {
 
       if( player.routes) {
         player.routes.forEach((x) => {
-          switch( x.move ){
-            case "curl":
-              this.generateCurlRoute(g, player, coordinates, x)
-              break;
-            default:
-              this.generateGoRoute(g, player, coordinates, x )
-            }
+
+          x.moveDescriptors.forEach((y) => {
+            console.log(JSON.stringify(x));
+
+            switch( y.move ){
+              case "curl":
+                this.generateCurlRoute(g, player, coordinates, y)
+                break;
+              case "go":
+                this.generateGoRoute(g, player, coordinates, y )
+                break;
+              case "custom":
+                this.generateCustomRoute(g, player, coordinates, y );
+                break;
+              }
+
           })
+                    })
         }
+    }
+
+    generateCustomRoute(g, player,coordinates,route ){
+      console.log(JSON.stringify(route));
+      console.log("Generate Custom Route" );
+
+      // g.append("path")
+      //   .attr("marker-end", "url(#head)")
+      //   .attr("d", path)
+      //   .attr("fill", "none" )
+      //   .attr( "stroke-width", "5px" )
+      //   .attr("stroke",routeColor)
+
+  //       <polyline points="20,20 40,25 60,40 80,120 120,140 200,180"
+  // style="fill:none;stroke:black;stroke-width:3" />
+
+      var points = "";
+      console.log( route.start.relativeX + " " + route.start.relativeY + " " + route.end.relativeX + " " + route.end.relativeY );
+
+      g.append("polyline")
+        .attr( "points", route.start.relativeX + " " + route.start.relativeY + " " + route.end.relativeX + " " + route.end.relativeY )
+        .attr("fill", "none" )
+        .attr( "stroke-width", "5px" )
+        .attr("stroke",routeColor)
     }
 
     generateGoRoute(g, player, coordinates, route ){
@@ -233,7 +268,6 @@ class Field extends React.Component {
                         refX='0.1' refY='2'>
                       <path d='M0,0 V4 L2,2 Z' fill='red' />
                 </marker>
-
                 <path d="M200,200 M100,100" fill='black' />
 
 
