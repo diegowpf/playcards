@@ -8,6 +8,7 @@ import com.bytecubed.commons.models.movement.CustomMoveDescriptor;
 import com.bytecubed.commons.models.movement.Move;
 import com.bytecubed.commons.models.movement.MoveDescriptor;
 import com.bytecubed.commons.models.movement.Route;
+import org.apache.poi.sl.draw.geom.Path;
 import org.apache.poi.xslf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -156,9 +157,12 @@ public class RavensPowerPointParser implements PlayCardParser {
 
                     double x1, y1, x2, y2;
 
-                    if (shape.getFlipVertical()) {
+//                    if( shape.getFlipHorizontal() ){
+//                        shape.setFlipHorizontal(false);
+//                    }
 
-                        Line2D.Double line = extractAsLine(shape, true);
+                    Line2D.Double line = extractAsLine(shape, true);
+                    if (shape.getFlipVertical()) {
                         x2 = line.x1;
                         y2 = line.y1;
                         x1 = line.x2;
@@ -174,6 +178,14 @@ public class RavensPowerPointParser implements PlayCardParser {
                         logger.debug("No Flip");
                         logger.debug(x1 + " " + y1 + " " + x2 + " " + y2);
                     }
+//                    } else {
+//                        x1 = newX(bounds.getMinX());
+//                        y1 = newY(bounds.getMaxY());
+//                        x2 = newX(bounds.getMaxX());
+//                        y2 = newY(bounds.getMinY());
+//                        logger.debug("No Flip");
+//                        logger.debug(x1 + " " + y1 + " " + x2 + " " + y2);
+//                    }
 
                     List<MoveDescriptor> moveDescriptors = new ArrayList();
                     moveDescriptors.add(new CustomMoveDescriptor(Move.custom,
@@ -194,17 +206,28 @@ public class RavensPowerPointParser implements PlayCardParser {
 
     private Line2D.Double extractAsLine(XSLFShape shape, boolean b) {
         Rectangle2D bounds = shape.getAnchor().getBounds2D();
-        return new Line2D.Double(newX(bounds.getMaxX()),
+        logger.debug("Line is represeted as:  " + shape.getClass().getName());
+        logger.debug(shape.getXmlObject().toString());
+
+        XSLFConnectorShape connector = (XSLFConnectorShape) shape;
+//        connector.setFlipHorizontal(false);
+//        connector.setFlipVertical(false);
+
+        logger.debug("Line head: " + connector.getLineHeadDecoration());
+
+//        return new Line2D.Double(newX(bounds.getMaxX()),
+//                newY(bounds.getMinY()),
+//                newX(bounds.getMinX()),
+//                newY(bounds.getMaxY()));
+
+        return new Line2D.Double(newX(bounds.getMinX()),
                 newY(bounds.getMinY()),
-                newX(bounds.getMinX()),
+                newX(bounds.getMaxX()),
                 newY(bounds.getMaxY()));
     }
 
 
     private Route extractCurvedRoutes(XSLFShape f, ShapeToEntityRegistry entityRegistry) {
-        logger.debug((f.getClass().getName()));
-
-        logger.debug(f.getXmlObject().xmlText());
         XSLFFreeformShape connector = (XSLFFreeformShape) f;
         PathIterator pathIterator = connector.getPath().getPathIterator(new AffineTransform());
 
