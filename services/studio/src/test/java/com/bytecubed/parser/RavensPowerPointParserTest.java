@@ -25,6 +25,17 @@ public class RavensPowerPointParserTest {
     }
 
     @Test
+    public void shouldOpenUpPowerPointWithMultipleSlides() throws IOException {
+        assertThat(new RavensPowerPointParser(getDefaultPowerPoint())
+                .extractPlayCards()
+                .get(0).getName()).isEqualTo("CIN-32 3-6 +30");
+
+        assertThat(new RavensPowerPointParser(getDefaultPowerPoint())
+                .extractPlayCards()
+                .get(1).getName()).isEqualTo("BLT-44 3-6 +25");
+    }
+
+    @Test
     public void shouldExtractName() throws IOException {
         PlayCard playCard = new RavensPowerPointParser(getDefaultPowerPoint()).extractPlayCards().get(0);
         assertThat(playCard.getName()).isEqualTo("CIN-32 3-6 +30");
@@ -44,7 +55,7 @@ public class RavensPowerPointParserTest {
     @Test
     public void shouldOpenSlidesWith2Plays() throws IOException {
         assertThat(new RavensPowerPointParser(getPowerPoint("test-2-play.pptx"))
-                  .extractPlayCards()).hasSize(2);
+                .extractPlayCards()).hasSize(2);
     }
 
     @Test
@@ -73,6 +84,7 @@ public class RavensPowerPointParserTest {
 
         assertThat(playCard.getFormation().getPlayerMarkerAt("89").getRoutes()).hasSize(3);
     }
+
     @Test
     @Ignore("This test picks up routes that have not been collapsed.")
     public void shouldReturnAllRoutesWithinCanvas() throws IOException {

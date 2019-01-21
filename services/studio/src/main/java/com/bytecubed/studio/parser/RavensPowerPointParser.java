@@ -46,7 +46,7 @@ public class RavensPowerPointParser implements PlayCardParser {
                     playerMarkers.addAll(nestedPlayerExtractor(entityRegistry, s));
                 });
 
-        PlayCard playCard = new PlayCard(UUID.randomUUID(), new Formation(playerMarkers), getName());
+        PlayCard playCard = new PlayCard(UUID.randomUUID(), new Formation(playerMarkers), getName(slide));
         getRoutes(slide);
 
         playerMarkers.forEach(f -> {
@@ -289,15 +289,15 @@ public class RavensPowerPointParser implements PlayCardParser {
         return (x / maxX) * 160;
     }
 
-    public String getName() {
+    public String getName(XSLFSlide slide) {
 
         int longest = 0;
         String longestText = "";
 
-        List<XSLFTextBox> textBoxes = asList(this.ppt.getSlides().get(0).getShapes()
+        List<XSLFTextBox> textBoxes = asList(slide.getShapes()
                 .stream()
                 .filter(s -> s.getShapeName().contains("Text"))
-                .collect(toList()).toArray(new XSLFTextBox[0]));
+                .collect(toList()).toArray(new XSLFTextBox [0]));
 
         for (XSLFTextBox textBox : textBoxes) {
             if (longest < textBox.getText().length()) {
