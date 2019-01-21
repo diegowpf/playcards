@@ -33,8 +33,8 @@ class Focus extends React.Component {
           centered
         >
           <Tab label="OFFENSE" />
-          <Tab label="DEFENSE" />
-          <Tab label="SPECIAL TEAMS" />
+          <Tab label="DEFENSE" disabled />
+          <Tab label="SPECIAL TEAMS" disabled/>
         </Tabs>
       </Paper>
     );

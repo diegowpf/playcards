@@ -35,10 +35,6 @@ const styles = {
   },
 };
 
-/*{name: "Danger Right", formation: "Standard Layout", description: "Running Back Wide"},
-            {name: "Some New Play", formation: "Standard Layout", description: "Three Wide Recievers"},
-            {name: "True Detective", formation: "Standard Layout", description: "Halfback"}
-&*/
 var playCards = [];
 
 class PersonList extends React.Component{

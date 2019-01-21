@@ -223,7 +223,7 @@ class Field extends React.Component {
       icon.attr( "cx", coordinates.x + playerWidth )
         .attr( "cy", coordinates.y + (playerWidth) )
         .attr( "r", playerWidth )
-        .attr( "fill", "red" )
+        .attr( "fill", "skyblue" )
         .attr( "stroke-width", "5px" )
         .attr( "stroke", "black")
     }
