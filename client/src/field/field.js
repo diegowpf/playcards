@@ -81,25 +81,9 @@ class Field extends React.Component {
   state = {
     placements: []
   }
-    // componentDidMount(){
-    //   players.forEach( (x)=> {
-    //       this.addPlayer(d3.select("#svg"), x)
-    //   })
-    //
-    //
-    // }
 
     componentDidMount() {
-        axios.get("http://localhost:8080/playcards")
-          .then(res => {
-            const placements = res.data[0].formation.playerMarkers;
-            // const placements = players;
-            // const placements = []
-            // this.setState({ placements });
-            placements.forEach( (x)=> {
-                   this.addPlayer(d3.select("#renderBox"), x)
-            })
-          })
+
       }
 
     componentWillReceiveProps(nextProps) {
@@ -183,16 +167,6 @@ class Field extends React.Component {
     generateCustomRoute(g, player,coordinates,route ){
       console.log(JSON.stringify(route));
       console.log("Generate Custom Route" );
-
-      // g.append("path")
-      //   .attr("marker-end", "url(#head)")
-      //   .attr("d", path)
-      //   .attr("fill", "none" )
-      //   .attr( "stroke-width", "5px" )
-      //   .attr("stroke",routeColor)
-
-  //       <polyline points="20,20 40,25 60,40 80,120 120,140 200,180"
-  // style="fill:none;stroke:black;stroke-width:3" />
       var newStartPoints = this.convertX( route.start.relativeX, route.start.relativeY );
       var newEndPoints = this.convertX( route.end.relativeX, route.end.relativeY );
 
@@ -296,10 +270,7 @@ class Field extends React.Component {
         );
     }
 }
-//
-// PrimarySearchAppBar.propTypes = {
-//     classes: PropTypes.object.isRequired,
-// };
+
 
 const mapStateToProps = (state) =>{
   return {

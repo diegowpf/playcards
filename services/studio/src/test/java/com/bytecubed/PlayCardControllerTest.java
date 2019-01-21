@@ -28,4 +28,11 @@ public class PlayCardControllerTest {
         PlayCardController controller = new PlayCardController(repository);
         assertThat(controller.getPlayCards(teamId).getBody().iterator().next()).isEqualTo(playCard);
     }
+
+    @Test
+    @Ignore
+    public void shouldLoadAllRecords(){
+        
+    }
+
 }

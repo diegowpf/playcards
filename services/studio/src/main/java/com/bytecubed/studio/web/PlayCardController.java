@@ -76,4 +76,11 @@ public class PlayCardController {
         return ok(repository.findAll());
     }
 
+    @DeleteMapping()
+    public HttpEntity reset(){
+        repository.deleteAll();
+
+        return ok().build();
+    }
+
 }
