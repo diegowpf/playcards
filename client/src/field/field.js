@@ -43,17 +43,17 @@ var routeColor = "navy";
 
  // var players = [ [{"placement":{"relativeX":72,"relativeY":0},"pos":"lt","center":false},{"placement":{"relativeX":64,"relativeY":0},"pos":"lg","center":false},{"placement":{"relativeX":88,"relativeY":0},"pos":"rt","center":false},{"placement":{"relativeX":96,"relativeY":0},"pos":"rg","center":false},{"placement":{"relativeX":80,"relativeY":0},"pos":"C","center":true},{"placement":{"relativeX":80,"relativeY":8},"pos":"QB","tag":"QB","center":false},{"placement":{"relativeX":20,"relativeY":2},"pos":"wr","tag":"X","center":false},{"placement":{"relativeX":145,"relativeY":8},"pos":"wr","tag":"Y","center":false},{"placement":{"relativeX":80,"relativeY":16},"pos":"FB","tag":"FB","center":false},{"placement":{"relativeX":80,"relativeY":24},"pos":"HB","tag":"HB","center":false},{"placement":{"relativeX":104,"relativeY":2},"pos":"te","tag":"T","center":false}];
 
-var players = [
-  { placement: { relativeX: 30, relativeY: 10 }, pos: "wr", tag: "Y" ,
-    routes:[{distance: 5, move: "go"}]},
-  { placement: { relativeX: 143, relativeY: 10 }, pos: "wr", tag: "Z",
-    routes:[{distance: 5, move: "curl"}] },
-  { placement: { relativeX: 80, relativeY: 9 }, pos: "qb" },
-  { placement: { relativeX: 80, relativeY: 18 }, pos: "rb", tag: "F",
-    routes:[{distance: 4, move: ""}]},
-  { placement: { relativeX: 91, relativeY: 0}, pos: "wr", tag: "19" },
-{ placement: { relativeX: 67, relativeY: 0}, pos: "wr", tag: "19" },
-{ placement: { relativeX: 83, relativeY: 0}, pos: "wr", tag: "19" }]
+// var players = [
+//   { placement: { relativeX: 30, relativeY: 10 }, pos: "wr", tag: "Y" ,
+//     routes:[{distance: 5, move: "go"}]},
+//   { placement: { relativeX: 143, relativeY: 10 }, pos: "wr", tag: "Z",
+//     routes:[{distance: 5, move: "curl"}] },
+//   { placement: { relativeX: 80, relativeY: 9 }, pos: "qb" },
+//   { placement: { relativeX: 80, relativeY: 18 }, pos: "rb", tag: "F",
+//     routes:[{distance: 4, move: ""}]},
+//   { placement: { relativeX: 91, relativeY: 0}, pos: "wr", tag: "19" },
+// { placement: { relativeX: 67, relativeY: 0}, pos: "wr", tag: "19" },
+// { placement: { relativeX: 83, relativeY: 0}, pos: "wr", tag: "19" }]
 // { placement: { relativeX: 59, relativeY: 0}, pos: "wr", tag: "19" },
   // { placement: { relativeX: 11, relativeY: 0}, pos: "wr", tag: "84" },
   // { placement: { relativeX: 70, relativeY: 15}, pos: "wr", tag: "7" },
@@ -90,7 +90,7 @@ class Field extends React.Component {
     // }
 
     componentDidMount() {
-        axios.get("http://server.immersivesports.ai/playcards/team/c679919f-d524-3f75-ad2a-5161706e12a5")
+        axios.get("http://server.immersivesports.ai/playcards")
           .then(res => {
             const placements = res.data[0].formation.playerMarkers;
             // const placements = players;
@@ -237,8 +237,15 @@ class Field extends React.Component {
                       <path d='M0,0 V4 L2,2 Z' fill='red' />
                 </marker>
 
+                <path d="M200,200 M100,100" fill='black' />
+
+
               </svg>
 
+              <svg viewBox="0 0 1000 1000" >
+
+
+              </svg>
             </div>
         );
     }
