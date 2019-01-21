@@ -1,3 +1,5 @@
+curl -X DELETE http://server.immersivesports.ai/playcards
+
 curl \
   -X POST \
   -F "file=@./initialize/CIN-32.pptx" \

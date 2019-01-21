@@ -211,12 +211,6 @@ public class RavensPowerPointParser implements PlayCardParser {
         logger.debug("Line is represeted as:  " + shape.getClass().getName());
         logger.debug(shape.getXmlObject().toString());
 
-        XSLFConnectorShape connector = (XSLFConnectorShape) shape;
-//        connector.setFlipHorizontal(false);
-//        connector.setFlipVertical(false);
-
-        logger.debug("Line head: " + connector.getLineHeadDecoration());
-
 //        return new Line2D.Double(newX(bounds.getMaxX()),
 //                newY(bounds.getMinY()),
 //                newX(bounds.getMinX()),
