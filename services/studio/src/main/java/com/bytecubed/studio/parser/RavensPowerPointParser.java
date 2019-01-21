@@ -125,7 +125,7 @@ public class RavensPowerPointParser implements PlayCardParser {
                 .stream()
                 .filter(this::isOnCanvas)
                 .filter(f -> f.getShapeName().contains("Free"))
-                .map(this::extract)
+                .map(this::extractCurvedRoutes)
                 .collect(toList()));
 
 
@@ -200,14 +200,8 @@ public class RavensPowerPointParser implements PlayCardParser {
                 newY(bounds.getMaxY()));
     }
 
-    private void print(List<Line2D.Double> p) {
-        for (Line2D.Double line : p) {
-            System.out.println(newX(line.x1) + " " + newY(line.y1) + " " + newX(line.x2) + " " + newY(line.y2));
-        }
-        System.out.println("done");
-    }
 
-    private Route extract(XSLFShape f) {
+    private Route extractCurvedRoutes(XSLFShape f) {
         logger.debug((f.getClass().getName()));
 
         logger.debug(f.getXmlObject().xmlText());
@@ -237,8 +231,6 @@ public class RavensPowerPointParser implements PlayCardParser {
         }
 
         double[] start = new double[3]; // To record where each polygon starts
-
-        System.out.println("Size of points:  " + areaPoints.size());
 
         for (int i = 0; i < areaPoints.size(); i++) {
             // If we're not on the last point, return a line from this point to the next
@@ -279,7 +271,8 @@ public class RavensPowerPointParser implements PlayCardParser {
         }
 
         Route route = new Route( areaSegments.stream()
-                .map(b->new CustomMoveDescriptor(Move.custom, new Placement(b.x1, b.y1), new Placement(b.x2, b.y2)) )
+                .map(b->new CustomMoveDescriptor(Move.custom, new Placement(newX(b.x1), newY(b.y1)),
+                        new Placement(newX(b.x2), newY(b.y2))) )
                 .collect(toList()), playerTag );
 
         if( nearestPlayer != null )
@@ -290,15 +283,10 @@ public class RavensPowerPointParser implements PlayCardParser {
 
     private double newY(double y) {
         double adjustedY = y - lineOfScrimage;
-        if (true) return (((adjustedY / 200) * 30) * 8.4) + 510;
-
-        if (true) return (y * 8.4) + 510;
-        if (false) return y;
-        return y + 80;
+        return (((adjustedY / 200) * 30) * 8.4) + 510;
     }
 
     private double newX(double x) {
-        if (false) return x;
         return (x / maxX) * 160 * 8.4;
     }
 
