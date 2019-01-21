@@ -144,8 +144,10 @@ class Field extends React.Component {
       if( player.routes) {
         player.routes.forEach((x) => {
 
+          var i = 0;
           x.moveDescriptors.forEach((y) => {
             console.log(JSON.stringify(x));
+            i++;
 
             switch( y.move ){
               case "curl":
@@ -155,7 +157,7 @@ class Field extends React.Component {
                 this.generateGoRoute(g, player, coordinates, y )
                 break;
               case "custom":
-                this.generateCustomRoute(g, player, coordinates, y );
+                this.generateCustomRoute(g, player, coordinates, y, i==x.moveDescriptors.length);
                 break;
               }
 
@@ -164,7 +166,7 @@ class Field extends React.Component {
         }
     }
 
-    generateCustomRoute(g, player,coordinates,route ){
+    generateCustomRoute(g, player,coordinates,route, last ){
       console.log(JSON.stringify(route));
       console.log("Generate Custom Route" );
       var newStartPoints = this.convertX( route.start.relativeX, route.start.relativeY );
@@ -173,12 +175,12 @@ class Field extends React.Component {
       var points = "";
       console.log( route.start.relativeX + " " + route.start.relativeY + " " + route.end.relativeX + " " + route.end.relativeY );
 
-
       g.append("polyline")
         .attr( "points", newStartPoints.x + " " + newStartPoints.y + " " + newEndPoints.x + " " + newEndPoints.y  )
         .attr("fill", "none" )
         .attr( "stroke-width", "5px" )
         .attr("stroke",routeColor)
+        .attr("marker-end", last ? "url(#head)" : "")
     }
 
     generateGoRoute(g, player, coordinates, route ){

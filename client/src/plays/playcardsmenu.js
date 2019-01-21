@@ -49,11 +49,9 @@ class PersonList extends React.Component{
   }
 
   componentDidMount(){
-    axios.get("http://server.immersivesports.ai/playcards")
+    axios.get("http://localhost:8080/playcards")
       .then(res => {
-        // res.data.forEach(card=> playCards.push({name: card.name, formation: "Standard Layout", description:"Imported"}));
         this.setState({playCards: res.data});
-
       })
   }
 
@@ -74,7 +72,7 @@ class PersonList extends React.Component{
             <Typography component="p">
               Imported
             </Typography>
-            <Button onClick={()=>this.props.navigate(card)}>Foo</Button>
+            <Button onClick={()=>this.props.navigate(card)}>VIEW</Button>
             </CardContent>
            </Card>
            <br/>

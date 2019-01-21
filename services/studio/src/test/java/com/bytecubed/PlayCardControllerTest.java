@@ -32,7 +32,7 @@ public class PlayCardControllerTest {
     @Test
     @Ignore
     public void shouldLoadAllRecords(){
-        
+
     }
 
 }

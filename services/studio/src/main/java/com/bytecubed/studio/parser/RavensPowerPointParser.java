@@ -159,10 +159,10 @@ public class RavensPowerPointParser implements PlayCardParser {
                     if (shape.getFlipVertical()) {
 
                         Line2D.Double line = extractAsLine(shape, true);
-                        x1 = line.x1;
-                        y1 = line.y1;
-                        x2 = line.x2;
-                        y2 = line.y2;
+                        x2 = line.x1;
+                        y2 = line.y1;
+                        x1 = line.x2;
+                        y1 = line.y2;
 
                         logger.debug("Flip Vertical");
                         logger.debug(x1 + " " + y1 + " " + x2 + " " + y2);
