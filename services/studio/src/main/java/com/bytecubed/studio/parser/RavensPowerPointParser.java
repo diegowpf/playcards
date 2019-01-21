@@ -46,7 +46,7 @@ public class RavensPowerPointParser implements PlayCardParser {
                     playerMarkers.addAll(nestedPlayerExtractor(entityRegistry, s));
                 });
 
-        PlayCard playCard = new PlayCard(UUID.randomUUID(), new Formation(playerMarkers), "foo");
+        PlayCard playCard = new PlayCard(UUID.randomUUID(), new Formation(playerMarkers), getName());
         getRoutes(slide);
 
         playerMarkers.forEach(f -> {
