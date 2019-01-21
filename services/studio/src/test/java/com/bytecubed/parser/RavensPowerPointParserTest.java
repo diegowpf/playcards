@@ -2,6 +2,7 @@ package com.bytecubed.parser;
 
 import com.bytecubed.commons.PlayCard;
 import com.bytecubed.studio.parser.RavensPowerPointParser;
+import com.bytecubed.studio.parser.ShapeToEntityRegistry;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.junit.Ignore;
@@ -91,9 +92,9 @@ public class RavensPowerPointParserTest {
         XMLSlideShow show = getPowerPoint("test-scrubbed.pptx");
         XSLFSlide firstSlide = show.getSlides().get(0);
 
-        assertThat(new RavensPowerPointParser(show).getRoutes(firstSlide)).hasSize(4);
+        assertThat(new RavensPowerPointParser(show).getRoutes(firstSlide, new ShapeToEntityRegistry())).hasSize(4);
         //This would work but this is wrong since this is a user error on how the routes are drawn.
-        assertThat(new RavensPowerPointParser(show).getRoutes(firstSlide)).hasSize(10);
+        assertThat(new RavensPowerPointParser(show).getRoutes(firstSlide, new ShapeToEntityRegistry())).hasSize(10);
     }
 
 
