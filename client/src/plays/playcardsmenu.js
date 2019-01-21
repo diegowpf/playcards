@@ -49,7 +49,7 @@ class PersonList extends React.Component{
   }
 
   componentDidMount(){
-    axios.get("http://localhost:8080/playcards")
+    axios.get("http://server.immersivesports.ai/playcards")
       .then(res => {
         this.setState({playCards: res.data});
         if( res.data.length > 0 )
