@@ -67,7 +67,7 @@ class PersonList extends React.Component{
               {card.name}
             </Typography>
             <Typography  color="textSecondary">
-              Formation []
+              User Defined Formation 
             </Typography>
             <Typography component="p">
               Imported
