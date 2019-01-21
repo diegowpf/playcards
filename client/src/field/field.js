@@ -90,7 +90,7 @@ class Field extends React.Component {
     // }
 
     componentDidMount() {
-        axios.get("http://localhost:8080/playcards")
+        axios.get("http://server.immersivesports.ai/playcards")
           .then(res => {
             const placements = res.data[0].formation.playerMarkers;
             // const placements = players;
