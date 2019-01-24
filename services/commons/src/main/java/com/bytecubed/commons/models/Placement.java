@@ -1,5 +1,7 @@
 package com.bytecubed.commons.models;
 
+import java.awt.geom.Point2D;
+
 public class Placement {
 
     private double relativeX;
@@ -30,4 +32,7 @@ public class Placement {
         return relativeY;
     }
 
+    public Point2D.Double toPoint() {
+        return new Point2D.Double(relativeX, relativeY );
+    }
 }

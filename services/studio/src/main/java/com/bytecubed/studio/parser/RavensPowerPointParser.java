@@ -5,7 +5,6 @@ import com.bytecubed.commons.PlayCard;
 import com.bytecubed.commons.models.Placement;
 import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.commons.models.movement.CustomMoveDescriptor;
-import com.bytecubed.commons.models.movement.Move;
 import com.bytecubed.commons.models.movement.MoveDescriptor;
 import com.bytecubed.commons.models.movement.Route;
 import org.apache.poi.xslf.usermodel.*;
@@ -22,9 +21,9 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 public class RavensPowerPointParser implements PlayCardParser {
-    static int maxX = 1000;
-    static int maxY = 600;
-    static int lineOfScrimage = 400;
+    private static int maxX = 1000;
+    private static int maxY = 600;
+    private static int lineOfScrimage = 400;
     private XMLSlideShow ppt;
 
     private Logger logger = LoggerFactory.getLogger(RavensPowerPointParser.class);
@@ -87,14 +86,12 @@ public class RavensPowerPointParser implements PlayCardParser {
     private PlayerMarker playerExtractor(XSLFShape shape) {
         if (shape.getShapeName().contains("Oval") || shape.getShapeName().contains("Rect")) {
             boolean isCenter = shape.getShapeName().contains("Rect");
-            int translatedX = 0;
-            int translatedY = 0;
 
-            translatedX = (int) Math.round((shape.getAnchor().getX() / maxX) * 160);
+            int translatedX = (int) Math.round((shape.getAnchor().getX() / maxX) * 160);
 
             double adjustedY = shape.getAnchor().getY() - lineOfScrimage;
 
-            translatedY = (int) Math.round(((adjustedY / 200) * 30));
+            int translatedY = (int) Math.round(((adjustedY / 200) * 30));
             return new PlayerMarker(new Placement(translatedX, translatedY), "wr", getText(shape), isCenter);
         }
 
@@ -135,13 +132,6 @@ public class RavensPowerPointParser implements PlayCardParser {
         return routes;
     }
 
-    private Route convertToRoute(ArrayList<Line2D.Double> doubles) {
-        return new Route(doubles.stream()
-                .map(f -> new CustomMoveDescriptor(Move.custom,
-                        new Placement(f.x1, f.y1),
-                        new Placement(f.x2, f.y2)))
-                .collect(toList()), "foo");
-    }
 
     private List<Route> extractStraightRoutes(XSLFSlide slide, ShapeToEntityRegistry entityRegistry) {
         List<Route> routes = new ArrayList();
@@ -159,10 +149,6 @@ public class RavensPowerPointParser implements PlayCardParser {
 
                     double x1, y1, x2, y2;
 
-//                    if( shape.getFlipHorizontal() ){
-//                        shape.setFlipHorizontal(false);
-//                    }
-
                     Line2D.Double line = extractAsLine(shape, true);
                     if (shape.getFlipVertical()) {
                         x2 = line.x1;
@@ -173,24 +159,16 @@ public class RavensPowerPointParser implements PlayCardParser {
                         logger.debug("Flip Vertical");
                         logger.debug(x1 + " " + y1 + " " + x2 + " " + y2);
                     } else {
-                        x1 = newX(bounds.getMinX());
-                        y1 = newY(bounds.getMaxY());
-                        x2 = newX(bounds.getMaxX());
-                        y2 = newY(bounds.getMinY());
+                        x1 = x(bounds.getMinX());
+                        y1 = y(bounds.getMaxY());
+                        x2 = x(bounds.getMaxX());
+                        y2 = y(bounds.getMinY());
                         logger.debug("No Flip");
                         logger.debug(x1 + " " + y1 + " " + x2 + " " + y2);
                     }
-//                    } else {
-//                        x1 = newX(bounds.getMinX());
-//                        y1 = newY(bounds.getMaxY());
-//                        x2 = newX(bounds.getMaxX());
-//                        y2 = newY(bounds.getMinY());
-//                        logger.debug("No Flip");
-//                        logger.debug(x1 + " " + y1 + " " + x2 + " " + y2);
-//                    }
 
                     List<MoveDescriptor> moveDescriptors = new ArrayList();
-                    moveDescriptors.add(new CustomMoveDescriptor(Move.custom,
+                    moveDescriptors.add(new CustomMoveDescriptor(
                             new Placement(x1, y1),
                             new Placement(x2, y2)));
 
@@ -208,18 +186,13 @@ public class RavensPowerPointParser implements PlayCardParser {
 
     private Line2D.Double extractAsLine(XSLFShape shape, boolean b) {
         Rectangle2D bounds = shape.getAnchor().getBounds2D();
-        logger.debug("Line is represeted as:  " + shape.getClass().getName());
+        logger.debug("Line is represented as:  " + shape.getClass().getName());
         logger.debug(shape.getXmlObject().toString());
 
-//        return new Line2D.Double(newX(bounds.getMaxX()),
-//                newY(bounds.getMinY()),
-//                newX(bounds.getMinX()),
-//                newY(bounds.getMaxY()));
-
-        return new Line2D.Double(newX(bounds.getMinX()),
-                newY(bounds.getMinY()),
-                newX(bounds.getMaxX()),
-                newY(bounds.getMaxY()));
+        return new Line2D.Double(x(bounds.getMinX()),
+                y(bounds.getMinY()),
+                x(bounds.getMaxX()),
+                y(bounds.getMaxY()));
     }
 
 
@@ -289,8 +262,9 @@ public class RavensPowerPointParser implements PlayCardParser {
         }
 
         Route route = new Route(areaSegments.stream()
-                .map(b -> new CustomMoveDescriptor(Move.custom, new Placement(newX(b.x1), newY(b.y1)),
-                        new Placement(newX(b.x2), newY(b.y2))))
+                .map(b -> new CustomMoveDescriptor(
+                        new Placement(x(b.x1), y(b.y1)),
+                        new Placement(x(b.x2), y(b.y2))))
                 .collect(toList()), playerTag);
 
         if (nearestPlayer != null)
@@ -299,12 +273,12 @@ public class RavensPowerPointParser implements PlayCardParser {
         return route;
     }
 
-    private double newY(double y) {
+    private double y(double y) {
         double adjustedY = y - lineOfScrimage;
         return ((adjustedY / 200) * 30);
     }
 
-    private double newX(double x) {
+    private double x(double x) {
         return (x / maxX) * 160;
     }
 

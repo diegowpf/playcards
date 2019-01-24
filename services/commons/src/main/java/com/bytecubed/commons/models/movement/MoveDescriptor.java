@@ -1,6 +1,6 @@
 package com.bytecubed.commons.models.movement;
 
-public class MoveDescriptor {
+public abstract class MoveDescriptor {
     private Move move;
 
     public Move getMove() {
