@@ -6,7 +6,7 @@ resource "aws_route53_record" "records" {
   records = ["40.117.45.119"]
 }
 
-resource "aws_route53_record" "records" {
+resource "aws_route53_record" "zero" {
   zone_id = "${var.zone_id}"
   name    = "zero.immersivesports.ai"
   type    = "A"
@@ -14,7 +14,7 @@ resource "aws_route53_record" "records" {
   records = ["40.113.201.39"]
 }
 
-resource "aws_route53_record" "records" {
+resource "aws_route53_record" "zeros" {
   zone_id = "${var.zone_id}"
   name    = "zeros.immersivesports.ai"
   type    = "A"
