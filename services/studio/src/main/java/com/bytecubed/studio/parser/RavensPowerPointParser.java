@@ -12,12 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.geom.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.partitioningBy;
 import static java.util.stream.Collectors.toList;
 
 public class RavensPowerPointParser implements PlayCardParser {
@@ -49,7 +48,7 @@ public class RavensPowerPointParser implements PlayCardParser {
                 });
 
         PlayCard playCard = new PlayCard(UUID.randomUUID(), new Formation(playerMarkers), getName(slide));
-        getRoutes(slide, entityRegistry);
+        buildRoutes(slide, entityRegistry);
 
         playerMarkers.forEach(f -> {
             String pos = f.isCenter() ? "center" : "wr";
@@ -117,7 +116,8 @@ public class RavensPowerPointParser implements PlayCardParser {
 
     }
 
-    public List<Route> getRoutes(XSLFSlide slide, ShapeToEntityRegistry entityRegistry) {
+    //Todo: This should functionality of a playcard at this point but it is easier to build here.
+    public List<Route> buildRoutes(XSLFSlide slide, ShapeToEntityRegistry entityRegistry) {
 
         List<Route> routes = new ArrayList(extractStraightRoutes(slide, entityRegistry));
         routes.addAll(ppt.getSlides().get(0)
@@ -128,8 +128,66 @@ public class RavensPowerPointParser implements PlayCardParser {
                 .map(f -> extractCurvedRoutes(f, entityRegistry))
                 .collect(toList()));
 
+        logger.debug("About to build routes.");
+        mergeRoutes(routes);
 
         return routes;
+    }
+
+    private void mergeRoutes(List<Route> routes) {
+        logger.debug("Routes: ");
+
+        routes.stream().forEach(s -> logger.debug("Merging routes:  " + s.getPlayer()));
+
+        Map<Boolean, List<Route>> partitionedRoutes = routes.stream()
+                .collect(partitioningBy(s -> s.getPlayer() != null));
+
+        logger.debug(partitionedRoutes.keySet().toString());
+
+        List<Route> associatedWithPlayers = partitionedRoutes.get(true);
+        List<Route> notAssociatedWithPlayers = partitionedRoutes.get(false);
+
+        logger.debug("Number of associated routes:  " + associatedWithPlayers.size());
+        logger.debug("Number of un-associated routes:  " + notAssociatedWithPlayers.size());
+
+
+        associatedWithPlayers.forEach(r -> notAssociatedWithPlayers.forEach(n -> extendRouteIfPossible(r, n)));
+
+        routes.forEach(r -> {
+
+
+            r.getMoveDescriptors().forEach(d -> {
+                Placement start = ((CustomMoveDescriptor) d).getStart();
+                Placement end = ((CustomMoveDescriptor) d).getEnd();
+                logger.debug("[" + start.getRelativeX() + "," + start.getRelativeY() + "]->["
+                        + end.getRelativeX() + "," + end.getRelativeY() + "]");
+            });
+
+        });
+    }
+
+    private void extendRouteIfPossible(Route associatedRoute, Route nonAssociatedRoute) {
+        boolean notChanged = false;
+
+        logger.debug("Number of associated routes:  " + associatedRoute.getMoveDescriptors().size());
+        logger.debug("Number of un-associated routes:  " + nonAssociatedRoute.getMoveDescriptors().size());
+
+        while (!notChanged) {
+            List<MoveDescriptor> extension = new ArrayList();
+
+            associatedRoute.getMoveDescriptors().forEach(associatedMovement -> {
+                nonAssociatedRoute.getMoveDescriptors().forEach(nonAssociatedMovement -> {
+                    if (((CustomMoveDescriptor) associatedMovement).collidesWith((CustomMoveDescriptor) nonAssociatedMovement)
+                            && !associatedRoute.getMoveDescriptors().contains(nonAssociatedMovement)) {
+                        extension.add(nonAssociatedMovement);
+                        logger.debug("Incorporating route");
+                    }
+                });
+            });
+
+            associatedRoute.getMoveDescriptors().addAll(extension);
+            notChanged = extension.isEmpty();
+        }
     }
 
 
@@ -140,29 +198,42 @@ public class RavensPowerPointParser implements PlayCardParser {
                 .filter(this::isOnCanvas)
                 .filter(f -> f.getShapeName().contains("Straight"))
                 .forEach(f -> {
-                    Rectangle2D bounds = f.getAnchor().getBounds2D();
                     XSLFSimpleShape shape = (XSLFSimpleShape) f;
 
                     PlayerMarker player = entityRegistry.getNearestPlayer(f);
-                    String nearestPlayerMarker = player == null ? "" : player.getTag();
+                    String nearestPlayerMarker = player == null ? null : player.getTag();
                     logger.debug("Nearest Player:  " + nearestPlayerMarker);
+                    logger.debug("Rotation:  " + ((XSLFSimpleShape) f).getRotation());
+                    logger.debug("Horizontal Flip:  " + ((XSLFSimpleShape) f).getFlipHorizontal());
+                    logger.debug("Vertical Flip:  " + ((XSLFSimpleShape) f).getFlipVertical());
+
 
                     double x1, y1, x2, y2;
 
                     Line2D.Double line = extractAsLine(shape, true);
+
+
                     if (shape.getFlipVertical()) {
                         x2 = line.x1;
                         y2 = line.y1;
                         x1 = line.x2;
                         y1 = line.y2;
 
+                        if (!shape.getFlipHorizontal()) {
+                            x1 = line.x1;
+                            y1 = line.y2;
+                            x2 = line.x2;
+                            y2 = line.y1;
+                        }
+
                         logger.debug("Flip Vertical");
                         logger.debug(x1 + " " + y1 + " " + x2 + " " + y2);
                     } else {
-                        x1 = x(bounds.getMinX());
-                        y1 = y(bounds.getMaxY());
-                        x2 = x(bounds.getMaxX());
-                        y2 = y(bounds.getMinY());
+                        x1 = line.x2;
+                        y1 = line.y2;
+                        x2 = line.x1;
+                        y2 = line.y1;
+
                         logger.debug("No Flip");
                         logger.debug(x1 + " " + y1 + " " + x2 + " " + y2);
                     }
@@ -176,6 +247,9 @@ public class RavensPowerPointParser implements PlayCardParser {
 
                     if (player != null) {
                         player.addRoute(e);
+                    } else {
+                        logger.debug("Not adding route.");
+                        logger.debug("Nearest player:  " + nearestPlayerMarker);
                     }
 
                     routes.add(e);

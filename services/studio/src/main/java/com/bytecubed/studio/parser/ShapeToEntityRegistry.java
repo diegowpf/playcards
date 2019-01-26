@@ -32,9 +32,7 @@ public class ShapeToEntityRegistry {
     }
 
     public PlayerMarker getNearestPlayer(XSLFShape shape) {
-        Point2D points = getAsPoint(shape);
         PlayerMarker nearestPlayer = null;
-        double nearestDistance = Double.MIN_VALUE;
 
         logger.debug("Bounds:  " + shape.getAnchor().getBounds2D());
 
