@@ -32,6 +32,19 @@ public class RavensPowerPointParser implements PlayCardParser {
 
     private PlayCard extractPlayersOnSlide(XSLFSlide slide) {
         ShapeToEntityRegistry entityRegistry = new ShapeToEntityRegistry();
+        List<XSLFGroupShape> groupedShapes = slide.getShapes().stream()
+
+                .filter(f->f.getClass().getName().equals(XSLFGroupShape.class.getName()))
+                .filter(f->((XSLFGroupShape)f).getShapes()
+                        .stream()
+                        .anyMatch(x->x.getShapeName().contains("Rect")))
+                .map(f->(XSLFGroupShape) f)
+                .collect(toList());
+
+        logger.debug("Only this many grouped shapes:  "  + groupedShapes.size());
+        logger.debug("Shape count first:  " + slide.getShapes().size());
+        unGroupShapes(slide, groupedShapes);
+        logger.debug("Shape count after:  " + slide.getShapes().size());
 
         List<PlayerMarker> playerMarkers = new ArrayList<>();
         slide.getShapes().stream()
@@ -55,22 +68,49 @@ public class RavensPowerPointParser implements PlayCardParser {
         return playCard;
     }
 
+    private void unGroupShapes(XSLFSlide slide, List<XSLFGroupShape> groupedShapes) {
+
+        groupedShapes.forEach( shape -> shape.getShapes().forEach(f->{
+
+                XSLFAutoShape autoShape = slide.createAutoShape();
+                autoShape.setShapeType(((XSLFAutoShape)f).getShapeType());
+                autoShape.setAnchor(f.getAnchor());
+
+
+                logger.debug("New X: " + autoShape.getAnchor().getX());
+                logger.debug("New Y: " + autoShape.getAnchor().getY());
+
+        }));
+
+        groupedShapes.forEach(XSLFGroupShape::clear);
+    }
+
     private List<PlayerMarker> nestedPlayerExtractor(ShapeToEntityRegistry registry, XSLFShape s) {
         List<PlayerMarker> placements = new ArrayList<>();
 
         if (s.getShapeName().contains("Group")) {
             XSLFGroupShape shape = (XSLFGroupShape) s;
 
+
+
+
             List<XSLFShape> groupShapes = new ArrayList(shape.getShapes());
+
+
             groupShapes.stream()
                     .filter(f -> f.getShapeName().contains("Oval") || f.getShapeName().contains("Rectangle"))
                     .forEach(f -> {
 
+
+
+
                         PlayerMarker playerMarker = playerExtractor(f);
                         registry.register(playerMarker, f);
 
-                        logger.debug("X: " + f.getAnchor().getX());
-                        logger.debug("Y: " + f.getAnchor().getY());
+
+                        logger.debug("Group X: " + f.getAnchor().getX());
+                        logger.debug("Group Y: " + f.getAnchor().getY());
+
                         placements.add(playerMarker);
                     });
         }
@@ -79,22 +119,20 @@ public class RavensPowerPointParser implements PlayCardParser {
     }
 
     private PlayerMarker playerExtractor(XSLFShape shape) {
+
+        PlayerMarker marker = null;
+
         if (shape.getShapeName().contains("Oval") || shape.getShapeName().contains("Rect")) {
             logger.debug(shape.getClass().getName());
             boolean isCenter = shape.getShapeName().contains("Rect");
             int translatedX = (int) Math.round((shape.getAnchor().getX() / maxX) * 160);
             double adjustedY = shape.getAnchor().getY() - lineOfScrimage;
             int translatedY = (int) Math.round(((adjustedY / 200) * 30));
-            return new PlayerMarker(new Placement(translatedX, translatedY),
+            marker = new PlayerMarker(new Placement(translatedX, translatedY),
                     PositionDetector.getPosition((XSLFAutoShape) shape), getText(shape), isCenter);
         }
 
-        return null;
-    }
-
-    private String determineShape(XSLFShape shape ) {
-
-        return "wr";
+        return marker;
     }
 
     //Todo: Such a hack

@@ -115,5 +115,13 @@ public class RavensPowerPointParserTest {
         assertThat(new RavensPowerPointParser(show).buildRoutes(firstSlide, new ShapeToEntityRegistry())).hasSize(10);
     }
 
+    @Test
+    public void shouldExtractStandardTemplateOnRightHash() throws IOException {
+        RavensPowerPointParser parser = new RavensPowerPointParser(get("center-hash.pptx"));
+        PlayCard playCard = parser.extractPlayCards().get(0);
+
+        assertThat(playCard.getFormation().getPlayerMarkers()).hasSize(5);
+
+    }
 
 }
