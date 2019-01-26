@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,6 +75,18 @@ public class PlayCardController {
     @GetMapping()
     public HttpEntity<Iterable<PlayCard>> getAll() {
         return ok(repository.findAll());
+    }
+
+    @GetMapping("/lastmodified" )
+    public HttpEntity<LocalDateTime> getLastModified(){
+        LocalDateTime dateTime = LocalDateTime.now();
+        for( PlayCard playCard : repository.findAll()){
+            if( dateTime.isAfter(playCard.getCreateTime())){
+                dateTime = playCard.getCreateTime();
+            }
+        }
+
+        return ok(dateTime);
     }
 
     @DeleteMapping()
