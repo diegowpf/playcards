@@ -9,7 +9,7 @@ import static com.bytecubed.commons.models.movement.Move.custom;
 
 public class CustomMoveDescriptor extends MoveDescriptor{
 
-    public static final int MAXIMUM_POINT_DISTANCE = 10;
+    public static final int MAXIMUM_POINT_DISTANCE = 20;
     private Placement start;
     private Placement end;
 

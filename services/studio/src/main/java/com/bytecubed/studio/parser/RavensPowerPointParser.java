@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.geom.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.partitioningBy;
@@ -208,40 +207,28 @@ public class RavensPowerPointParser implements PlayCardParser {
                     logger.debug("Vertical Flip:  " + ((XSLFSimpleShape) f).getFlipVertical());
 
 
-                    double x1, y1, x2, y2;
-
                     Line2D.Double line = extractAsLine(shape, true);
-
+                    Line2D.Double convertedLine;
 
                     if (shape.getFlipVertical()) {
-                        x2 = line.x1;
-                        y2 = line.y1;
-                        x1 = line.x2;
-                        y1 = line.y2;
-
-                        if (!shape.getFlipHorizontal()) {
-                            x1 = line.x1;
-                            y1 = line.y2;
-                            x2 = line.x2;
-                            y2 = line.y1;
-                        }
-
                         logger.debug("Flip Vertical");
-                        logger.debug(x1 + " " + y1 + " " + x2 + " " + y2);
+                        convertedLine = new Line2D.Double(line.x2, line.y2, line.x1, line.y1);
+                        if (!shape.getFlipHorizontal()) {
+                            convertedLine = new Line2D.Double(line.x1, line.y2, line.x2, line.y1);
+                        }
                     } else {
-                        x1 = line.x2;
-                        y1 = line.y2;
-                        x2 = line.x1;
-                        y2 = line.y1;
-
                         logger.debug("No Flip");
-                        logger.debug(x1 + " " + y1 + " " + x2 + " " + y2);
+                        convertedLine = new Line2D.Double(line.x2, line.y2, line.x1, line.y1);
+                        //This does not make sense.
+                        if (shape.getFlipHorizontal()) {
+                            convertedLine = new Line2D.Double(line.x2, line.y1, line.x1, line.y2);
+                        }
                     }
 
                     List<MoveDescriptor> moveDescriptors = new ArrayList();
                     moveDescriptors.add(new CustomMoveDescriptor(
-                            new Placement(x1, y1),
-                            new Placement(x2, y2)));
+                            new Placement(convertedLine.x1, convertedLine.y1),
+                            new Placement(convertedLine.x2, convertedLine.y2)));
 
                     Route e = new Route(moveDescriptors, nearestPlayerMarker);
 
