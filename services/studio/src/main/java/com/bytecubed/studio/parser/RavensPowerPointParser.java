@@ -43,7 +43,7 @@ public class RavensPowerPointParser implements PlayCardParser {
 
         logger.debug("Only this many grouped shapes:  "  + groupedShapes.size());
         logger.debug("Shape count first:  " + slide.getShapes().size());
-        unGroupShapes(slide, groupedShapes);
+//        unGroupShapes(slide, groupedShapes);
         logger.debug("Shape count after:  " + slide.getShapes().size());
 
         List<PlayerMarker> playerMarkers = new ArrayList<>();
