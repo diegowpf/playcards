@@ -48,7 +48,7 @@ public class RavensPowerPointParserTest {
         PlayCard playCard = new RavensPowerPointParser(getDefaultPowerPoint()).extractPlayCards().get(0);
         Route route = playCard.getFormation().getPlayerMarkerAt("84").getRoutes().get(0);
 
-        assertThat(route.getMoveDescriptors()).hasSize(8);
+        assertThat(route.getMoveDescriptors()).hasSize(10);
 
     }
 

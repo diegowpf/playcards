@@ -36,24 +36,21 @@ public class RavensPowerPointParser implements PlayCardParser {
         List<PlayerMarker> playerMarkers = new ArrayList<>();
         slide.getShapes().stream()
                 .filter(this::isOnCanvas)
+                .filter(f -> !(f instanceof XSLFGroupShape))
                 .forEach(s -> {
                     PlayerMarker placement = playerExtractor(s);
                     if (placement != null) {
                         entityRegistry.register(placement, s);
                         playerMarkers.add(placement);
                     }
-
-                    playerMarkers.addAll(nestedPlayerExtractor(entityRegistry, s));
                 });
+
+        slide.getShapes().stream()
+                .filter(this::isOnCanvas)
+                .forEach(s -> playerMarkers.addAll(nestedPlayerExtractor(entityRegistry, s)));
 
         PlayCard playCard = new PlayCard(UUID.randomUUID(), new Formation(playerMarkers), getName(slide));
         buildRoutes(slide, entityRegistry);
-
-        playerMarkers.forEach(f -> {
-            String pos = f.isCenter() ? "center" : "wr";
-            logger.debug("{ placement: { relativeX: " + f.getPlacement().getRelativeX() + ", relativeY: "
-                    + f.getPlacement().getRelativeY() + "}, pos: \"" + pos + "\", tag: \"" + f.getTag() + "\" },");
-        });
 
         return playCard;
     }
@@ -83,17 +80,21 @@ public class RavensPowerPointParser implements PlayCardParser {
 
     private PlayerMarker playerExtractor(XSLFShape shape) {
         if (shape.getShapeName().contains("Oval") || shape.getShapeName().contains("Rect")) {
+            logger.debug(shape.getClass().getName());
             boolean isCenter = shape.getShapeName().contains("Rect");
-
             int translatedX = (int) Math.round((shape.getAnchor().getX() / maxX) * 160);
-
             double adjustedY = shape.getAnchor().getY() - lineOfScrimage;
-
             int translatedY = (int) Math.round(((adjustedY / 200) * 30));
-            return new PlayerMarker(new Placement(translatedX, translatedY), "wr", getText(shape), isCenter);
+            return new PlayerMarker(new Placement(translatedX, translatedY),
+                    PositionDetector.getPosition((XSLFAutoShape) shape), getText(shape), isCenter);
         }
 
         return null;
+    }
+
+    private String determineShape(XSLFShape shape ) {
+
+        return "wr";
     }
 
     //Todo: Such a hack
