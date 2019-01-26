@@ -19,66 +19,66 @@ import {connect} from 'react-redux';
 import {handleNavigationClick} from '../reducers'
 
 const styles = {
-  card: {
-    minWidth: 275,
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
+card: {
+  minWidth: 275,
+},
+bullet: {
+  display: 'inline-block',
+  margin: '0 2px',
+  transform: 'scale(0.8)',
+},
+title: {
+  fontSize: 14,
+},
+pos: {
+  marginBottom: 12,
+},
 };
 
 var playCards = [];
 
 class PersonList extends React.Component{
-    // const { classes } = props;
-    // const bull = <span className={classes.bullet}>•</span>;
-  state = {
-      playCards: []
-  }
+  // const { classes } = props;
+  // const bull = <span className={classes.bullet}>•</span>;
+state = {
+    playCards: []
+}
 
-  componentDidMount(){
-    axios.get("http://server.immersivesports.ai/playcards")
-      .then(res => {
-        this.setState({playCards: res.data});
-        if( res.data.length > 0 )
-          this.props.navigate(res.data[0])
-      })
-  }
+componentDidMount(){
+  axios.get("http://server.immersivesports.ai/playcards")
+    .then(res => {
+      this.setState({playCards: res.data});
+      if( res.data.length > 0 )
+        this.props.navigate(res.data[0])
+    })
+}
 
-  render(){
-    return (
-      <div id="availableCards">
-       { this.state.playCards.map(card =>
-         <div>
-           <Card>
-            <CardContent>
+render(){
+  return (
+    <div id="availableCards">
+     { this.state.playCards.map(card =>
+       <div>
+         <Card>
+          <CardContent>
 
-            <Typography variant="h5" component="h2">
-              {card.name}
-            </Typography>
-            <Typography  color="textSecondary">
-              User Defined Formation
-            </Typography>
-            <Typography component="p">
-              Imported
-            </Typography>
-            <Button onClick={()=>this.props.navigate(card)}>VIEW</Button>
-            </CardContent>
-           </Card>
-           <br/>
-         </div>
-     )}
-      </div>
-    );
-  }
+          <Typography variant="h5" component="h2">
+            {card.name}
+          </Typography>
+          <Typography  color="textSecondary">
+            User Defined Formation
+          </Typography>
+          <Typography component="p">
+            Imported
+          </Typography>
+          <Button onClick={()=>this.props.navigate(card)}>VIEW</Button>
+          </CardContent>
+         </Card>
+         <br/>
+       </div>
+   )}
+    </div>
+  );
+}
 }
 
 const mapDispatchToProps = dispatch => { return {dispatch, navigate: (card) => dispatch(handleNavigationClick(card))}}
@@ -87,8 +87,8 @@ const mapDispatchToProps = dispatch => { return {dispatch, navigate: (card) => d
 // const mapDispatchToProps = dispatch;
 
 export default connect(
- null,
- mapDispatchToProps
+null,
+mapDispatchToProps
 )(PersonList);
 
 // PlayCardMenu.propTypes = {
