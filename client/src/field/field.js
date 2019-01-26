@@ -82,10 +82,6 @@ class Field extends React.Component {
     placements: []
   }
 
-    componentDidMount() {
-
-      }
-
     componentWillReceiveProps(nextProps) {
       console.log('Component : nextprops: ', nextProps)
       this.setState({placements: nextProps.placements.formation.playerMarkers})
@@ -273,6 +269,7 @@ const mapStateToProps = (state) =>{
     placements: state.active_card_id
   }
 }
+
 export default connect(
  mapStateToProps
 )(Field);

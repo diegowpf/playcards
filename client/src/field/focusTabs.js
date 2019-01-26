@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const styles = {
   root: {
@@ -24,6 +25,7 @@ class Focus extends React.Component {
     const { classes } = this.props;
 
     return (
+      <div>
       <Paper className={classes.root}>
         <Tabs
           value={this.state.value}
@@ -36,7 +38,10 @@ class Focus extends React.Component {
           <Tab label="DEFENSE" disabled />
           <Tab label="SPECIAL TEAMS" disabled/>
         </Tabs>
+
       </Paper>
+      <LinearProgress variant="determinate" value={0} />
+      </div>
     );
   }
 }

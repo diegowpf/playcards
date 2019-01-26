@@ -6,7 +6,6 @@ import PlayCardMenu from './plays/playcardsmenu'
 import './App.css';
 import Grid from '@material-ui/core/Grid';
 import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -23,7 +22,8 @@ import {BrowserRouter, Route} from 'react-router-dom';
 import SignIn from './auth/signin'
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-
+import Confirmation from './upload/confirmation';
+import DocumentUploader from './upload/documentuploader'
 // import primaryNavigation from "./nav/primaryNavigation";
 const styles = theme => ({
   card: {
@@ -57,22 +57,7 @@ class App extends Component {
     this.classes = props.classes;
   }
 
-  handleFileUpload(args){
-    console.log( "file args", args );
-    var file = args.target.files[0];
 
-    const data = new FormData()
-    data.append('file', file, file.name)
-
-    console.log(file.name);
-
-    axios
-      .post("http://server.immersivesports.ai/playcards/team/import/c679919f-d524-3f75-ad2a-5161706e12a5", data)
-      .then(res => {
-        console.log(res.statusText)
-        console.log("this is the response", res );
-      })
-  }
 
   render() {
 
@@ -91,21 +76,8 @@ class App extends Component {
                 </Grid>
                 <Grid  item xs={1}>
                 <br/>
-                  <Fab color="primary" aria-label="Add">
-
-                    <input
-                     accept="application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/vnd.openxmlformats-officedocument.presentationml.presentation"
-                     id="contained-button-file"
-                     className={this.classes.input}
-                     onChange={this.handleFileUpload}
-                     multiple
-                     type="file"
-                   />
-
-                   <label htmlFor="contained-button-file">
-                    <AddIcon />
-                   </label>
-                  </Fab>
+                  <DocumentUploader />
+                  <Confirmation />
                 </Grid>
               </Grid>
               <Grid container spacing={0} justify="space-around">
