@@ -77,7 +77,7 @@ public class PlayCardController {
         return ok(repository.findAll());
     }
 
-    @GetMapping("/lastmodified" )
+    @GetMapping("/data/lastmodified" )
     public HttpEntity<LocalDateTime> getLastModified(){
         LocalDateTime dateTime = LocalDateTime.now();
         for( PlayCard playCard : repository.findAll()){
