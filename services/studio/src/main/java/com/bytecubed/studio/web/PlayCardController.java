@@ -72,6 +72,12 @@ public class PlayCardController {
         return ok(repository.findById(id).get());
     }
 
+    @GetMapping( "/{id}/svg" )
+    public HttpEntity getPlayCardAsSvg(@PathVariable UUID id ){
+
+        return null;
+    }
+
     @GetMapping()
     public HttpEntity<Iterable<PlayCard>> getAll() {
         return ok(repository.findAll());

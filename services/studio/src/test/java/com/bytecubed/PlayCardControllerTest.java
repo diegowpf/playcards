@@ -3,9 +3,16 @@ package com.bytecubed;
 import com.bytecubed.commons.PlayCard;
 import com.bytecubed.studio.persistence.PlayCardRepository;
 import com.bytecubed.studio.web.PlayCardController;
+import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.junit.Ignore;
 import org.junit.Test;
+import sun.awt.image.codec.JPEGImageEncoderImpl;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.UUID;
 
 import static java.util.Arrays.asList;
@@ -35,4 +42,23 @@ public class PlayCardControllerTest {
 
     }
 
+
+    @Test
+    public void shouldGenerateAnSVGOfAGivenImage() throws IOException {
+
+        Image image = ImageIO.read(new File("/Users/carlyledavis/Projects/mr-platform/playcards/client/public/images/ravens-30-no-logo.png"));
+        SVGGraphics2D graphics = new SVGGraphics2D(1443,767);
+        graphics.drawImage(image, 0,0,null);
+//        graphics.drawImage( new BufferedImage(), 0,0);
+        Shape circle = new Ellipse2D.Double(100, 100, 100, 100);
+
+
+        PrintWriter fos = new PrintWriter("/Users/carlyledavis/Desktop/image.svg");
+
+        graphics.setColor(Color.red);
+        graphics.fill(circle);
+        System.out.println( graphics.getSVGDocument() );
+        fos.println(graphics.getSVGDocument());
+        fos.flush();
+    }
 }
