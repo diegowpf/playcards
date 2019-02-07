@@ -6,13 +6,13 @@ import com.bytecubed.studio.web.PlayCardController;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.junit.Ignore;
 import org.junit.Test;
-import sun.awt.image.codec.JPEGImageEncoderImpl;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
-import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.UUID;
 
 import static java.util.Arrays.asList;
