@@ -44,6 +44,7 @@ public class PlayCardControllerTest {
 
 
     @Test
+    @Ignore
     public void shouldGenerateAnSVGOfAGivenImage() throws IOException {
 
         Image image = ImageIO.read(new File("/Users/carlyledavis/Projects/mr-platform/playcards/client/public/images/ravens-30-no-logo.png"));
