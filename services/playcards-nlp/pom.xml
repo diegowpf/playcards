@@ -108,6 +108,11 @@
             <type>pom</type>
         </dependency>
         <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreesvg</artifactId>
+            <version>3.4</version>
+        </dependency>
+        <dependency>
             <groupId>org.bots4j</groupId>
             <artifactId>wit-ai-client</artifactId>
             <version>0.01</version>

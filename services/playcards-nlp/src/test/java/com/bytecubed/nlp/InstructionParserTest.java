@@ -4,7 +4,6 @@ import com.bytecubed.commons.Formation;
 import com.bytecubed.commons.IFormation;
 import com.bytecubed.commons.PlayCard;
 import com.bytecubed.commons.models.PlayerMarker;
-import com.bytecubed.commons.models.movement.MoveDescriptor;
 import com.bytecubed.commons.models.movement.Route;
 import com.bytecubed.commons.models.movement.StandardMoveDescriptor;
 import com.bytecubed.nlp.parsing.InstructionParser;
@@ -13,7 +12,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
 import java.util.UUID;
 
 import static com.bytecubed.commons.models.movement.Move.comeback;
