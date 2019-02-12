@@ -51,7 +51,7 @@ public class FormationRenderer {
         graphics.draw(circle);
 
         graphics.setColor(Color.black);
-        graphics.drawString(p.getTag(), (float)x(p) + (RADIUS/2), (float)y(p) + (RADIUS/2));
+//        graphics.drawString(p.getTag(), (float)x(p) + (RADIUS/2), (float)y(p) + (RADIUS/2));
     }
 
     private double x(PlayerMarker p) {
