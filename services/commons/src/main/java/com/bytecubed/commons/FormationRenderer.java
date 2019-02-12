@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.io.IOException;
 
+
 public class FormationRenderer {
 
     private Logger logger = LoggerFactory.getLogger(FormationRenderer.class);
@@ -44,6 +45,13 @@ public class FormationRenderer {
         Shape circle = new Ellipse2D.Double(x(p), y(p), RADIUS, RADIUS);
         graphics.setColor(Color.red);
         graphics.fill(circle);
+
+        graphics.setColor(Color.black);
+        graphics.setStroke(new BasicStroke(3));
+        graphics.draw(circle);
+
+        graphics.setColor(Color.black);
+        graphics.drawString(p.getTag(), (float)x(p) + (RADIUS/2), (float)y(p) + (RADIUS/2));
     }
 
     private double x(PlayerMarker p) {
