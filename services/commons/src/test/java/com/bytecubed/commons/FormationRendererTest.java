@@ -2,6 +2,7 @@ package com.bytecubed.commons;
 
 import com.bytecubed.commons.models.Placement;
 import com.bytecubed.commons.models.PlayerMarker;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import static java.util.Arrays.asList;
 public class FormationRendererTest {
 
     @Test
+    @Ignore
     public void shouldRenderFormationAsImage() throws IOException {
         FormationRenderer renderer = new FormationRenderer();
 
