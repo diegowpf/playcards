@@ -1,4 +1,4 @@
-
+import axios from 'axios'
 var initialState = {}
 
 const ACTION_SWITCH_ACTIVE_CARD = "ACTION_SWITCH_ACTIVE_CARD";
@@ -15,7 +15,16 @@ export function handleNavigationClick(id) {
 export function uploadFile(file){
   console.log("Updating progress" )
 
-  
+  var formData = new FormData();
+
+  console.log("This is the file", file );
+  formData.append("file",file);
+  axios.post('http://server.immersivesports.ai/playcards/team/import/c679919f-d524-3f75-ad2a-5161706e12a5', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+})
+
   return (dispatch) => {
     dispatch({type: ACTION_UPLOAD_FILE, payload: file });
   }
