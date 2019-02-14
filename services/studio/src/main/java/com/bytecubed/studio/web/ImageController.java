@@ -7,6 +7,7 @@ import com.bytecubed.studio.persistence.PlayCardRepository;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.JPEGTranscoder;
+import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,18 +49,16 @@ public class ImageController {
         PrintWriter writer = new PrintWriter(response.getOutputStream());
         writer.println(svg);
         writer.flush();
-
-        writeImageToResponse(response, svg);
     }
 
-    private void writeImageToResponse(HttpServletResponse response, String svg) {
-        response.setContentType(IMAGE_SVG_XML);
+    private void writeImageToResponseAsPNG(HttpServletResponse response, String svg, String contentType) {
+        response.setContentType(contentType);
 
         try {
             TranscoderInput input = new TranscoderInput(new StringReader(svg));
             TranscoderOutput output_png_image = new TranscoderOutput(response.getOutputStream());
 
-            JPEGTranscoder my_converter = new JPEGTranscoder();
+            PNGTranscoder my_converter = new PNGTranscoder();
             my_converter.transcode(input, output_png_image);
         } catch (Exception e) {
             logger.error("Error creating document", e );
@@ -72,7 +71,7 @@ public class ImageController {
         PlayCard card = playCardRepository.findById(id).get();
         String svg = renderer.render(card.getFormation());
 
-        writeImageToResponse(response, svg);
+        writeImageToResponseAsPNG(response, svg, MediaType.IMAGE_PNG_VALUE);
     }
 
     @GetMapping("/playcards/{id}/svg")
