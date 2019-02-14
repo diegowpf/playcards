@@ -5,6 +5,7 @@ import com.bytecubed.commons.PlayCard;
 import com.bytecubed.studio.persistence.PlayCardRepository;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,7 @@ public class ImageController {
 
     @GetMapping("/playcards/{id}")
     public void getImageAsByteArray(HttpServletResponse response, @PathVariable UUID id ) {
-        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 
         PlayCard card = repository.findById(id).get();
         String svg = renderer.render(card.getFormation());
@@ -45,7 +46,9 @@ public class ImageController {
         try {
             TranscoderInput input = new TranscoderInput(new StringReader(svg));
             TranscoderOutput output_png_image = new TranscoderOutput(response.getOutputStream());
-            PNGTranscoder my_converter = new PNGTranscoder();
+
+            JPEGTranscoder my_converter = new JPEGTranscoder();
+//            PNGTranscoder my_converter = new PNGTranscoder();
             my_converter.transcode(input, output_png_image);
         } catch (Exception e) {
             logger.error("Error creating document", e );
