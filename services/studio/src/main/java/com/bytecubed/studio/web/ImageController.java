@@ -69,11 +69,15 @@ public class ImageController {
         writeImageToResponse(response, svg);
     }
 
-    @GetMapping("/playcards/{id}/placements")
+    @GetMapping("/playcards/{id}/svg")
     public void getImageAsSvg(HttpServletResponse response, @PathVariable UUID id ) throws IOException {
+        response.setContentType("image/svg+xml");
+
         PlayCard card = playCardRepository.findById(id).get();
         String svg = renderer.render(card.getFormation(), false);
 
-        writeImageToResponse(response, svg);
+        PrintWriter writer = new PrintWriter(response.getOutputStream());
+        writer.println(svg);
+        writer.flush();
     }
 }
