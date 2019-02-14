@@ -74,8 +74,6 @@ public class ImageController {
         PlayCard card = playCardRepository.findById(id).get();
         String svg = renderer.render(card.getFormation(), false);
 
-        PrintWriter writer = new PrintWriter(response.getOutputStream());
-        writer.println(svg);
-        writer.flush();
+        writeImageToResponse(response, svg);
     }
 }
