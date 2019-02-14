@@ -23,7 +23,7 @@ import static java.util.UUID.randomUUID;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping( "/coach")
+@RequestMapping("/coach")
 public class CoachController {
 
     private PlayRepository repository;
@@ -34,14 +34,14 @@ public class CoachController {
     @Autowired
     public CoachController(PlayRepository repository,
                            InstructionParser parser,
-                           FormationRepository formationRepository){
+                           FormationRepository formationRepository) {
         this.repository = repository;
         this.parser = parser;
         this.formationRepository = formationRepository;
     }
 
-    @PostMapping("/play" )
-    public HttpEntity<UUID> createPlay(@RequestBody PlayDescription playDescription){
+    @PostMapping("/play")
+    public HttpEntity<UUID> createPlay(@RequestBody PlayDescription playDescription) {
         Play play = new Play(randomUUID(), playDescription);
         repository.save(play);
         return ok(play.getId());
@@ -49,20 +49,20 @@ public class CoachController {
 
 
     @GetMapping("/play/{id}")
-    public HttpEntity<Play> getPlay(@PathVariable UUID id ){
+    public HttpEntity<Play> getPlay(@PathVariable UUID id) {
         return ok(repository.findById(id).orElseThrow(NoSuchElementException::new));
     }
 
     @PostMapping("/play/{id}")
-    public HttpEntity addMove(@RequestBody String commandAsString, @PathVariable UUID id){
+    public HttpEntity addMove(@RequestBody String commandAsString, @PathVariable UUID id) {
         Play play = repository.findById(id).get();
-        parser.parse(commandAsString );
+        parser.parse(commandAsString);
 
         return null;
     }
 
     @GetMapping("/formation/{name}")
-    public HttpEntity<Iterable<PlayerMarker>> getFormationByName(@PathVariable String name ){
+    public HttpEntity<Iterable<PlayerMarker>> getFormationByName(@PathVariable String name) {
         return ok(new FormationFactory()
                 .withStandardTemplateInTheCenter()
                 .andQbUnderCenter()
@@ -73,23 +73,23 @@ public class CoachController {
                 .addTightEndOnTheBallOnTheRight().getPlayerMarkers());
     }
 
-    @GetMapping("/formations" )
-    public HttpEntity<List<Formation>> getAllFormations(){
+    @GetMapping("/formations")
+    public HttpEntity<List<Formation>> getAllFormations() {
         return ok(formationRepository.findAll());
     }
 
-    @PostMapping("/formation" )
-    public HttpEntity addFormation(@RequestBody Formation formation ){
+    @PostMapping("/formation")
+    public HttpEntity addFormation(@RequestBody Formation formation) {
         logger.debug("Formation added: " + formation.getName());
         Formation target = new Formation(randomUUID(), formation);
         formationRepository.save(target);
 
-        logger.debug( "saving fomration:  " + target.toString());
+        logger.debug("saving fomration:  " + target.toString());
         return ok().build();
     }
 
     @PostMapping("/playcards/team/{id}/formation/{name}")
-    public HttpEntity<PlayCard> add(@PathVariable UUID id, @PathVariable  String name ){
+    public HttpEntity<PlayCard> add(@PathVariable UUID id, @PathVariable String name) {
 
         return null;
     }

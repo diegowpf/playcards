@@ -23,42 +23,52 @@ public class FormationRenderer {
     public static final int FIELD_WIDTH = 148;
     public static final int TEN_YARDS_IN_FT = 30;
 
-    public String render(Formation formation ) {
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+    public String render(Formation formation) {
+        return render(formation, true);
+    }
 
-        Image image = null;
-        try {
-            image = ImageIO.read(classloader.getResourceAsStream("images/ravens-30-no-logo.png"));
-        } catch (IOException e) {
-            logger.error("Can not find base background image.",e );
-        }
+    public String render(Formation formation, boolean includeBackground) {
 
         SVGGraphics2D graphics = new SVGGraphics2D(WIDTH, HEIGHT);
+        if (includeBackground) {
+            ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+            Image image = null;
+            try {
+                image = ImageIO.read(classloader.getResourceAsStream("images/ravens-30-no-logo.png"));
+            } catch (IOException e) {
+                logger.error("Can not find base background image.", e);
+            }
 
-        graphics.drawImage(image, 0,0,null);
-        formation.getPlayerMarkers().forEach(p->drawPlayer(graphics, p ));
+            graphics.drawImage(image, 0, 0, null);
+        }
+
+        formation.getPlayerMarkers().forEach(p -> drawPlayer(graphics, p));
 
         return graphics.getSVGDocument();
     }
 
+
     private void drawPlayer(SVGGraphics2D graphics, PlayerMarker p) {
         Shape circle = new Ellipse2D.Double(x(p), y(p), RADIUS, RADIUS);
         graphics.setColor(Color.red);
-        graphics.fill(circle);
 
+        if( p.getTag() == null && p.getTag().isEmpty() ) {
+            graphics.setColor(Color.lightGray);
+        }
+
+        graphics.fill(circle);
         graphics.setColor(Color.black);
         graphics.setStroke(new BasicStroke(3));
         graphics.draw(circle);
 
         graphics.setColor(Color.black);
-//        graphics.drawString(p.getTag(), (float)x(p) + (RADIUS/2), (float)y(p) + (RADIUS/2));
     }
 
     private double x(PlayerMarker p) {
-        return ((p.getPlacement().getRelativeX()/ FIELD_WIDTH) * WIDTH);
+        return ((p.getPlacement().getRelativeX() / FIELD_WIDTH) * WIDTH);
     }
 
     private double y(PlayerMarker p) {
-        return LINE_OF_SCRIMAGE + ((p.getPlacement().getRelativeY()/ TEN_YARDS_IN_FT) * TEN_YARD_IN_PIXELS);
+        return LINE_OF_SCRIMAGE + ((p.getPlacement().getRelativeY() / TEN_YARDS_IN_FT) * TEN_YARD_IN_PIXELS);
     }
 }

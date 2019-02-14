@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.UUID;
 
@@ -48,5 +50,19 @@ public class ImageController {
         } catch (Exception e) {
             logger.error("Error creating document", e );
         }
+    }
+
+    //image/svg+xml
+
+    @GetMapping("/playcards/{id}/svg")
+    public void getImageAsSvg(HttpServletResponse response, @PathVariable UUID id ) throws IOException {
+        response.setContentType("image/svg+xml");
+
+        PlayCard card = repository.findById(id).get();
+        String svg = renderer.render(card.getFormation(), false);
+
+        PrintWriter writer = new PrintWriter(response.getOutputStream());
+        writer.println(svg);
+        writer.flush();
     }
 }
