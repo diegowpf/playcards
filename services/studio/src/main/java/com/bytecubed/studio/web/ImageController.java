@@ -25,6 +25,7 @@ import java.util.UUID;
 @RequestMapping("/images")
 public class ImageController {
 
+    public static final String IMAGE_SVG_XML = "image/svg+xml";
     private PlayCardRepository playCardRepository;
     private FormationRepository formationRepository;
     private FormationRenderer renderer;
@@ -39,15 +40,20 @@ public class ImageController {
         this.renderer = renderer;
     }
 
-    @GetMapping("/formations/{id}")
-    public void getFormationAsByArray(HttpServletResponse response, @PathVariable UUID id ){
+    @GetMapping("/formations/{id}/svg")
+    public void getFormationAsByArray(HttpServletResponse response, @PathVariable UUID id ) throws IOException {
+        response.setContentType(IMAGE_SVG_XML);
+        String svg = renderer.render(formationRepository.findById(id).get(), false);
 
-        String svg = renderer.render(formationRepository.findById(id).get());
+        PrintWriter writer = new PrintWriter(response.getOutputStream());
+        writer.println(svg);
+        writer.flush();
+
         writeImageToResponse(response, svg);
     }
 
     private void writeImageToResponse(HttpServletResponse response, String svg) {
-        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        response.setContentType(IMAGE_SVG_XML);
 
         try {
             TranscoderInput input = new TranscoderInput(new StringReader(svg));
@@ -71,7 +77,7 @@ public class ImageController {
 
     @GetMapping("/playcards/{id}/svg")
     public void getImageAsSvg(HttpServletResponse response, @PathVariable UUID id ) throws IOException {
-        response.setContentType("image/svg+xml");
+        response.setContentType(IMAGE_SVG_XML);
 
         PlayCard card = playCardRepository.findById(id).get();
         String svg = renderer.render(card.getFormation(), false);
