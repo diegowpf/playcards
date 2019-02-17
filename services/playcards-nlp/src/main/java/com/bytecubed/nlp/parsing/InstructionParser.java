@@ -1,7 +1,7 @@
 package com.bytecubed.nlp.parsing;
 
+import com.bytecubed.commons.models.movement.CustomRoute;
 import com.bytecubed.commons.models.movement.Move;
-import com.bytecubed.commons.models.movement.Route;
 import com.bytecubed.commons.models.movement.StandardMoveDescriptor;
 import com.google.api.client.util.ArrayMap;
 import org.bots4j.wit.WitClient;
@@ -26,7 +26,7 @@ public class InstructionParser {
         this.client = client;
     }
 
-    public Route parse(String routeDescription) {
+    public CustomRoute parse(String routeDescription) {
         GetIntentViaTextResponse response = client.getIntentViaText(routeDescription,null,null,null,null);
         ArrayMap distanceMap = (ArrayMap) ((List)response.getOutcomes().get(0).getEntities().get("distance")).get(0);
         double yards = Double.valueOf( distanceMap.get("value").toString());
@@ -36,8 +36,8 @@ public class InstructionParser {
 
         logger.debug("Found:   " + playerTag );
 
-        return new Route( asList(new StandardMoveDescriptor(yards, Move.valueOf(route_type))), playerTag );
-//        return new Route(yards, Move.valueOf(route_type), playerTag);
+        return new CustomRoute( asList(new StandardMoveDescriptor(yards, Move.valueOf(route_type))), playerTag );
+//        return new CustomRoute(yards, Move.valueOf(route_type), playerTag);
     }
 
 }

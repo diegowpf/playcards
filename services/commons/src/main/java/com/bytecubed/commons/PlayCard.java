@@ -1,7 +1,7 @@
 package com.bytecubed.commons;
 
 import com.bytecubed.commons.models.PlayerMarker;
-import com.bytecubed.commons.models.movement.Route;
+import com.bytecubed.commons.models.movement.CustomRoute;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
@@ -93,7 +93,7 @@ public class PlayCard {
         this.teamId = teamId;
     }
 
-    public void apply(Route route) {
+    public void apply(CustomRoute route) {
         formation.getPlayerMarkerAt(route.getPlayer()).addRoute(route);
     }
 

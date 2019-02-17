@@ -1,6 +1,8 @@
 package com.bytecubed.commons.models;
 
-import com.bytecubed.commons.models.movement.Route;
+import com.bytecubed.commons.models.movement.CustomMoveDescriptor;
+import com.bytecubed.commons.models.movement.CustomRoute;
+import com.bytecubed.commons.models.movement.MoveDescriptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,7 @@ public class PlayerMarker {
     private String pos;
     private String tag;
     private boolean isCenter;
-    private List<Route> routes;
+    private List<CustomRoute> routes;
 
     public PlayerMarker(){
     }
@@ -44,7 +46,7 @@ public class PlayerMarker {
         return isCenter;
     }
 
-    public List<Route> getRoutes() {
+    public List<CustomRoute> getRoutes() {
         return routes;
     }
 
@@ -59,7 +61,15 @@ public class PlayerMarker {
                 '}';
     }
 
-    public void addRoute(Route route) {
+    public void addRoute(CustomRoute route) {
         routes.add(route);
+    }
+
+    public void applyRoute(CustomRoute customRoute) {
+        CustomMoveDescriptor moveDescriptor = ((CustomMoveDescriptor) customRoute.getMoveDescriptors().get(0));
+        double xOffset = moveDescriptor.getStart().getXOffSet(placement);
+        double yOffSet = moveDescriptor.getStart().getYOffSet(placement);
+
+        this.addRoute(customRoute.transform(xOffset, yOffSet));
     }
 }

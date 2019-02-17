@@ -6,9 +6,12 @@ import com.bytecubed.commons.PlayCard;
 import com.bytecubed.commons.models.PlayDescription;
 import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.commons.FormationFactory;
+import com.bytecubed.nlp.models.PlayCardInstruction;
 import com.bytecubed.nlp.parsing.InstructionParser;
 import com.bytecubed.nlp.repository.FormationRepository;
 import com.bytecubed.nlp.repository.PlayRepository;
+import com.bytecubed.nlp.repository.RouteRepository;
+import com.bytecubed.nlp.service.PlayCardBuilderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +32,17 @@ public class CoachController {
     private PlayRepository repository;
     private InstructionParser parser;
     private FormationRepository formationRepository;
+    private RouteRepository routeRepository;
     private Logger logger = LoggerFactory.getLogger(CoachController.class);
 
     @Autowired
-    public CoachController(PlayRepository repository,
+    public CoachController(PlayRepository playRepository,
                            InstructionParser parser,
-                           FormationRepository formationRepository) {
-        this.repository = repository;
+                           FormationRepository formationRepository,
+                           RouteRepository routeRepository) {
+        this.repository = playRepository;
         this.parser = parser;
-        this.formationRepository = formationRepository;
+        this.routeRepository = routeRepository;
     }
 
     @PostMapping("/play")
@@ -92,6 +97,12 @@ public class CoachController {
     public HttpEntity<PlayCard> add(@PathVariable UUID id, @PathVariable String name) {
 
         return null;
+    }
+
+    @PostMapping( "/playcards/script" )
+    public HttpEntity<PlayCard> postScript(PlayCardInstruction instruction ){
+        PlayCardBuilderService service = new PlayCardBuilderService(formationRepository, routeRepository);
+        return ok(service.buildFrom(instruction));
     }
 
 }

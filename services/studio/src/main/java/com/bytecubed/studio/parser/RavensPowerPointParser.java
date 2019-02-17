@@ -5,8 +5,8 @@ import com.bytecubed.commons.PlayCard;
 import com.bytecubed.commons.models.Placement;
 import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.commons.models.movement.CustomMoveDescriptor;
+import com.bytecubed.commons.models.movement.CustomRoute;
 import com.bytecubed.commons.models.movement.MoveDescriptor;
-import com.bytecubed.commons.models.movement.Route;
 import org.apache.poi.xslf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -155,9 +155,9 @@ public class RavensPowerPointParser implements PlayCardParser {
     }
 
     //Todo: This should functionality of a playcard at this point but it is easier to build here.
-    public List<Route> buildRoutes(XSLFSlide slide, ShapeToEntityRegistry entityRegistry) {
+    public List<CustomRoute> buildRoutes(XSLFSlide slide, ShapeToEntityRegistry entityRegistry) {
 
-        List<Route> routes = new ArrayList(extractStraightRoutes(slide, entityRegistry));
+        List<CustomRoute> routes = new ArrayList(extractStraightRoutes(slide, entityRegistry));
         routes.addAll(ppt.getSlides().get(0)
                 .getShapes()
                 .stream()
@@ -172,18 +172,18 @@ public class RavensPowerPointParser implements PlayCardParser {
         return routes;
     }
 
-    private void mergeRoutes(List<Route> routes) {
+    private void mergeRoutes(List<CustomRoute> routes) {
         logger.debug("Routes: ");
 
         routes.stream().forEach(s -> logger.debug("Merging routes:  " + s.getPlayer()));
 
-        Map<Boolean, List<Route>> partitionedRoutes = routes.stream()
+        Map<Boolean, List<CustomRoute>> partitionedRoutes = routes.stream()
                 .collect(partitioningBy(s -> s.getPlayer() != null));
 
         logger.debug(partitionedRoutes.keySet().toString());
 
-        List<Route> associatedWithPlayers = partitionedRoutes.get(true);
-        List<Route> notAssociatedWithPlayers = partitionedRoutes.get(false);
+        List<CustomRoute> associatedWithPlayers = partitionedRoutes.get(true);
+        List<CustomRoute> notAssociatedWithPlayers = partitionedRoutes.get(false);
 
         logger.debug("Number of associated routes:  " + associatedWithPlayers.size());
         logger.debug("Number of un-associated routes:  " + notAssociatedWithPlayers.size());
@@ -204,7 +204,7 @@ public class RavensPowerPointParser implements PlayCardParser {
         });
     }
 
-    private void extendRouteIfPossible(Route associatedRoute, Route nonAssociatedRoute) {
+    private void extendRouteIfPossible(CustomRoute associatedRoute, CustomRoute nonAssociatedRoute) {
         boolean notChanged = false;
 
         logger.debug("Number of associated routes:  " + associatedRoute.getMoveDescriptors().size());
@@ -229,8 +229,8 @@ public class RavensPowerPointParser implements PlayCardParser {
     }
 
 
-    private List<Route> extractStraightRoutes(XSLFSlide slide, ShapeToEntityRegistry entityRegistry) {
-        List<Route> routes = new ArrayList();
+    private List<CustomRoute> extractStraightRoutes(XSLFSlide slide, ShapeToEntityRegistry entityRegistry) {
+        List<CustomRoute> routes = new ArrayList();
 
         slide.getShapes().stream()
                 .filter(this::isOnCanvas)
@@ -269,7 +269,7 @@ public class RavensPowerPointParser implements PlayCardParser {
                             new Placement(convertedLine.x1, convertedLine.y1),
                             new Placement(convertedLine.x2, convertedLine.y2)));
 
-                    Route e = new Route(moveDescriptors, nearestPlayerMarker);
+                    CustomRoute e = new CustomRoute(moveDescriptors, nearestPlayerMarker);
 
                     if (player != null) {
                         player.addRoute(e);
@@ -296,7 +296,7 @@ public class RavensPowerPointParser implements PlayCardParser {
     }
 
 
-    private Route extractCurvedRoutes(XSLFShape f, ShapeToEntityRegistry entityRegistry) {
+    private CustomRoute extractCurvedRoutes(XSLFShape f, ShapeToEntityRegistry entityRegistry) {
         XSLFFreeformShape connector = (XSLFFreeformShape) f;
         PathIterator pathIterator = connector.getPath().getPathIterator(new AffineTransform());
 
@@ -361,7 +361,7 @@ public class RavensPowerPointParser implements PlayCardParser {
             playerTag = nearestPlayer.getTag();
         }
 
-        Route route = new Route(areaSegments.stream()
+        CustomRoute route = new CustomRoute(areaSegments.stream()
                 .map(b -> new CustomMoveDescriptor(
                         new Placement(x(b.x1), y(b.y1)),
                         new Placement(x(b.x2), y(b.y2))))

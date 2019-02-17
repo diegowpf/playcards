@@ -4,7 +4,7 @@ import com.bytecubed.commons.Formation;
 import com.bytecubed.commons.IFormation;
 import com.bytecubed.commons.PlayCard;
 import com.bytecubed.commons.models.PlayerMarker;
-import com.bytecubed.commons.models.movement.Route;
+import com.bytecubed.commons.models.movement.CustomRoute;
 import com.bytecubed.commons.models.movement.StandardMoveDescriptor;
 import com.bytecubed.nlp.parsing.InstructionParser;
 import org.bots4j.wit.WitClient;
@@ -28,7 +28,7 @@ public class InstructionParserTest {
         PlayerMarker playerMarker = new PlayerMarker(null, "wr", "x", false);
         when(formation.getPlayerMarkerAt("X")).thenReturn(playerMarker);
 
-        Route route = new InstructionParser(getClient()).parse("X has a 5 yard go route");
+        CustomRoute route = new InstructionParser(getClient()).parse("X has a 5 yard go route");
         StandardMoveDescriptor moveDescriptor = (StandardMoveDescriptor) route.getMoveDescriptors().get(0);
 
         assertThat(moveDescriptor.getMove()).isEqualTo(go);
@@ -42,7 +42,7 @@ public class InstructionParserTest {
         Formation formation = new IFormation();
         PlayCard card = new PlayCard(UUID.randomUUID(), formation, "Fake card");
 
-        Route route = new InstructionParser(getClient()).parse("X has a 5 yard go route");
+        CustomRoute route = new InstructionParser(getClient()).parse("X has a 5 yard go route");
         card.apply(route);
 
         System.out.println(card);
@@ -59,7 +59,7 @@ public class InstructionParserTest {
         PlayerMarker playerMarker = new PlayerMarker(null, "wr", "x", false);
         when(formation.getPlayerMarkerAt("X")).thenReturn(playerMarker);
 
-        Route route = new InstructionParser(getClient()).parse("X has a 5 yard comeback");
+        CustomRoute route = new InstructionParser(getClient()).parse("X has a 5 yard comeback");
         StandardMoveDescriptor moveDescriptor = (StandardMoveDescriptor) route.getMoveDescriptors().get(0);
 
         assertThat(moveDescriptor.getMove()).isEqualTo(comeback);

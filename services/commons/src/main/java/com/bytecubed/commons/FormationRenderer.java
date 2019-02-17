@@ -3,7 +3,7 @@ package com.bytecubed.commons;
 import com.bytecubed.commons.models.Placement;
 import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.commons.models.movement.CustomMoveDescriptor;
-import com.bytecubed.commons.models.movement.Route;
+import com.bytecubed.commons.models.movement.CustomRoute;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +73,7 @@ public class FormationRenderer {
         p.getRoutes().forEach(r->renderRoute(r, graphics));
     }
 
-    private void renderRoute(Route route, SVGGraphics2D graphics) {
+    private void renderRoute(CustomRoute route, SVGGraphics2D graphics) {
 
         route.getMoveDescriptors().forEach(m->{
             Placement start = ((CustomMoveDescriptor) m).getStart();

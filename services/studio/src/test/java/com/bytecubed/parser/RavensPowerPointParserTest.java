@@ -1,7 +1,7 @@
 package com.bytecubed.parser;
 
 import com.bytecubed.commons.PlayCard;
-import com.bytecubed.commons.models.movement.Route;
+import com.bytecubed.commons.models.movement.CustomRoute;
 import com.bytecubed.studio.parser.RavensPowerPointParser;
 import com.bytecubed.studio.parser.ShapeToEntityRegistry;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
@@ -46,7 +46,7 @@ public class RavensPowerPointParserTest {
     @Test
     public void shouldCombineRoutesIfCurvedOrStraight() throws IOException {
         PlayCard playCard = new RavensPowerPointParser(getDefaultPowerPoint()).extractPlayCards().get(0);
-        Route route = playCard.getFormation().getPlayerMarkerAt("84").getRoutes().get(0);
+        CustomRoute route = playCard.getFormation().getPlayerMarkerAt("84").getRoutes().get(0);
 
         assertThat(route.getMoveDescriptors()).hasSize(10);
 

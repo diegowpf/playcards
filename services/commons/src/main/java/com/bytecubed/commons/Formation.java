@@ -28,6 +28,9 @@ public class Formation {
     public Formation(List<PlayerMarker> playerMarkers ){
         this(playerMarkers.toArray(new PlayerMarker[0]));
     }
+    public Formation(UUID id, String name, List<PlayerMarker> playerMarkers ){
+        this(id, name, playerMarkers.toArray(new PlayerMarker[0]));
+    }
 
     public Formation(PlayerMarker... players) {
         this(randomUUID(), "", players);
@@ -123,7 +126,7 @@ public class Formation {
                 '}';
     }
 
-//    public void apply(Route route) {
+//    public void apply(CustomRoute route) {
 //        getPlayerMarkerAt(route.getPlayer())
 //    }
 }
