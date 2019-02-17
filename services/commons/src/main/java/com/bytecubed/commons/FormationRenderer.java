@@ -55,12 +55,13 @@ public class FormationRenderer {
         Shape shape = new Ellipse2D.Double(x(p), y(p), RADIUS, RADIUS);
         graphics.setColor(Color.red);
 
-        if( p.isCenter() ){
-            shape = new Rectangle2D.Double(x(p), y(p), RADIUS, RADIUS );
+        if (p.isCenter()) {
+            shape = new Rectangle2D.Double(x(p), y(p), RADIUS, RADIUS);
             graphics.setColor(Color.black);
         }
 
-        if( p.getTag() == null && p.getTag().isEmpty() ) {
+        logger.debug("Player being rendered:  " + p.toString());
+        if (p.getTag() == null || p.getTag().isEmpty()) {
             graphics.setColor(Color.lightGray);
         }
 
@@ -70,20 +71,22 @@ public class FormationRenderer {
         graphics.draw(shape);
 
         graphics.setColor(Color.black);
-        p.getRoutes().forEach(r->renderRoute(r, graphics));
+        if (p.getRoutes() != null) {
+            p.getRoutes().forEach(r -> renderRoute(r, graphics));
+        }
     }
 
     private void renderRoute(CustomRoute route, SVGGraphics2D graphics) {
 
-        route.getMoveDescriptors().forEach(m->{
+        route.getMoveDescriptors().forEach(m -> {
             Placement start = ((CustomMoveDescriptor) m).getStart();
             Placement end = ((CustomMoveDescriptor) m).getEnd();
 
             graphics.drawLine(
-                    (int)x(start.getRelativeX()),
-                    (int)y(start.getRelativeY()),
-                    (int)x(end.getRelativeX()),
-                    (int)y(end.getRelativeY()));
+                    (int) x(start.getRelativeX()),
+                    (int) y(start.getRelativeY()),
+                    (int) x(end.getRelativeX()),
+                    (int) y(end.getRelativeY()));
         });
     }
 

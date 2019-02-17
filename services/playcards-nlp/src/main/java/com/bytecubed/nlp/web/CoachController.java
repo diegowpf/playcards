@@ -42,6 +42,7 @@ public class CoachController {
                            RouteRepository routeRepository) {
         this.repository = playRepository;
         this.parser = parser;
+        this.formationRepository = formationRepository;
         this.routeRepository = routeRepository;
     }
 

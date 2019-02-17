@@ -31,6 +31,6 @@ public class PlayCardBuilderService {
                     .applyRoute(routeRepository.findById(r.getRouteId()).get());
         });
 
-        return new PlayCard(UUID.randomUUID(), formation, "fakeName" );
+        return new PlayCard(UUID.randomUUID(), formation, formation.getName() );
     }
 }
