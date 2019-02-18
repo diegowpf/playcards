@@ -13,6 +13,9 @@ public class CustomMoveDescriptor extends MoveDescriptor{
     private Placement start;
     private Placement end;
 
+    public CustomMoveDescriptor(){
+        super(custom);
+    }
 
     public CustomMoveDescriptor(Placement start, Placement end) {
         super(custom);

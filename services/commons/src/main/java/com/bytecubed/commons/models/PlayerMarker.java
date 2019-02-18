@@ -3,6 +3,8 @@ package com.bytecubed.commons.models;
 import com.bytecubed.commons.models.movement.CustomMoveDescriptor;
 import com.bytecubed.commons.models.movement.CustomRoute;
 import com.bytecubed.commons.models.movement.MoveDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +15,10 @@ public class PlayerMarker {
     private String tag;
     private boolean isCenter;
     private List<CustomRoute> routes;
+    private Logger logger = LoggerFactory.getLogger(PlayerMarker.class);
 
     public PlayerMarker(){
+        this.routes = new ArrayList();
     }
 
     public PlayerMarker(Placement placement, String pos, String tag) {
@@ -66,6 +70,8 @@ public class PlayerMarker {
     }
 
     public void applyRoute(CustomRoute customRoute) {
+        logger.debug( "Applying Route:  " + customRoute.toString());
+
         CustomMoveDescriptor moveDescriptor = ((CustomMoveDescriptor) customRoute.getMoveDescriptors().get(0));
         double xOffset = moveDescriptor.getStart().getXOffSet(placement);
         double yOffSet = moveDescriptor.getStart().getYOffSet(placement);

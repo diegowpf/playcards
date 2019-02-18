@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.UUID;
 
 public class PlayCardInstruction {
-    UUID formationId;
+    private UUID formationId;
     private List<RouteInstruction> routes;
-    private List<UUID> routeIds;
+
+    public PlayCardInstruction() { }
 
     public PlayCardInstruction(UUID formationId, List<RouteInstruction> routes ) {
         this.formationId = formationId;

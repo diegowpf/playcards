@@ -3,8 +3,11 @@ package com.bytecubed.nlp.models;
 import java.util.UUID;
 
 public class RouteInstruction {
-    private final String tag;
-    private final UUID routeId;
+    private String tag;
+    private UUID routeId;
+
+    public RouteInstruction() {
+    }
 
     public RouteInstruction(String tag, UUID routeId) {
         this.tag = tag;

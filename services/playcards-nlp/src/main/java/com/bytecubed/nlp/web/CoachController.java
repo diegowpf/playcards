@@ -6,6 +6,8 @@ import com.bytecubed.commons.PlayCard;
 import com.bytecubed.commons.models.PlayDescription;
 import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.commons.FormationFactory;
+import com.bytecubed.commons.models.movement.CustomRoute;
+import com.bytecubed.commons.models.movement.Route;
 import com.bytecubed.nlp.models.PlayCardInstruction;
 import com.bytecubed.nlp.parsing.InstructionParser;
 import com.bytecubed.nlp.repository.FormationRepository;
@@ -101,9 +103,26 @@ public class CoachController {
     }
 
     @PostMapping( "/playcards/script" )
-    public HttpEntity<PlayCard> postScript(PlayCardInstruction instruction ){
+    public HttpEntity<PlayCard> postScript(@RequestBody  PlayCardInstruction instruction ){
+        logger.debug("Formation ID:  " + instruction.getFormationId().toString());
+        logger.debug( "Route Count:  "  + instruction.getRoutes().size() );
+
         PlayCardBuilderService service = new PlayCardBuilderService(formationRepository, routeRepository);
         return ok(service.buildFrom(instruction));
+    }
+
+    @PostMapping("/routes")
+    public HttpEntity<Route> addRoute(@RequestBody CustomRoute route ){
+        UUID routeId = randomUUID();
+        CustomRoute generatedRoute = new CustomRoute(routeId, "straight", route);
+        routeRepository.save(generatedRoute);
+
+        return ok(generatedRoute);
+    }
+
+    @GetMapping("/routes")
+    public HttpEntity<List<CustomRoute>> getRoutes(){
+        return ok(routeRepository.findAll());
     }
 
 }

@@ -52,17 +52,21 @@ public class FormationRenderer {
 
 
     private void drawPlayer(SVGGraphics2D graphics, PlayerMarker p) {
-        Shape shape = new Ellipse2D.Double(x(p), y(p), RADIUS, RADIUS);
+        double correctedX = x(p);
+        double correctedY = y(p);
+        Shape shape = new Ellipse2D.Double(correctedX, correctedY, RADIUS, RADIUS);
         graphics.setColor(Color.red);
 
         if (p.isCenter()) {
-            shape = new Rectangle2D.Double(x(p), y(p), RADIUS, RADIUS);
+            shape = new Rectangle2D.Double(correctedX, correctedY, RADIUS, RADIUS);
             graphics.setColor(Color.black);
         }
 
         logger.debug("Player being rendered:  " + p.toString());
         if (p.getTag() == null || p.getTag().isEmpty()) {
             graphics.setColor(Color.lightGray);
+        } else {
+            graphics.drawString(p.getTag(), (float)correctedX, (float)correctedY);
         }
 
         graphics.fill(shape);

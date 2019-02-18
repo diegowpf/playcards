@@ -12,8 +12,15 @@ import com.bytecubed.nlp.parsing.InstructionParser;
 import com.bytecubed.nlp.repository.FormationRepository;
 import com.bytecubed.nlp.repository.PlayRepository;
 import com.bytecubed.nlp.repository.RouteRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -21,8 +28,9 @@ import java.util.UUID;
 import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class CoachControllerTest {
 
@@ -70,10 +78,61 @@ public class CoachControllerTest {
         assertThat(movements.getEnd()).isEqualTo(new Placement(10d, 05d));
     }
 
+    @Test
+    @Ignore
+    public void shouldGenerateWithIFormation() {
+        UUID iFormationId = UUID.fromString("2a6009a0-b66d-440a-b141-7cb64054e217");
+        UUID routeID = UUID.fromString("d2c38c13-ece6-40fe-acab-f72aaacf737b");
+
+        PlayCardInstruction instruction = new PlayCardInstruction(iFormationId,
+                asList(new RouteInstruction("X", routeID)));
+
+        RestTemplate template = new RestTemplate();
+        String response = template.postForEntity("http://localhost:8080/coach/playcards/script", instruction, String.class).getBody();
+
+        System.out.println( "Response:  " + response );
+    }
+
+    @Test
+    @Ignore
+    public void shouldSaveRealRoute(){
+        CustomRoute route = new CustomRoute(asList(new CustomMoveDescriptor(
+                new Placement(0, 0),
+                new Placement(0, -5))), "X");
+
+        RestTemplate template = new RestTemplate();
+        String response = template.postForEntity( "http://localhost:8080/coach/routes", route, String.class).getBody();
+        System.out.println( response );
+    }
+
+    @Test
+    public void shouldGenerateAndSaveRoute() throws Exception {
+        CustomRoute route = new CustomRoute(asList(new CustomMoveDescriptor(
+                new Placement(0, 0),
+                new Placement(0, -5))), "X");
+
+        MockMvc controller = MockMvcBuilders.standaloneSetup(
+                new CoachController(playRepository, instructionParser,
+                        formationRepository, routeRepository)).build();
+        controller.perform(
+                post("/coach/routes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(route)))
+                .andExpect(status().isOk());
+
+        ArgumentCaptor<CustomRoute> savedRouteCaptor = ArgumentCaptor.forClass(CustomRoute.class);
+        verify(routeRepository).save(savedRouteCaptor.capture());
+        CustomRoute savedRoute = savedRouteCaptor.getValue();
+
+        CustomMoveDescriptor descriptor = (CustomMoveDescriptor) savedRoute.getMoveDescriptors().get(0);
+        assertThat(descriptor.getStart()).isEqualTo(((CustomMoveDescriptor) route.getMoveDescriptors().get(0)).getStart());
+        assertThat(descriptor.getEnd()).isEqualTo(((CustomMoveDescriptor) route.getMoveDescriptors().get(0)).getEnd());
+    }
+
     private FormationRepository formationRepository() {
         FormationRepository formationRepository = mock(FormationRepository.class);
         formation = new Formation(TEST_FORMATION_ID, PLAY_NAME, asList(new PlayerMarker(
-                new Placement(10,10), "wr", TAG
+                new Placement(10, 10), "wr", TAG
         )));
 
         when(formationRepository.findById(TEST_FORMATION_ID))
@@ -85,8 +144,8 @@ public class CoachControllerTest {
     private RouteRepository routeRepository() {
         RouteRepository routeRepository = mock(RouteRepository.class);
         CustomRoute customRoute = new CustomRoute(asList(
-                new CustomMoveDescriptor(new Placement(0d,0d),
-                        new Placement(0d,-5d))
+                new CustomMoveDescriptor(new Placement(0d, 0d),
+                        new Placement(0d, -5d))
         ), TAG);
 
         when(routeRepository.findById(TEST_ROUTE_ID)).thenReturn(Optional.of(customRoute));
