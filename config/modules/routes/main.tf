@@ -3,7 +3,8 @@ resource "aws_route53_record" "records" {
   name    = "michigan.immersivesports.ai"
   type    = "A"
   ttl     = "300"
-  records = ["40.117.45.119"]
+  #records = ["40.117.45.119"]
+  records = ["40.71.176.103"]
 }
 
 resource "aws_route53_record" "zero" {
