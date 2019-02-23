@@ -9,5 +9,5 @@ logging:
 
 persistence:
   mongo:
-    url: localhost
+    url: infra.immersivesports.ai
     port: 27017

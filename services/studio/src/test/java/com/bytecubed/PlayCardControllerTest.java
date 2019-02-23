@@ -2,6 +2,7 @@ package com.bytecubed;
 
 import com.bytecubed.commons.PlayCard;
 import com.bytecubed.studio.persistence.PlayCardRepository;
+import com.bytecubed.studio.persistence.RouteRepository;
 import com.bytecubed.studio.web.PlayCardController;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.junit.Ignore;
@@ -32,7 +33,7 @@ public class PlayCardControllerTest {
         PlayCard playCard = null;//new PlayCardController.PlayCard(teamId, null);
         when(repository.findAll()).thenReturn( asList(playCard));
 
-        PlayCardController controller = new PlayCardController(repository);
+        PlayCardController controller = new PlayCardController(repository, mock(RouteRepository.class));
         assertThat(controller.getPlayCards(teamId).getBody().iterator().next()).isEqualTo(playCard);
     }
 

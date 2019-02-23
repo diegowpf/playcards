@@ -15,7 +15,6 @@ public class PlayerMarker {
     private String tag;
     private boolean isCenter;
     private List<CustomRoute> routes;
-    private Logger logger = LoggerFactory.getLogger(PlayerMarker.class);
 
     public PlayerMarker(){
         this.routes = new ArrayList();
@@ -70,7 +69,6 @@ public class PlayerMarker {
     }
 
     public void applyRoute(CustomRoute customRoute) {
-        logger.debug( "Applying Route:  " + customRoute.toString());
 
         CustomMoveDescriptor moveDescriptor = ((CustomMoveDescriptor) customRoute.getMoveDescriptors().get(0));
         double xOffset = moveDescriptor.getStart().getXOffSet(placement);

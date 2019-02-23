@@ -5,6 +5,7 @@ import com.bytecubed.commons.models.movement.CustomRoute;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,6 +60,16 @@ public class PlayCard {
         this.teamId = teamId;
         this.formation = formation;
         this.name = name;
+    }
+
+    public List<CustomRoute> extractRoutes(){
+        List<CustomRoute> routes = new ArrayList<>();
+
+        formation.getPlayerMarkers().forEach(p->{
+           routes.addAll(p.getRoutes());
+        });
+
+        return routes;
     }
 
     public Formation getFormation() {

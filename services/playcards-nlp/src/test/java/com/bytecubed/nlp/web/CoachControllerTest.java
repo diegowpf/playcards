@@ -82,13 +82,14 @@ public class CoachControllerTest {
     @Ignore
     public void shouldGenerateWithIFormation() {
         UUID iFormationId = UUID.fromString("2a6009a0-b66d-440a-b141-7cb64054e217");
+//        UUID routeID = UUID.fromString("d2c38c13-ece6-40fe-acab-f72aaacf737b");
         UUID routeID = UUID.fromString("d2c38c13-ece6-40fe-acab-f72aaacf737b");
 
         PlayCardInstruction instruction = new PlayCardInstruction(iFormationId,
                 asList(new RouteInstruction("X", routeID)));
 
         RestTemplate template = new RestTemplate();
-        String response = template.postForEntity("http://localhost:8080/coach/playcards/script", instruction, String.class).getBody();
+        String response = template.postForEntity("http://nlp.immersivesports.ai/coach/playcards/script", instruction, String.class).getBody();
 
         System.out.println( "Response:  " + response );
     }
@@ -98,10 +99,10 @@ public class CoachControllerTest {
     public void shouldSaveRealRoute(){
         CustomRoute route = new CustomRoute(asList(new CustomMoveDescriptor(
                 new Placement(0, 0),
-                new Placement(0, -5))), "X");
+                new Placement(0, -25))), "X");
 
         RestTemplate template = new RestTemplate();
-        String response = template.postForEntity( "http://localhost:8080/coach/routes", route, String.class).getBody();
+        String response = template.postForEntity( "http://nlp.immersivesports.ai/coach/routes", route, String.class).getBody();
         System.out.println( response );
     }
 

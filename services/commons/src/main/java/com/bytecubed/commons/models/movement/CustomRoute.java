@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.UUID.randomUUID;
+
 public class CustomRoute implements Route {
     private String name;
     private List<MoveDescriptor> moveDescriptors;
@@ -15,6 +17,7 @@ public class CustomRoute implements Route {
     private UUID id;
 
     public CustomRoute(List<MoveDescriptor> moveDescriptors, String marker ){
+        id = randomUUID();
         this.moveDescriptors = moveDescriptors;
         this.marker = marker;
     }
