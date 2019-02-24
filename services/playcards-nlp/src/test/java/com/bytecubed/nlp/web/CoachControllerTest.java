@@ -6,6 +6,7 @@ import com.bytecubed.commons.models.Placement;
 import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.commons.models.movement.CustomMoveDescriptor;
 import com.bytecubed.commons.models.movement.CustomRoute;
+import com.bytecubed.nlp.models.PlayCardCommand;
 import com.bytecubed.nlp.models.PlayCardInstruction;
 import com.bytecubed.nlp.models.RouteInstruction;
 import com.bytecubed.nlp.parsing.InstructionParser;
@@ -90,6 +91,20 @@ public class CoachControllerTest {
 
         RestTemplate template = new RestTemplate();
         String response = template.postForEntity("http://nlp.immersivesports.ai/coach/playcards/script", instruction, String.class).getBody();
+
+        System.out.println( "Response:  " + response );
+    }
+
+    @Test
+    @Ignore
+    public void shouldGenerateFromSpeech() {
+        UUID iFormationId = UUID.fromString("2a6009a0-b66d-440a-b141-7cb64054e217");
+//        UUID routeID = UUID.fromString("d2c38c13-ece6-40fe-acab-f72aaacf737b");
+
+        PlayCardCommand command = new PlayCardCommand(iFormationId, "x has a straight" );
+
+        RestTemplate template = new RestTemplate();
+        String response = template.postForEntity("http://localhost:8080/coach/playcards/text", command, String.class).getBody();
 
         System.out.println( "Response:  " + response );
     }

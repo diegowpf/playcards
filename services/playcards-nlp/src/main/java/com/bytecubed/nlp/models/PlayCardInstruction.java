@@ -1,5 +1,8 @@
 package com.bytecubed.nlp.models;
 
+import com.bytecubed.commons.models.movement.CustomRoute;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,6 +11,10 @@ public class PlayCardInstruction {
     private List<RouteInstruction> routes;
 
     public PlayCardInstruction() { }
+
+    public PlayCardInstruction(UUID formationId ){
+        this(formationId, new ArrayList());
+    }
 
     public PlayCardInstruction(UUID formationId, List<RouteInstruction> routes ) {
         this.formationId = formationId;
@@ -20,5 +27,9 @@ public class PlayCardInstruction {
 
     public UUID getFormationId() {
         return formationId;
+    }
+
+    public void addRoute(String playerTag, CustomRoute route ){
+        routes.add(new RouteInstruction(playerTag, route.getId()));
     }
 }

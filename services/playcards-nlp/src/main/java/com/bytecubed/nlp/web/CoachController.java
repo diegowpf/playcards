@@ -8,8 +8,10 @@ import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.commons.FormationFactory;
 import com.bytecubed.commons.models.movement.CustomRoute;
 import com.bytecubed.commons.models.movement.Route;
+import com.bytecubed.nlp.models.PlayCardCommand;
 import com.bytecubed.nlp.models.PlayCardInstruction;
 import com.bytecubed.nlp.parsing.InstructionParser;
+import com.bytecubed.nlp.parsing.models.RouteCommand;
 import com.bytecubed.nlp.repository.FormationRepository;
 import com.bytecubed.nlp.repository.PlayRepository;
 import com.bytecubed.nlp.repository.RouteRepository;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
@@ -109,6 +112,22 @@ public class CoachController {
 
         PlayCardBuilderService service = new PlayCardBuilderService(formationRepository, routeRepository);
         return ok(service.buildFrom(instruction));
+    }
+
+    @PostMapping( "/playcards/text")
+    public HttpEntity<PlayCard> postCommands( @RequestBody PlayCardCommand command ){
+        List<RouteCommand> routeCommands = parser.getRouteCommands(command.getVoiceCommands());
+        PlayCardInstruction instruction = new PlayCardInstruction(command.getFormationId());
+
+        routeCommands.forEach(c->{
+            Optional<CustomRoute> routeSearchResult =  routeRepository.findByName(c.getRouteName());
+            routeSearchResult.ifPresent( route ->{
+                instruction.addRoute(c.getPlayerTag(), route);
+            });
+
+        });
+
+        return postScript(instruction);
     }
 
     @PostMapping("/routes")
