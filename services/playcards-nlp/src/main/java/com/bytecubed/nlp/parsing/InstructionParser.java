@@ -54,8 +54,11 @@ public class InstructionParser {
         logger.debug( "player positions:  " + playerPositions );
         logger.debug( "route type:  " + routeType );
 
-        for( int i = 0; i < playerPositions.size(); i++ ){
-            commands.add( new RouteCommand(playerPositions.get(i), routeType.get(i)));
+        if(playerPositions != null && routeType != null ) {
+
+            for (int i = 0; i < playerPositions.size(); i++) {
+                commands.add(new RouteCommand(playerPositions.get(i), routeType.get(i)));
+            }
         }
 
         return commands;
