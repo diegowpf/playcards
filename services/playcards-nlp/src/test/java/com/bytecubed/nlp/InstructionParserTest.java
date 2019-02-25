@@ -84,6 +84,7 @@ public class InstructionParserTest {
     }
 
     @Test
+    @Ignore
     public void shouldParseCommandOfKnownRoute(){
         Formation formation = mock(Formation.class);
         PlayerMarker playerMarker = new PlayerMarker(null, "wr", "x", false);
