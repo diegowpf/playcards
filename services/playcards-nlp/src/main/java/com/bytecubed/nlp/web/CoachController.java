@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -58,6 +59,15 @@ public class CoachController {
         return ok(play.getId());
     }
 
+    @PostMapping("/route/{id}/name")
+    public HttpEntity updateName(@PathVariable UUID id, @RequestBody String name) {
+        CustomRoute route = routeRepository.findById(id).get();
+        route.setName(name);
+        routeRepository.save(route);
+
+        logger.debug("About to save route:  " + id.toString());
+        return ok().build();
+    }
 
     @GetMapping("/play/{id}")
     public HttpEntity<Play> getPlay(@PathVariable UUID id) {
@@ -105,23 +115,23 @@ public class CoachController {
         return null;
     }
 
-    @PostMapping( "/playcards/script" )
-    public HttpEntity<PlayCard> postScript(@RequestBody  PlayCardInstruction instruction ){
+    @PostMapping("/playcards/script")
+    public HttpEntity<PlayCard> postScript(@RequestBody PlayCardInstruction instruction) {
         logger.debug("Formation ID:  " + instruction.getFormationId().toString());
-        logger.debug( "Route Count:  "  + instruction.getRoutes().size() );
+        logger.debug("Route Count:  " + instruction.getRoutes().size());
 
         PlayCardBuilderService service = new PlayCardBuilderService(formationRepository, routeRepository);
         return ok(service.buildFrom(instruction));
     }
 
-    @PostMapping( "/playcards/text")
-    public HttpEntity<PlayCard> postCommands( @RequestBody PlayCardCommand command ){
+    @PostMapping("/playcards/text")
+    public HttpEntity<PlayCard> postCommands(@RequestBody PlayCardCommand command) {
         List<RouteCommand> routeCommands = parser.getRouteCommands(command.getVoiceCommands());
         PlayCardInstruction instruction = new PlayCardInstruction(command.getFormationId());
 
-        routeCommands.forEach(c->{
-            Optional<CustomRoute> routeSearchResult =  routeRepository.findByName(c.getRouteName());
-            routeSearchResult.ifPresent( route ->{
+        routeCommands.forEach(c -> {
+            Optional<CustomRoute> routeSearchResult = routeRepository.findByName(c.getRouteName());
+            routeSearchResult.ifPresent(route -> {
                 instruction.addRoute(c.getPlayerTag(), route);
             });
 
@@ -131,7 +141,7 @@ public class CoachController {
     }
 
     @PostMapping("/routes")
-    public HttpEntity<Route> addRoute(@RequestBody CustomRoute route ){
+    public HttpEntity<Route> addRoute(@RequestBody CustomRoute route) {
         UUID routeId = randomUUID();
         CustomRoute generatedRoute = new CustomRoute(routeId, "straight", route);
         routeRepository.save(generatedRoute);
@@ -140,8 +150,15 @@ public class CoachController {
     }
 
     @GetMapping("/routes")
-    public HttpEntity<List<CustomRoute>> getRoutes(){
-        return ok(routeRepository.findAll());
+    public HttpEntity<List<CustomRoute>> getRoutes(@RequestParam(value = "named", defaultValue = "true" ) boolean named) {
+        if (!named) {
+            return ok(routeRepository.findAll());
+        } else {
+            return ok(routeRepository.findAll().stream()
+                    .filter(f -> f.getName() != null)
+                    .collect(toList()));
+        }
     }
+
 
 }

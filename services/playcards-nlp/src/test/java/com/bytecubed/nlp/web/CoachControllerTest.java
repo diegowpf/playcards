@@ -122,6 +122,27 @@ public class CoachControllerTest {
     }
 
     @Test
+    @Ignore
+    public void shouldSetNamesOfKnownRoutes(){
+        RestTemplate template = new RestTemplate();
+        template.postForEntity(
+                "http://localhost:8080/coach/route/192e3ecd-54ab-42ed-80e2-75323d2bd7bc/name",
+                "hook", String.class).getBody();
+
+        template.postForEntity(
+                "http://localhost:8080/coach/route/f272a07e-0b21-43ed-9721-377ea6bbd4ce/name",
+                "cross", String.class).getBody();
+
+        template.postForEntity(
+                "http://localhost:8080/coach/route/1cdce2b6-b192-4312-b6dc-1193603d614a/name",
+                "flat", String.class).getBody();
+
+        template.postForEntity(
+                "http://localhost:8080/coach/route/cfb88033-bdbc-4dcf-823c-4b334d865cfe/name",
+                "book", String.class).getBody();
+    }
+
+    @Test
     public void shouldGenerateAndSaveRoute() throws Exception {
         CustomRoute route = new CustomRoute(asList(new CustomMoveDescriptor(
                 new Placement(0, 0),

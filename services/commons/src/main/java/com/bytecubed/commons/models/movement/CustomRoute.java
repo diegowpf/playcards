@@ -39,6 +39,10 @@ public class CustomRoute implements Route {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String getPlayer() {
         return marker;
