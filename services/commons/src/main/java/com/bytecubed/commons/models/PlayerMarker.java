@@ -77,7 +77,7 @@ public class PlayerMarker {
         CustomRoute tentativeRoute = transform;
 
         if( this.getPlacement().getRelativeX() > 80 ){
-            tentativeRoute = customRoute.flipAlongXAxis(this.getPlacement().getRelativeX());
+            tentativeRoute = transform.flipAlongXAxis(this.getPlacement().getRelativeX());
         }
 
         this.addRoute(tentativeRoute);
