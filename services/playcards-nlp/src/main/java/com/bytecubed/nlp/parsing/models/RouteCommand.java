@@ -16,4 +16,12 @@ public class RouteCommand {
     public String getPlayerTag() {
         return playerTag;
     }
+
+    @Override
+    public String toString() {
+        return "RouteCommand{" +
+                "playerTag='" + playerTag + '\'' +
+                ", routeName='" + routeName + '\'' +
+                '}';
+    }
 }

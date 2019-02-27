@@ -64,4 +64,22 @@ public class CustomRoute implements Route {
 
         return new CustomRoute(moves,this.marker);
     }
+
+    public CustomRoute flipAlongXAxis(double axis){
+
+        List<MoveDescriptor> moves = new ArrayList<>();
+
+        this.getMoveDescriptors().forEach( m ->{
+            Placement start = ((CustomMoveDescriptor) m).getStart();
+            Placement end = ((CustomMoveDescriptor) m).getEnd();
+
+            double newStartX = start.getRelativeX() - ((start.getRelativeX() - axis) * 2 );
+            double newEndX = end.getRelativeX() - ((end.getRelativeX() - axis) * 2 );
+
+            moves.add( new CustomMoveDescriptor(new Placement(newStartX, start.getRelativeY()),
+                    new Placement(newEndX, end.getRelativeY())));
+        });
+
+        return new CustomRoute(moves, this.getPlayer());
+    }
 }

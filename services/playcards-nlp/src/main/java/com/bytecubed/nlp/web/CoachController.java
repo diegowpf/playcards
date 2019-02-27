@@ -129,7 +129,10 @@ public class CoachController {
         List<RouteCommand> routeCommands = parser.getRouteCommands(command.getVoiceCommands());
         PlayCardInstruction instruction = new PlayCardInstruction(command.getFormationId());
 
+        logger.debug("Looking up:  " + command.getVoiceCommands() );
+
         routeCommands.forEach(c -> {
+            logger.debug("parsed commands:  " + c );
             Optional<CustomRoute> routeSearchResult = routeRepository.findByName(c.getRouteName());
             routeSearchResult.ifPresent(route -> {
                 instruction.addRoute(c.getPlayerTag(), route);
@@ -143,7 +146,8 @@ public class CoachController {
     @PostMapping("/routes")
     public HttpEntity<Route> addRoute(@RequestBody CustomRoute route) {
         UUID routeId = randomUUID();
-        CustomRoute generatedRoute = new CustomRoute(routeId, "straight", route);
+        CustomRoute generatedRoute = new CustomRoute(routeId,
+                route.getName() == null ? "Un-named" : route.getName(), route);
         routeRepository.save(generatedRoute);
 
         return ok(generatedRoute);

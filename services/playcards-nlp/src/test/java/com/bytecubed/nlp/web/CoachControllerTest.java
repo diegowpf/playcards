@@ -6,6 +6,7 @@ import com.bytecubed.commons.models.Placement;
 import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.commons.models.movement.CustomMoveDescriptor;
 import com.bytecubed.commons.models.movement.CustomRoute;
+import com.bytecubed.commons.models.movement.MoveDescriptor;
 import com.bytecubed.nlp.models.PlayCardCommand;
 import com.bytecubed.nlp.models.PlayCardInstruction;
 import com.bytecubed.nlp.models.RouteInstruction;
@@ -22,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
+import sun.java2d.loops.SurfaceType;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -101,7 +103,7 @@ public class CoachControllerTest {
         UUID iFormationId = UUID.fromString("2a6009a0-b66d-440a-b141-7cb64054e217");
 //        UUID routeID = UUID.fromString("d2c38c13-ece6-40fe-acab-f72aaacf737b");
 
-        PlayCardCommand command = new PlayCardCommand(iFormationId, "x has a straight" );
+        PlayCardCommand command = new PlayCardCommand(iFormationId, "x has a basic" );
 
         RestTemplate template = new RestTemplate();
         String response = template.postForEntity("http://nlp.immersivesports.ai/coach/playcards/text", command, String.class).getBody();
@@ -109,6 +111,55 @@ public class CoachControllerTest {
         System.out.println( "Response:  " + response );
     }
 
+    @Test
+    @Ignore
+    public void shouldAddAllRoutes(){
+        RestTemplate template = new RestTemplate();
+
+//        CustomRoute route = new CustomRoute(asList(
+//                new CustomMoveDescriptor(new Placement(0d,0d), new Placement(0d,-30d)),
+//                new CustomMoveDescriptor(new Placement(0d,-30d), new Placement(15d,-30d))
+//        ), "X");
+//
+//        String response = template.postForEntity( "http://localhost:8080/coach/routes",
+//                 new CustomRoute(randomUUID(), "dig", route), String.class).getBody();
+//        System.out.println(response);
+//
+//        route = new CustomRoute(asList(
+//                new CustomMoveDescriptor(new Placement(0d, 0d), new Placement(0d, -25d)),
+//                new CustomMoveDescriptor(new Placement(0d, -25d), new Placement(15d, -25d))
+//        ), "X");
+//
+//        response = template.postForEntity("http://localhost:8080/coach/routes",
+//                new CustomRoute(randomUUID(), "basic", route), String.class).getBody();
+//        System.out.println(response);
+//
+//        route = new CustomRoute(asList(
+//                new CustomMoveDescriptor(new Placement(0d,0d), new Placement(0d,-15d)),
+//                new CustomMoveDescriptor(new Placement(0d,-15d), new Placement(3d,-12d))
+//        ), "X");
+//
+//        response = template.postForEntity( "http://localhost:8080/coach/routes",
+//                new CustomRoute(randomUUID(), "stick", route), String.class).getBody();
+//        System.out.println(response);
+
+//        route = new CustomRoute(asList(
+//                new CustomMoveDescriptor(new Placement(0d,0d), new Placement(0d,-50d))
+//        ), "X");
+//
+//        response = template.postForEntity( "http://nlp.immersivesports.ai/coach/routes",
+//                new CustomRoute(randomUUID(), "go", route), String.class).getBody();
+//        System.out.println(response);
+
+        CustomRoute route = new CustomRoute(asList(
+                new CustomMoveDescriptor(new Placement(0d,0d), new Placement(0d,-12d)),
+                new CustomMoveDescriptor(new Placement(0d,-12d), new Placement(80d,-92d))
+        ), "X");
+
+        String response = template.postForEntity( "http://nlp.immersivesports.ai/coach/routes",
+                new CustomRoute(randomUUID(), "slant", route), String.class).getBody();
+        System.out.println(response);
+    }
 
     @Test
     @Ignore
