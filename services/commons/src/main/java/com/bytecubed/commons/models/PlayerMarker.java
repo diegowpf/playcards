@@ -69,16 +69,17 @@ public class PlayerMarker {
     }
 
     public void applyRoute(CustomRoute customRoute) {
-        CustomRoute tentativeRoute = customRoute;
+        CustomMoveDescriptor moveDescriptor = ((CustomMoveDescriptor) customRoute.getMoveDescriptors().get(0));
+        double xOffset = moveDescriptor.getStart().getXOffSet(placement);
+        double yOffSet = moveDescriptor.getStart().getYOffSet(placement);
+
+        CustomRoute transform = customRoute.transform(xOffset, yOffSet);
+        CustomRoute tentativeRoute = transform;
 
         if( this.getPlacement().getRelativeX() > 80 ){
             tentativeRoute = customRoute.flipAlongXAxis(this.getPlacement().getRelativeX());
         }
 
-        CustomMoveDescriptor moveDescriptor = ((CustomMoveDescriptor) tentativeRoute.getMoveDescriptors().get(0));
-        double xOffset = moveDescriptor.getStart().getXOffSet(placement);
-        double yOffSet = moveDescriptor.getStart().getYOffSet(placement);
-
-        this.addRoute(customRoute.transform(xOffset, yOffSet));
+        this.addRoute(tentativeRoute);
     }
 }
