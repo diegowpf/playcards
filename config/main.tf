@@ -4,7 +4,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "immersivesports-deployments"
+    bucket = "bytecubedlabs-deployments"
     key    = "deploynents/playcards"
     region = "us-east-1"
   }
