@@ -11,7 +11,7 @@ terraform {
 }
 
 resource "aws_route53_zone" "primary" {
-  name = "immersivesports.ai"
+  name = "platform.bytecubedlabs.co"
 }
 
 # Fetch AZs in the current region
@@ -25,14 +25,14 @@ module "client" {
   vpc_id             = "${module.network.vpc_id}"
   private_subnets    = "${module.network.private_subnets}"
   public_subnets     = "${module.network.public_subnets}"
-  docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-client:${var.version}"
+  docker_image       = "126555851281.dkr.ecr.us-east-1.amazonaws.com/playcards-client:${var.version}"
   container_family   = "client"
   health_check_path  = "/"
   container_port     = 3000
   loadbalancer_port  = 80
 
   REACT_APP_SERVER_URL = "${module.server.dns_name}"
-  PERSISTENCE_MONGO_URL =  "infra.immersivesports.ai"
+  PERSISTENCE_MONGO_URL =  "infra.platform.bytecubedlabs.co"
   PERSISTENCE_MONGO_PORT =  27017
   instance_count     = 1
   timeout            = 180
@@ -47,12 +47,12 @@ module "server" {
   vpc_id             = "${module.network.vpc_id}"
   private_subnets    = "${module.network.private_subnets}"
   public_subnets     = "${module.network.public_subnets}"
-  docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-server:${var.version}"
+  docker_image       = "126555851281.dkr.ecr.us-east-1.amazonaws.com/playcards-server:${var.version}"
   container_family   = "server"
   # memory             = 4096
   # cpu                = 2048
   REACT_APP_SERVER_URL = "http://www.google.com"
-  PERSISTENCE_MONGO_URL =  "infra.immersivesports.ai"
+  PERSISTENCE_MONGO_URL =  "infra.platform.bytecubedlabs.co"
   PERSISTENCE_MONGO_PORT =  27017
   instance_count     = 1
   timeout            = 180
@@ -68,12 +68,12 @@ module "teams" {
   vpc_id             = "${module.network.vpc_id}"
   private_subnets    = "${module.network.private_subnets}"
   public_subnets     = "${module.network.public_subnets}"
-  docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-teams:${var.version}"
+  docker_image       = "126555851281.dkr.ecr.us-east-1.amazonaws.com/playcards-teams:${var.version}"
   container_family   = "teams"
   # memory             = 4096
   # cpu                = 2048
   REACT_APP_SERVER_URL = "http://www.google.com"
-  PERSISTENCE_MONGO_URL =  "infra.immersivesports.ai"
+  PERSISTENCE_MONGO_URL =  "infra.platform.bytecubedlabs.co"
   PERSISTENCE_MONGO_PORT =  27017
   instance_count     = 1
   timeout            = 180
@@ -89,12 +89,12 @@ module "nlp" {
   vpc_id             = "${module.network.vpc_id}"
   private_subnets    = "${module.network.private_subnets}"
   public_subnets     = "${module.network.public_subnets}"
-  docker_image       = "068681799287.dkr.ecr.us-east-1.amazonaws.com/playcards-nlp:${var.version}"
+  docker_image       = "126555851281.dkr.ecr.us-east-1.amazonaws.com/playcards-nlp:${var.version}"
   container_family   = "nlp"
   # memory             = 4096
   # cpu                = 2048
   REACT_APP_SERVER_URL = "http://www.google.com"
-  PERSISTENCE_MONGO_URL =  "infra.immersivesports.ai"
+  PERSISTENCE_MONGO_URL =  "infra.platform.bytecubedlabs.co"
   PERSISTENCE_MONGO_PORT =  27017
   instance_count     = 1
   timeout            = 180
