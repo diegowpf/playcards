@@ -126,7 +126,7 @@ module "routes" {
 
 module "ecs" {
   source           = "./modules/ecs"
-  ecs_cluster_name = "immersivesports"
+  ecs_cluster_name = "bytecubedlabs"
 
   vpc_id          = "${module.network.vpc_id}"
   private_subnets = "${module.network.private_subnets}"

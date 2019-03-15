@@ -50,12 +50,12 @@ variable "REACT_APP_SERVER_URL" {
 }
 
 variable "PERSISTENCE_MONGO_URL" {
-  default = "infra.immersivesports.ai"
+  default = "infra.platform.bytecubedlabs.co"
 }
 
 variable "PERSISTENCE_MONGO_PORT" {
   default = 27017
 }
 
-variable "base_domain" {default="immersivesports.ai"}
+variable "base_domain" {default="platform.bytecubedlabs.co"}
 variable "zone_id" {}
