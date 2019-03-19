@@ -45,7 +45,7 @@ state = {
 }
 
 componentDidMount(){
-  axios.get(process.env.REACT_APP_SERVER_URL)
+  axios.get(process.env.REACT_APP_SERVER_URL + "/playcards")
     .then(res => {
       this.setState({playCards: res.data});
       if( res.data.length > 0 )
