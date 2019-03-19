@@ -45,7 +45,7 @@ state = {
 }
 
 componentDidMount(){
-  axios.get("http://server.immersivesports.ai/playcards")
+  axios.get(process.env.REACT_APP_SERVER_URL)
     .then(res => {
       this.setState({playCards: res.data});
       if( res.data.length > 0 )
@@ -86,13 +86,4 @@ const mapDispatchToProps = dispatch => { return {dispatch, navigate: (card) => d
 
 // const mapDispatchToProps = dispatch;
 
-export default connect(
-null,
-mapDispatchToProps
-)(PersonList);
-
-// PlayCardMenu.propTypes = {
-//   classes: PropTypes.object.isRequired,
-// };
-
-// export default withStyles(styles)(PlayCardMenu);
+export default connect(null,mapDispatchToProps)(PersonList);
