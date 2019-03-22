@@ -45,3 +45,15 @@ resource "aws_route53_record" "demo_backend" {
   ttl     = "300"
   records = ["13.68.140.33"]
 }
+
+resource "aws_route53_record" "d1" {
+  zone_id = "${var.zone_id}"
+  name    = "d1.platform.bytecubedlabs.co"
+  type    = "A"
+  ttl     = "300"
+  records = ["13.68.140.33"]
+}
+
+# resource "aws_route53_zone" "primary" {
+#   name = "platform.bytecubedlabs.co"
+# }
