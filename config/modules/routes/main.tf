@@ -21,3 +21,11 @@ resource "aws_route53_record" "zeros" {
   ttl     = "300"
   records = ["40.113.201.39"]
 }
+
+resource "aws_route53_record" "updater" {
+  zone_id = "${var.zone_id}"
+  name    = "updates.platform.bytecubedlabs.co"
+  type    = "A"
+  ttl     = "300"
+  records = ["13.68.140.33"]
+}
