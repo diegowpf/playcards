@@ -29,3 +29,19 @@ resource "aws_route53_record" "updater" {
   ttl     = "300"
   records = ["13.68.140.33"]
 }
+
+resource "aws_route53_record" "dev_backend" {
+  zone_id = "${var.zone_id}"
+  name    = "dev-api.platform.bytecubedlabs.co"
+  type    = "A"
+  ttl     = "300"
+  records = ["13.68.140.33"]
+}
+
+resource "aws_route53_record" "demo_backend" {
+  zone_id = "${var.zone_id}"
+  name    = "demo-api.platform.bytecubedlabs.co"
+  type    = "A"
+  ttl     = "300"
+  records = ["13.68.140.33"]
+}
