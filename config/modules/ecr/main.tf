@@ -1,6 +1,6 @@
 resource "aws_ecr_repository" "repo" {
   count = "${length(var.repo_names)}"
-  name = "${element(var.repo_names, count.index)}"
+  name  = "${element(var.repo_names, count.index)}"
 }
 
 resource "aws_iam_role_policy" "ecr_admin_policy" {

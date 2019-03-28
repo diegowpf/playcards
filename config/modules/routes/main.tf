@@ -47,5 +47,5 @@ resource "aws_route53_record" "demo_backend" {
 }
 
 resource "aws_route53_zone" "immersive" {
-   name = "immersivesports.ai"
+  name = "immersivesports.ai"
 }

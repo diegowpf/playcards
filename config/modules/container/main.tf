@@ -73,7 +73,7 @@ resource "aws_alb" "lb" {
   security_groups            = ["${aws_security_group.lb.id}"]
   subnets                    = ["${var.public_subnets}"]
   enable_deletion_protection = false
-  idle_timeout  = "${var.timeout}"
+  idle_timeout               = "${var.timeout}"
 
   tags {
     Environment = "production"
@@ -124,7 +124,6 @@ resource "aws_security_group" "lb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
 
 resource "aws_route53_record" "www" {
   zone_id = "${var.zone_id}"

@@ -57,5 +57,8 @@ variable "PERSISTENCE_MONGO_PORT" {
   default = 27017
 }
 
-variable "base_domain" {default="platform.bytecubedlabs.co"}
+variable "base_domain" {
+  default = "platform.bytecubedlabs.co"
+}
+
 variable "zone_id" {}

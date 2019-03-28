@@ -11,5 +11,9 @@ variable "public_subnets" {
 }
 
 variable "vpc_id" {}
-variable "base_domain" {default="platform.bytecubedlabs.co"}
+
+variable "base_domain" {
+  default = "platform.bytecubedlabs.co"
+}
+
 variable "zone_id" {}
