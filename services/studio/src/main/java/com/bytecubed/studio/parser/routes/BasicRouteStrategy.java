@@ -13,6 +13,7 @@ import org.apache.poi.xslf.usermodel.XSLFSimpleShape;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.awt.geom.*;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import static com.bytecubed.studio.parser.RavensPowerPointParser.maxX;
 import static java.util.stream.Collectors.partitioningBy;
 import static java.util.stream.Collectors.toList;
 
+@Component
 public class BasicRouteStrategy implements RouteStrategy {
 
     Logger logger = LoggerFactory.getLogger(BasicRouteStrategy.class);
