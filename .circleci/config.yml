@@ -85,7 +85,7 @@ workflows:
               branches:
                 only: master
       - deploy:
-          type: approval
+          # type: approval
           requires:
             - build
           filters:
