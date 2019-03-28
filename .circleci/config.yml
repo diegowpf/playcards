@@ -52,6 +52,8 @@ jobs:
          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
          ./tag-push.sh
          ./push-images.sh
+      - store_artifacts:
+          path:  target
       # - run: cd client && ./build-container.sh
   deploy:
     docker:

@@ -2,6 +2,7 @@ package com.bytecubed.studio.web;
 
 import com.bytecubed.commons.PlayCard;
 import com.bytecubed.studio.parser.RavensPowerPointParser;
+import com.bytecubed.studio.parser.routes.BasicRouteStrategy;
 import com.bytecubed.studio.persistence.PlayCardRepository;
 import com.bytecubed.studio.persistence.RouteRepository;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
@@ -58,7 +59,7 @@ public class PlayCardController {
                                                               RedirectAttributes redirectAttributes,
                                                               @PathVariable UUID teamId) throws IOException {
         XMLSlideShow ppt = new XMLSlideShow(file.getInputStream());
-        RavensPowerPointParser ravensPowerPointParser = new RavensPowerPointParser(ppt);
+        RavensPowerPointParser ravensPowerPointParser = new RavensPowerPointParser(ppt, new BasicRouteStrategy());
         List<PlayCard> playCards = ravensPowerPointParser.extractPlayCards();
 
         playCards.forEach(repository::save);

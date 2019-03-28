@@ -56,5 +56,9 @@ public class CustomMoveDescriptor extends MoveDescriptor{
                 danglingRoute.getEnd().getRelativeX(), danglingRoute.getEnd().getRelativeY());
     }
 
+    @Override
+    public String toString(){
+        return "Start:  " + start.toString() + " End: " + end.toString();
+    }
 
 }

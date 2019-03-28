@@ -6,7 +6,6 @@ import com.bytecubed.commons.models.Placement;
 import com.bytecubed.commons.models.PlayerMarker;
 import com.bytecubed.commons.models.movement.CustomMoveDescriptor;
 import com.bytecubed.commons.models.movement.CustomRoute;
-import com.bytecubed.commons.models.movement.MoveDescriptor;
 import com.bytecubed.nlp.models.PlayCardCommand;
 import com.bytecubed.nlp.models.PlayCardInstruction;
 import com.bytecubed.nlp.models.RouteInstruction;
@@ -15,21 +14,28 @@ import com.bytecubed.nlp.repository.FormationRepository;
 import com.bytecubed.nlp.repository.PlayRepository;
 import com.bytecubed.nlp.repository.RouteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.BaseEncoding;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
-import sun.java2d.loops.SurfaceType;
 
-import java.util.Optional;
-import java.util.UUID;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -94,7 +100,7 @@ public class CoachControllerTest {
         RestTemplate template = new RestTemplate();
         String response = template.postForEntity("http://nlp.immersivesports.ai/coach/playcards/script", instruction, String.class).getBody();
 
-        System.out.println( "Response:  " + response );
+        System.out.println("Response:  " + response);
     }
 
     @Test
@@ -103,17 +109,17 @@ public class CoachControllerTest {
         UUID iFormationId = UUID.fromString("2a6009a0-b66d-440a-b141-7cb64054e217");
 //        UUID routeID = UUID.fromString("d2c38c13-ece6-40fe-acab-f72aaacf737b");
 
-        PlayCardCommand command = new PlayCardCommand(iFormationId, "x has a basic" );
+        PlayCardCommand command = new PlayCardCommand(iFormationId, "x has a basic");
 
         RestTemplate template = new RestTemplate();
         String response = template.postForEntity("http://nlp.immersivesports.ai/coach/playcards/text", command, String.class).getBody();
 
-        System.out.println( "Response:  " + response );
+        System.out.println("Response:  " + response);
     }
 
     @Test
     @Ignore
-    public void shouldAddAllRoutes(){
+    public void shouldAddAllRoutes() {
         RestTemplate template = new RestTemplate();
 
 //        CustomRoute route = new CustomRoute(asList(
@@ -152,44 +158,44 @@ public class CoachControllerTest {
 //        System.out.println(response);
 
         CustomRoute route = new CustomRoute(asList(
-                new CustomMoveDescriptor(new Placement(0d,0d), new Placement(0d,-12d)),
-                new CustomMoveDescriptor(new Placement(0d,-12d), new Placement(80d,-92d))
+                new CustomMoveDescriptor(new Placement(0d, 0d), new Placement(0d, -12d)),
+                new CustomMoveDescriptor(new Placement(0d, -12d), new Placement(80d, -92d))
         ), "X");
 
-        String response = template.postForEntity( "http://nlp.immersivesports.ai/coach/routes",
+        String response = template.postForEntity("http://nlp.immersivesports.ai/coach/routes",
                 new CustomRoute(randomUUID(), "slant", route), String.class).getBody();
         System.out.println(response);
     }
 
     @Test
     @Ignore
-    public void shouldBeGentleInTheEventNothingIsParsed(){
+    public void shouldBeGentleInTheEventNothingIsParsed() {
         UUID iFormationId = UUID.fromString("2a6009a0-b66d-440a-b141-7cb64054e217");
 //        UUID routeID = UUID.fromString("d2c38c13-ece6-40fe-acab-f72aaacf737b");
 
-        PlayCardCommand command = new PlayCardCommand(iFormationId, "this is nothing" );
+        PlayCardCommand command = new PlayCardCommand(iFormationId, "this is nothing");
 
         RestTemplate template = new RestTemplate();
         String response = template.postForEntity("http://localhost:8080/coach/playcards/text", command, String.class).getBody();
 
-        System.out.println( "Response:  " + response );
+        System.out.println("Response:  " + response);
     }
 
     @Test
     @Ignore
-    public void shouldSaveRealRoute(){
+    public void shouldSaveRealRoute() {
         CustomRoute route = new CustomRoute(asList(new CustomMoveDescriptor(
                 new Placement(0, 0),
                 new Placement(0, -25))), "X");
 
         RestTemplate template = new RestTemplate();
-        String response = template.postForEntity( "http://nlp.immersivesports.ai/coach/routes", route, String.class).getBody();
-        System.out.println( response );
+        String response = template.postForEntity("http://nlp.immersivesports.ai/coach/routes", route, String.class).getBody();
+        System.out.println(response);
     }
 
     @Test
     @Ignore
-    public void shouldSetNamesOfKnownRoutes(){
+    public void shouldSetNamesOfKnownRoutes() {
         RestTemplate template = new RestTemplate();
         template.postForEntity(
                 "http://localhost:8080/coach/route/192e3ecd-54ab-42ed-80e2-75323d2bd7bc/name",
@@ -255,5 +261,116 @@ public class CoachControllerTest {
 
         return routeRepository;
     }
+
+
+    @Test
+    @Ignore
+    public void shouldIngestNGSData() throws NoSuchAlgorithmException {
+        List<NFLGameResponse> games = new ArrayList();
+        games.addAll(Arrays.asList(getNflGameResponsesByYear(2012)));
+        games.addAll(Arrays.asList(getNflGameResponsesByYear(2013)));
+        games.addAll(Arrays.asList(getNflGameResponsesByYear(2014)));
+        games.addAll(Arrays.asList(getNflGameResponsesByYear(2015)));
+        games.addAll(Arrays.asList(getNflGameResponsesByYear(2016)));
+        games.addAll(Arrays.asList(getNflGameResponsesByYear(2017)));
+        games.addAll(Arrays.asList(getNflGameResponsesByYear(2018)));
+
+        games = filterOnlyBaltimoreGames(games);
+        cachePlays(games);
+
+        for (NFLGameResponse game : games) {
+            System.out.println(game.getGameId() + " " + game.getGameKey()
+                    + " " + game.getVisitorTeamAbbr() + " vs. " + game.getHomeTeamAbbr());
+        }
+    }
+
+    private void cachePlays(List<NFLGameResponse> games) {
+        String authorizationToken = generateAuthorizationToken();
+        RestTemplate template = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        System.out.println( "Token:  " + authorizationToken );
+        headers.add("Authorization", authorizationToken);
+
+        HttpEntity entity = new HttpEntity("parameters", headers);
+        for (NFLGameResponse game : games) {
+            String url = "http://localhost:6569/submittedPlays/game?gameId="
+                    + game.getGameId() + "&gameKey=" + game.getGameKey();
+            System.out.println(url);
+
+            try {
+                GamePlay[] plays = template.exchange(url, HttpMethod.GET, entity, GamePlay[].class).getBody();
+                System.out.println("Play count:  " + plays.length);
+                for (GamePlay play : plays) {
+                    String playUrl = "http://localhost:6569/tracking/game/play?gameId=" + game.getGameId() +
+                            "&gameKey=" + game.getGameKey() + "&playId=" + play.getPlayId();
+                    System.out.println(playUrl);
+                    try {
+                        String response = template.exchange(playUrl, HttpMethod.GET, entity, String.class).getBody();
+                        System.out.println(response);
+
+                    } catch (Exception e) {
+                    }
+                }
+            }catch(Exception e ){}
+
+        }
+
+    }
+
+    private List<NFLGameResponse> filterOnlyBaltimoreGames(List<NFLGameResponse> games) {
+        return games.stream()
+                .filter(f -> f.getHomeTeamAbbr().equals("BAL") )//|| f.getVisitorTeamAbbr().equals("BAL"))
+                .collect(toList());
+    }
+
+    private NFLGameResponse[] getNflGameResponsesByYear(int year) {
+        String authorizationToken = generateAuthorizationToken();
+        RestTemplate template = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.add("Authorization", authorizationToken);
+
+        return template.exchange("http://localhost:6569/league/schedule?season=" + year,
+                HttpMethod.GET, null, NFLGameResponse[].class).getBody();
+    }
+
+    private String generateAuthorizationToken() {
+        String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+
+        String username = "ravens_3rdparty_bytecubed_api";
+        String password = "xKymIZL6fzgMksN4";
+        String secretKey = "BHEUc/k6+ZyEEgBmQV7QxlQKYj3xMVbZon9QA4ZY";
+        String accessToken = "AKIAJ67I5VLKQUHOZBVQ";
+        String concatenatedString = "";
+
+        /*
+        date = datetime.now(tz=pytz.utc).astimezone(pytz.timezone('US/Pacific')).strftime('%m%d%Y')
+        string_to_sign = username + password + access_token + date
+         */
+
+        LocalDate pst = LocalDate.now(ZoneId.of("America/Los_Angeles"));
+        String date = pst.format(DateTimeFormatter.ofPattern("MMddyyyy"));
+        concatenatedString = username + password + accessToken + date;
+
+        String hmacSha1 = null;
+        SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes(), HMAC_SHA1_ALGORITHM);
+        Mac mac;
+        try {
+            mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
+            mac.init(signingKey);
+            byte[] rawHmac = mac.doFinal(concatenatedString.getBytes());
+            System.out.println(rawHmac);
+            hmacSha1 = BaseEncoding.base64().encode(rawHmac);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        return "NGS " + accessToken + ":" + hmacSha1;
+    }
+
 
 }
